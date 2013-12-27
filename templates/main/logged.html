@@ -1,0 +1,300 @@
+{% load staticfiles %}
+{% load my_app_filter %}
+<!DOCTYPE HTML>
+<html>
+<head>
+<link rel="stylesheet" type="text/css" href="{% static 'myregister/css/style.css' %}">
+<link rel="stylesheet" type="text/css" href="{% static 'myregister/css/tabs.css' %}">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<title>FreePL Home</title>
+<script type='text/javascript' src="{% static 'myregister/js/jquery.js' %}"></script>
+<script type="text/javascript" src="{% static 'myregister/js/start.js' %}"></script>
+
+
+
+<script type="text/javascript">	
+
+$(document).ready(function() {
+	//initialising conditions for the tabs
+	$("#contentB").hide();
+	$("#contentC").hide();
+	$("#contentD").hide();
+	$( "div.fixturecontent" ).hide();
+
+	//function for the logout button
+	$("#logoutbtn").click(function() {
+		console.log("logout");
+		$.ajax({
+			url : "/dummylogout",
+			type : "POST",
+			dataType: "json",
+			data : {
+					csrfmiddlewaretoken: '{{ csrf_token }}'
+					},
+			success : function(hill) {
+				console.log(hill.server_response);
+				location.href="/";
+			},
+			error : function(xhr,errmsg,err) {
+			alert(xhr.status + ": " + xhr.responseText);
+			}
+		});
+	return false;
+	});
+
+	//function for the tab change feature
+	$(".tab").click(function()
+	{
+		$(".active").removeClass("active");
+		$(this).addClass("active");
+		var alph=$(this).attr("id");
+		console.log(alph);
+		$(".tabcontent").hide();
+		$("#content"+alph).show();
+		return false;
+	});
+	$
+	//function for fixture submenu click
+	$(".fixture").click(function(){
+
+		$("td.clickablepl").attr("style","background:;");
+		var fid=$(this).attr("id");
+		$( "div.fixturecontent" ).hide();
+		$("#f"+fid).show();
+		//$( "div.fixturecontent" ).show();
+		console.log(fid);
+		return false;
+	});
+	
+	//function for clickablepl
+	$("tr.clickablepl").click(function(){
+		//complement the color
+		if($(this).attr("style")=="background:;")
+		{
+			$(this).attr("style","background:white;");
+			$(this).children("td.powerornot").attr("style","background:white;");
+		}
+		else
+		{	
+			$(this).attr("style","background:;");
+			$(this).children("td.powerornot").attr("style","background:;");
+		}
+		return false;
+	});
+	
+	//function for locktheteam
+	$("button.lockteam").click(function(){
+		var messg="";
+		
+		//finding the fixture to which it corresponds 
+		fid=$(this).parents('div.fixturecontent').attr("id");
+		$( "div#"+fid+" tr.clickablepl" ).each(function( i ) {
+				if($(this).attr("style")=="background:white;")
+				{
+					var tmp=$(this).attr("id");
+					messg=messg+tmp+",";
+				}
+		});
+		
+	
+		var tpowerpid=""
+		console.log(tpowerpid);
+		//finding the powerplayer for the fixture, and the team chosen
+		$("td.powerornot").each(function(){
+				if($(this).attr("style")=="background:green;")
+				{
+					if($(this).parents('div.fixturecontent').attr("id")==fid)
+					{
+						console.log($(this).parents('div.fixturecontent').attr("id"));
+						tpowerpid=$(this).parent('tr.clickablepl').attr("id");
+					}
+				}
+		});
+		console.log(messg,tpowerpid);
+			$.ajax({
+				url : "/dummylocktheteam",
+				type : "POST",
+				dataType: "json",
+				data : {
+						csrfmiddlewaretoken: '{{ csrf_token }}',
+						fixtureid:fid,
+						teamconfig : messg,
+						powerpid:tpowerpid,
+						teamname : $("input.teamname").val()
+						},
+				success : function(hill) {
+					console.log(hill.server_response);
+					if(hill.server_response=="yes")
+					{
+						alert("Congratulations! Your Team has been registered for the fixture");
+						location.href="/qwe";
+					}
+					else
+					{
+						console.log(hill.server_message);
+						$("#fixterror").html(hill.server_message);
+					}
+				},
+				error : function(xhr,errmsg,err) {
+				alert(xhr.status + ": " + xhr.responseText);
+				}
+			});
+			return false;
+		});
+		
+		//function for powerplayer clicking
+		$("td.powerornot").click(function(){
+				$("tr.clickablepl td.powerornot").each(function(){
+				
+				if($(this).attr("style")==("background:green;"))
+					{
+						$(this).attr("style","background:white;");}
+				});
+			if($(this).parent("tr.clickablepl").attr("style")=="background:white;")
+			{
+	
+				if($(this).attr("style")=="background:green;")
+				$(this).attr("style","background:;");
+				else
+				$(this).attr("style","background:green;");
+			}
+			else
+			{
+				$(this).parent("tr.clickablepl").attr("style","background:white;");
+				$(this).attr("style","background:green;")
+			}
+			return false;
+		});
+
+});
+</script>
+
+
+
+
+</head>
+
+<div>
+	<table>
+	<tr>
+	<td><img src="{% static 'myregister/images/fpl.png' %}" style="margin-bottom:0px;"></td>
+	<td style="font-size:18px;">Welcomes you, {{ username }}</td>
+	<td>{% csrf_token %}<button id="logoutbtn" class="submitbutton"  type="button">Log out</button>
+</td>
+	</tr>
+	</table>
+	
+</div>
+<body>
+
+<div id='cssmenu'>
+<ul>
+   <li id="A" class='has-sub active tab'><a href='#'><span>Fixtures</span></a>
+	  <ul>
+		  {% for fixture,b,c in fixnteamsnpow %}
+         <li class='last fixture' id={{fixture.id}} >{#this is why i have to use pid,fid n stuff..#}
+			 <a href='#'>
+				 <span> {{fixture.teamA}} vs {{fixture.teamB}} on {{fixture.date}}</span>
+			 </a>
+         </li>
+         {% endfor %}
+      </ul>
+   </li>
+   
+   <li id="B" class='last tab'><a href='#'><span>User Standings</span></a></li>
+   <li id="C" class='last tab'><a href='#'><span>Ongoing Matches</span></a></li>
+   <li id="D" class='last tab'><a href='#'><span>Player Watch</span></a></li>
+</ul>
+</div>
+
+<div id="content">{#This is for the main container for tabwise contents#}
+	<div id="contentA" class="tabcontent">
+		{% for fixture,team_list,teampowerpid in fixnteamsnpow %}
+		<div class="fixturecontent" id={{fixture.fixtureid}}>
+			<p class="fixturelabel">Fixture: {{fixture.teamA}} vs {{fixture.teamB}} on {{fixture.date}}</p>
+			{% if fixture.isactive %}
+					<table class="allplayer" {% if fixture.isover and not team_list %}style="display:none;"{% endif %} >	
+						<tr id="tableheader" style={% if fixture.isover %}"display:none;"{% endif %}>
+							<td>  Name  </td>
+							<td>  Country  </td>
+							<td>  Price  </td>
+							<td>  Points So Far!  </td>
+							<td>  Role  </td>
+						{% if not team_list %}
+							<td>  Power or not  </td>
+						{% endif %}
+						</tr>
+						{% if team_list %}
+							<p>You locked your team!</p>
+							{% for player in team_list %}				
+							<tr>
+								<td>  {{player.firstname}} {{player.lastname}} </td>
+								<td>  {{player.country}}  </td>
+								<td>  {{player.price}}  </td>
+								<td>  {{player.netperformance}}  </td>
+								<td id={{player.role}}> {{player.role}}</td>
+								{% if player.playerid == teampowerpid %}
+								<td class="powerornot" style="background:green;">        p</td>
+								{% else %}
+								<td class="powerornot" style="background:;">        p</td>		
+								{% endif %}
+							</tr>
+							{% endfor %}
+							{% if fixture.isover %}
+								<p>Your team scored {{ok}} fantasy points.</p>
+							{% endif %}
+							</table>
+						{% else %}
+							{% if fixture.isover %}
+								<p>Sorry but the fixture is over, and you did not make any team</p>
+							{% else %}
+								{#<p>Following is a list of available players!</p>#}
+								{% for player in playerlist %}				
+									<tr class="clickablepl" id={{player.playerid}} style="background:;" >
+										<td>  {{player.firstname}} {{player.lastname}}  </td>
+										<td>  {{player.country}}  </td>
+										<td>  {{player.price}}  </td>
+										<td>  {{player.netperformance}}  </td>
+										<td id={{player.role}}>{{player.role}}</td>
+										<td class="powerornot">           </td>
+									</tr>
+								{% endfor %}	
+							</table>
+							{% csrf_token %}
+							<input class="teamname" placeholder="Enter Your team name"></input>
+							<button class="lockteam submitbutton">Lock the team</button>
+							{% 	endif %}
+						{% endif %}
+					{% if fixture.isover %}
+							<table class="allteams" style="width:500px;">
+								{% for obj in fixtureresults %}
+									{% if obj.fixtureid == fixture.fixtureid %}
+									<tr>
+										<td>{{obj.teamname}}</td><td>{{obj.points}}</td>
+									</tr>
+									{% endif %}
+								{% endfor %}
+							</table>
+					{% endif %}			
+				{%else%}{#fixture is not active#}
+					<p>You can lock your team 24 hours before the match.</p>
+				{%endif%}
+			</div>
+			{%endfor%}
+		<div style="width:1000px;">
+			<p id="fixterror" style="width:1000px;">Ispum A.</p>
+		</div>
+		
+	</div>
+	<div id="contentB" class="tabcontent">
+	<p>Ispum B.</p>
+	</div>
+	<div id="contentC" class="tabcontent">
+	<p>Ispum C.</p>
+	</div>
+	<div id="contentD" class="tabcontent">
+	<p>Ispum D.</p>
+	</div>
+</div>
+
+</html>
