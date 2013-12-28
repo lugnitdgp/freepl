@@ -249,15 +249,17 @@ $(document).ready(function() {
 								<p>Sorry but the fixture is over, and you did not make any team</p>
 							{% else %}
 								{#<p>Following is a list of available players!</p>#}
-								{% for player in playerlist %}				
-									<tr class="clickablepl" id={{player.playerid}} style="background:;" >
-										<td>  {{player.firstname}} {{player.lastname}}  </td>
-										<td>  {{player.country}}  </td>
-										<td>  {{player.price}}  </td>
-										<td>  {{player.netperformance}}  </td>
-										<td id={{player.role}}>{{player.role}}</td>
-										<td class="powerornot">           </td>
-									</tr>
+								{% for player in playerlist %}
+									{% if fixture.teamA == player.country or fixture.teamB == player.country %}				
+										<tr class="clickablepl" id={{player.playerid}} style="background:;" >
+											<td>  {{player.firstname}} {{player.lastname}}  </td>
+											<td>  {{player.country}}  </td>
+											<td>  {{player.price}}  </td>
+											<td>  {{player.netperformance}}  </td>
+											<td id={{player.role}}>{{player.role}}</td>
+											<td class="powerornot">           </td>
+										</tr>
+									{% endif %}
 								{% endfor %}	
 							</table>
 							{% csrf_token %}
@@ -286,15 +288,38 @@ $(document).ready(function() {
 		</div>
 		
 	</div>
+	
 	<div id="contentB" class="tabcontent">
+		<table class="userstandings">
+			{% for user in cumusers %}
+				<tr>
+					<td>{{user.username}}</td>
+					<td>{{user.cumulativescore}}</td>
+				</tr>
+			{% endfor %}
+		</table>
 	<p>Ispum B.</p>
 	</div>
+	
 	<div id="contentC" class="tabcontent">
+		<table class="ongoingmatches">
+			{% for fixture,b,c in fixnteamsnpow %}
+				{% if fixture.isactive and not fixture.isover %}
+				<tr>
+					<td>{{fixture.teamA}} vs {{fixture.teamB}}</td>
+					<td>{{fixture.date}}</td>
+				</tr>
+				{% endif %}
+			{% endfor %}
+		</table>
 	<p>Ispum C.</p>
 	</div>
+	
 	<div id="contentD" class="tabcontent">
+		Page under construction. 
 	<p>Ispum D.</p>
 	</div>
+
 </div>
 
 </html>

@@ -10,7 +10,9 @@
 <script type="text/javascript">
 $(document).ready(function() {
 		
-		
+		{% if alert == "activated" %}
+			alert('Your User Profile has been activated, Please login to play the game.')
+		{% endif %}
 		//signup button 
 		$("#signupbtn").click(function(){
 					
@@ -74,7 +76,7 @@ $(document).ready(function() {
 						else
 						{
 							console.log(hill.server_response);
-							$("#errormsg").text("ohhhhh");
+							$("#errormsg").text("Invalid Login Credentials!");
 						}
 					//$('#result').append( 'Server Response: ' + hill.server_response);
 					//var form=$('#limit').val('My Submit');

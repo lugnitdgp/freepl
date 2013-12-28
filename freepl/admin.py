@@ -18,6 +18,7 @@ def update_scores_of_fixture_teams(modeladmin, request, queryset):
 		for team in curfixteams:
 			plyrids=team.teamconfig.split(',')
 			teamname=team.teamname
+			username=team.username
 			del plyrids[11]
 			points=0
 			tmp=0
@@ -34,7 +35,7 @@ def update_scores_of_fixture_teams(modeladmin, request, queryset):
 			except:
 				points+=0
 			queryset.filter(fixtureid="f"+str(i+1)).filter(teamname=teamname).update(score=points)
-
+			fplUser.objects.all().filter(username=username).update(cumulativescore=cumulativescore+points)
 """
 this updates the funscore field for each entry in the 
 fixtureCricketPlayer table.

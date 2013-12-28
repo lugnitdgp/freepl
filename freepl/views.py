@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse,HttpResponseRedirect
 import json
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.models import User
@@ -27,6 +27,23 @@ def make_playerlist_from_config(teamconfig):
 		playerlist.append(CricketPlayer.objects.get(playerid=tmp[i]))
 	return playerlist
 	
+def user_verify(request,activation_key):
+	flag=0
+	pwd=""
+	#print "82ghzsF8itjyckjm9tVNbGLItbcFPckIxOhVbqtQFCI="
+	print User.objects.all().filter(username="tutogaya")[0].password
+	activation_key=activation_key.decode("hex")
+	for user in User.objects.all():
+		pwd=user.password
+		tmp=pwd.split('$')
+		if tmp[3]==activation_key:
+			if user.is_active:
+				return HttpResponse("Stop being silly, after activating yourself!")
+			user.is_active=True
+			user.save()
+			return render(request,'startpage/start.html',{'alert':"activated"})
+	return HttpResponse("Invalid confirmation link!")
+	
 	
 # Create your views here.
 def init(request):
@@ -47,8 +64,7 @@ def loginit(request):
 		print tmp['username']
 		user=authenticate(username=tmp['username'],password=tmp['password'])
 		print user
-		if user is not None:
-			print "no"
+		if user is not None and user.is_active:
 			login(request,user)
 			response_dict.update({'server_response': "yes" })                                                                  
 	return HttpResponse(json.dumps(response_dict), mimetype='application/javascript')
@@ -87,8 +103,18 @@ def registerit(request):
 			return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')						
 		#creating the User object
 		user = User.objects.create_user(tmp['username'], tmp['email'],tmp['password'])
+		user.is_active = False
+		print user.password+" ee "
 		user.save()
+		hexkey=(user.password.split('$')[3]).encode("hex")
+		activation_url="http://<domain-name>/activate/"+hexkey
+		
+		"""
+		we send email of the activation_url to the user email address here
+		"""
+		
 		#creating the fplUser object
+		
 		fpluser=fplUser(username=tmp['username'],email=tmp['email'],phonenumber=tmp['phone'],\
 		cumulativescore=0,recentscore=0)
 		fpluser.save()
@@ -153,9 +179,11 @@ def locktheteamit(request):
 		tmp2=tmp["teamconfig"].split(',')
 		#pretest
 		if tmp["teamconfig"]=="" or tmp["teamname"]=="" or len(tmp2)!=12:
-			response_dict={"server_response":"no","server_message":"Improper team name or configuration"}
+			response_dict={"server_response":"no","server_message":"Improper team name or configuration."}
 			return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')
-
+		if fixtureTeams.filter(teamname=tmp["teamname"],fixtureid=tmp["fixtureid"]):
+			response_dict={"server_response":"no","server_message":"Team Name already taken for the fixture."}
+			return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')			
 		rivals=[]
 		rivals.append(fixtures.objects.get(fixtureid=tmp["fixtureid"]).teamA)
 		rivals.append(fixtures.objects.get(fixtureid=tmp["fixtureid"]).teamB)
