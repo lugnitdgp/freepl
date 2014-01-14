@@ -1,37 +1,76 @@
 p.fixturelabel{
-    margin-left:10px;
-    font-size:18px;
+    text-align:centre;
+    margin-left:450px;
+    font-size:20px;
     font-style:italic;
+	
 }
 body{
-	 background:#202020;
+	 background:url(../images/ball.jpg) fixed;
+	 background-repeat:no-repeat;
+	 background-size:100% auto;
 	 font:bold 12px Arial, Helvetica, sans-serif;
 	 margin:0;
 	 padding:0;
 	 min-width:960px;
 	 color:#bbbbbb; 
 }
+.bg
+{
+background:#94ff32;
+}
 .fixturecontent{
+width:auto;
+border-radius:10px;
+margin:20px;
 position:relative;
+padding:5px;
 }
 #tableheader{
 	font-size:14px;
-	background:#ffa500;
+	background:#252525;
+	color:#ffffff;
 }
-
-table.allteams{
-float:left;
+#fxtr_hr
+{
+width:90%
+margin-left:5%;
+opacity:0.5;
+}
+.stuck
+{
+position:fixed;
+top:-10px;
+z-index:5;
+width:100%;
+}
+table.
+s{
+float:right;
 margin-left:100px;
+margin-top:20px;
+}
+.teamname
+{
+margin-left:450px;
+text-align:centre;
+float:left;
+margin-top:30px;
+}
+.lockteam
+{
+float:left;
+margin-left:10px;
 }
 
 table.allplayer{
-	float:left;
-	margin-left:30px;
+	clear:left;
+	margin-left:2.5%;
+	margin-top:100px;
 	height:800px;
-	width:600px;
+	width:95%;
 	text-align:center;
 	border-collapse:collapse;
-	background:#e60000;
 	color:black;
 }
 #logoutbtn{
@@ -39,6 +78,15 @@ margin-top:0px;
 padding-top:0px;
 padding-bottom:10px;
 	margin-bottom:10px;
+float:right;
+}
+.fr
+{
+width:850px;
+}
+.header
+{
+background:url(images/mel.jpg) auto 100%;
 }
 td.powerornot{
 width:50px;
@@ -51,7 +99,14 @@ margin-top:10px;
 padding-top:0px;
 border: 1px solid black;
 }
-
+table.allplayer tr:nth-child(even)
+{
+background:rgba(213, 207, 207, 0.8);
+}
+table.allplayer tr:nth-child(odd)
+{
+background:rgba(175, 174, 174, 0.7);
+}
 table.allplayer td{
 padding-left:20px;
 padding-right:20px;
@@ -192,7 +247,13 @@ form.popupform p, form.popupform span {
 	font-size:11px; 
 	line-height:18px;
 } 
-
+.rght_table
+{
+text-align:center;
+clear:both;
+margin-left:100px;
+margin-top:100px;
+}
 
 
 
@@ -230,7 +291,7 @@ form.popupform p, form.popupform span {
 	text-align:center;
 	text-shadow:1px 1px 0px #ffffff;
 }.submitbutton:hover {
-	background-color:#dfdfdf;
+	background-color:#d5d5d5;
 	cursor:pointer;
 }.submitbutton:active {
 	position:relative;

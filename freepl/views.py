@@ -138,10 +138,11 @@ def mainpage(request):
 		tt=fixtureTeams.objects.filter(username=request.user.username)
 		userfixtured=[]
 		if tt:
-			userfixtured=tt.get(fixtureid=fix.fixtureid)
+			print tt			
+			userfixtured=tt.filter(fixtureid=fix.fixtureid)
 			if userfixtured:
-				teamlists.append(make_playerlist_from_config(userfixtured.teamconfig))
-				powerpids.append(userfixtured.powerpid)
+				teamlists.append(make_playerlist_from_config(userfixtured[0].teamconfig))
+				powerpids.append(userfixtured[0].powerpid)
 			else:
 				teamlists.append([])
 				powerpids.append("")
@@ -181,7 +182,7 @@ def locktheteamit(request):
 		if tmp["teamconfig"]=="" or tmp["teamname"]=="" or len(tmp2)!=12:
 			response_dict={"server_response":"no","server_message":"Improper team name or configuration."}
 			return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')
-		if fixtureTeams.filter(teamname=tmp["teamname"],fixtureid=tmp["fixtureid"]):
+		if fixtureTeams.objects.filter(teamname=tmp["teamname"],fixtureid=tmp["fixtureid"]):
 			response_dict={"server_response":"no","server_message":"Team Name already taken for the fixture."}
 			return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')			
 		rivals=[]
@@ -198,6 +199,7 @@ def locktheteamit(request):
 			which means that the team is valid and is ready to be written
 			in the fixtureteams db
 			"""
+			#print ftdobj
 			ftdbobj=fixtureTeams(teamname=tmp["teamname"],username=request.user.username,\
 			fixtureid=tmp["fixtureid"],teamconfig=tmp["teamconfig"],powerpid=tmp["powerpid"],score=0)
 			ftdbobj.save()

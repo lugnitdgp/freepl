@@ -75,12 +75,15 @@ DATABASES = {
         'ENGINE':'django.db.backends.mysql',
         'NAME': 'mydja',
         'USER': 'root',
-        'PASSWORD': '123456',
+        'PASSWORD': '8583977007', 
         'HOST': 'localhost',
         'PORT': '8000',
     }
 }
 
+TEMPLATE_DIRS = '/home/avio/freepl/templates'
+PROJECT_DIR='/home/avio/freepl'
+STATIC_ROOT = '/home/avio/freepl'
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
@@ -101,8 +104,8 @@ USE_TZ = True
 for the following only the /home/mj part will change depending on where 
 you keep this repo
 """
-PROJECT_DIR='/home/mj/mydjango/mysite/'
+PROJECT_DIR='/home/avio/freepl/'
 STATICFILES_DIRS = (os.path.join(PROJECT_DIR, 'static'),)
 
-STATIC_ROOT = '/home/mj/mydjango/mysite/'
+STATIC_ROOT = '/home/avio/freepl'
 STATIC_URL = '/static/'

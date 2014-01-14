@@ -8,6 +8,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>FreePL Home</title>
 <script type='text/javascript' src="{% static 'myregister/js/jquery.js' %}"></script>
+<script type='text/javascript' src="{% static 'myregister/js/jquery-migrate-1.2.1.js' %}"></script>
+<script type="text/javascript" src="{% static 'myregister/js/waypoints.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'myregister/js/jquery.mCustomScrollbar.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'myregister/js/start.js' %}"></script>
 
 
@@ -20,8 +23,12 @@ $(document).ready(function() {
 	$("#contentC").hide();
 	$("#contentD").hide();
 	$( "div.fixturecontent" ).hide();
+	var wdth=$(window).innerWidth();
+	$('.fr').css("width","wdth");
 
-	//function for the logout button
+
+
+//function for the logout button
 	$("#logoutbtn").click(function() {
 		console.log("logout");
 		$.ajax({
@@ -42,6 +49,25 @@ $(document).ready(function() {
 	return false;
 	});
 
+var st=$('.sticky').offset().top;
+var stik=function() {
+var scrollTop=$(window).scrollTop();
+if(scrollTop>st){
+	$('.sticky').addClass("stuck");}
+else{
+$('.sticky').removeClass("stuck");}
+};
+
+stik();
+$(window).scroll(function() {
+	stik();
+});
+
+$('.lockteam').click(function() {
+	$('.allplayer').css("margin-top","20px");
+});
+
+
 	//function for the tab change feature
 	$(".tab").click(function()
 	{
@@ -53,7 +79,7 @@ $(document).ready(function() {
 		$("#content"+alph).show();
 		return false;
 	});
-	$
+	
 	//function for fixture submenu click
 	$(".fixture").click(function(){
 
@@ -81,7 +107,7 @@ $(document).ready(function() {
 		}
 		return false;
 	});
-	
+
 	//function for locktheteam
 	$("button.lockteam").click(function(){
 		var messg="";
@@ -99,6 +125,9 @@ $(document).ready(function() {
 	
 		var tpowerpid=""
 		console.log(tpowerpid);
+
+
+
 		//finding the powerplayer for the fixture, and the team chosen
 		$("td.powerornot").each(function(){
 				if($(this).attr("style")=="background:green;")
@@ -141,6 +170,7 @@ $(document).ready(function() {
 			});
 			return false;
 		});
+
 		
 		//function for powerplayer clicking
 		$("td.powerornot").click(function(){
@@ -179,7 +209,7 @@ $(document).ready(function() {
 	<tr>
 	<td><img src="{% static 'myregister/images/fpl.png' %}" style="margin-bottom:0px;"></td>
 	<td style="font-size:18px;">Welcomes you, {{ username }}</td>
-	<td>{% csrf_token %}<button id="logoutbtn" class="submitbutton"  type="button">Log out</button>
+	<td class="fr">{% csrf_token %}<button id="logoutbtn" class="submitbutton"  type="button">Log out</button>
 </td>
 	</tr>
 	</table>
@@ -187,13 +217,13 @@ $(document).ready(function() {
 </div>
 <body>
 
-<div id='cssmenu'>
+<div id='cssmenu' class="sticky">
 <ul>
    <li id="A" class='has-sub active tab'><a href='#'><span>Fixtures</span></a>
-	  <ul>
+	  <ul class="bg">
 		  {% for fixture,b,c in fixnteamsnpow %}
-         <li class='last fixture' id={{fixture.id}} >{#this is why i have to use pid,fid n stuff..#}
-			 <a href='#'>
+         <li class='last fixture' class="bg" id={{fixture.id}} >{#this is why i have to use pid,fid n stuff..#}
+			 <a href='#' class="bg">
 				 <span> {{fixture.teamA}} vs {{fixture.teamB}} on {{fixture.date}}</span>
 			 </a>
          </li>
@@ -209,10 +239,21 @@ $(document).ready(function() {
 
 <div id="content">{#This is for the main container for tabwise contents#}
 	<div id="contentA" class="tabcontent">
+		
 		{% for fixture,team_list,teampowerpid in fixnteamsnpow %}
 		<div class="fixturecontent" id={{fixture.fixtureid}}>
+			
 			<p class="fixturelabel">Fixture: {{fixture.teamA}} vs {{fixture.teamB}} on {{fixture.date}}</p>
+			<hr id="fxtr_hr"></hr>
 			{% if fixture.isactive %}
+					{% csrf_token %}
+					{%if not team_list%}
+					<input class="teamname" placeholder="Enter Your team name"></input>
+					<button class="lockteam submitbutton">Lock the team</button>
+					<div style="width:1000px;" class="rght_table">
+						<p id="fixterror" style="width:1000px;"></p>
+					</div>
+					{%endif%}
 					<table class="allplayer" {% if fixture.isover and not team_list %}style="display:none;"{% endif %} >	
 						<tr id="tableheader" style={% if fixture.isover %}"display:none;"{% endif %}>
 							<td>  Name  </td>
@@ -220,12 +261,11 @@ $(document).ready(function() {
 							<td>  Price  </td>
 							<td>  Points So Far!  </td>
 							<td>  Role  </td>
-						{% if not team_list %}
 							<td>  Power or not  </td>
-						{% endif %}
+						
 						</tr>
 						{% if team_list %}
-							<p>You locked your team!</p>
+							<div><p>You locked your team!</p></div>
 							{% for player in team_list %}				
 							<tr>
 								<td>  {{player.firstname}} {{player.lastname}} </td>
@@ -234,7 +274,7 @@ $(document).ready(function() {
 								<td>  {{player.netperformance}}  </td>
 								<td id={{player.role}}> {{player.role}}</td>
 								{% if player.playerid == teampowerpid %}
-								<td class="powerornot" style="background:green;">        p</td>
+								<td class="powerornot" style="background:#94ff32;">        p</td>
 								{% else %}
 								<td class="powerornot" style="background:;">        p</td>		
 								{% endif %}
@@ -262,9 +302,7 @@ $(document).ready(function() {
 									{% endif %}
 								{% endfor %}	
 							</table>
-							{% csrf_token %}
-							<input class="teamname" placeholder="Enter Your team name"></input>
-							<button class="lockteam submitbutton">Lock the team</button>
+
 							{% 	endif %}
 						{% endif %}
 					{% if fixture.isover %}
@@ -283,9 +321,7 @@ $(document).ready(function() {
 				{%endif%}
 			</div>
 			{%endfor%}
-		<div style="width:1000px;">
-			<p id="fixterror" style="width:1000px;">Ispum A.</p>
-		</div>
+
 		
 	</div>
 	

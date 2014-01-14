@@ -34,8 +34,12 @@ def update_scores_of_fixture_teams(modeladmin, request, queryset):
 				points+=curfixCP.get(playerid=powerpid).funscore
 			except:
 				points+=0
-			queryset.filter(fixtureid="f"+str(i+1)).filter(teamname=teamname).update(score=points)
-			fplUser.objects.all().filter(username=username).update(cumulativescore=cumulativescore+points)
+			queryset.filter(fixtureid=fixture.fixtureid).filter(teamname=teamname).update(score=points)
+			#fplUser.objects.all().filter(username=username).update(cumulativescore=cumulativescore+points)
+			fu=fplUser.objects.filter(username=username)
+			print fu			
+			fu[0].cumulativescore+=points
+			fu[0].save()
 """
 this updates the funscore field for each entry in the 
 fixtureCricketPlayer table.

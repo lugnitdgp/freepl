@@ -26,11 +26,6 @@ class fixtureTeams(models.Model):
 	def __unicode__(self):
 		return '%s %s ' % (self.username,self.teamname)
 
-	def save(self, *args, **kwargs):
-		self.fixtureid="f"+str(self.id)
-		super(fixtureTeams, self).save(*args, **kwargs) # Call the "real" save() method.
-
-
 class CricketPlayer(models.Model):
 	playerid=models.CharField(max_length=5,blank=True)
 	firstname=models.CharField(max_length=30)
