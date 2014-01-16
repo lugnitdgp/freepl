@@ -22,6 +22,7 @@ $(document).ready(function() {
 	$("#contentB").hide();
 	$("#contentC").hide();
 	$("#contentD").hide();
+	$("#contentE").hide();
 	$( "div.fixturecontent" ).hide();
 	var wdth=$(window).innerWidth();
 	$('.fr').css("width","wdth");
@@ -234,6 +235,7 @@ $('.lockteam').click(function() {
    <li id="B" class='last tab'><a href='#'><span>User Standings</span></a></li>
    <li id="C" class='last tab'><a href='#'><span>Ongoing Matches</span></a></li>
    <li id="D" class='last tab'><a href='#'><span>Player Watch</span></a></li>
+   <li id="E" class='last tab'><a href='#'><span>Rules</span></a></li>
 </ul>
 </div>
 
@@ -354,6 +356,40 @@ $('.lockteam').click(function() {
 	<div id="contentD" class="tabcontent">
 		Page under construction. 
 	<p>Ispum D.</p>
+	</div>
+
+	<div id="contentE" class="tabcontent">
+		<p>TEAM SELECTION</p>
+
+BALANCE
+Batsmen:		At least 4
+All-Rounders:		At least 2
+Wicket Keeper:		Exactly 1
+Bowlers:		At least 2
+Make one player of you’re the powerplayer
+TEAM SPREAD
+You can pick a maximum of 6 players from a single Team.
+
+SCORING
+
+BATTING POINTS
+Base Score:		1 point per run.
+Impact Score:		2 points per six, -5 for a duck.
+Milestone Bonus:		10 points for every 25 runs scored.
+Pace Bonus:		Runs Scored – Balls faced.
+BOWLING POINTS
+Base Score:		20 points per wicket.
+Impact Score:		1 point per dot ball, 20 points for a maiden over.
+Milestone Bonus:		10 points for the 2nd wicket, 10 points for each subsequent wicket.
+Pace Bonus:		1.5 x Balls – Runs conceded. If it is positive, it is doubled.
+FIELDING POINTS
+Catch:		10 points.
+Stumping:	15 points.
+Run Out:	10 points for each player involved.
+BONUS POINTS
+ Player of the Match:	25 points.
+The points of your power player gets doubled.
+	<p>Ispum E.</p>
 	</div>
 
 </div>
