@@ -64,6 +64,8 @@ class CricketPlayer(models.Model):
 class fixtureCricketPlayers(models.Model):
 	playerid=models.CharField(max_length=5,blank=True)	
 	fixtureid=models.CharField(max_length=5,blank=True)
+	firstname=models.CharField(max_length=30)
+	lastname=models.CharField(max_length=30)
 	runsmade=models.PositiveSmallIntegerField()
 	wickets=models.PositiveSmallIntegerField()
 	ballsfaced=models.PositiveSmallIntegerField()
@@ -106,7 +108,7 @@ class fixtures(models.Model):
 		inserting the players as soon as the fixture is made
 		"""
 		for c in tobeinsert:
-			fcp=fixtureCricketPlayers(playerid=c.playerid,fixtureid=c.fixtureid,\
+			fcp=fixtureCricketPlayers(playerid=c.playerid,fixtureid=self.fixtureid,\
 			mom=False,runsmade=0,wickets=0,ballsfaced=0,fours=0,sixes=0,oversbowled=0,\
 			maidenovers=0,runsgiven=0,catches=0,stumpings=0,runouts=0,dotsbowled=0,\
 			funscore=0)

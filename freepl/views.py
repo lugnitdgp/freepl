@@ -159,7 +159,7 @@ def mainpage(request):
 	recentusers=fplUser.objects.all().order_by('recentscore')
 	return render(request,'main/logged.html',{"username":request.user.username,\
 	"playerlist":playerlist,"fixnteamsnpow":fixnteamsnpow,"fixtureresults":fixtureresults,\
-	"cumusers":cumusers,"recentusers":recentusers})
+	"cumusers":cumusers,"recentusers":recentusers,"allfixtures":allfixtures})
 
 def logoutit(request):
 	logout(request)

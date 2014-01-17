@@ -82,11 +82,16 @@ $('.lockteam').click(function() {
 	});
 	
 	//function for fixture submenu click
-	$(".fixture").click(function(){
+	$("li.fixture").click(function(){
 
-		$("td.clickablepl").attr("style","background:;");
+		//$("td.clickablepl").attr("style","background:;");
+		//should be getting rid of this hack!!!!
 		var fid=$(this).attr("id");
-		$( "div.fixturecontent" ).hide();
+		$("div.tabcontent").hide();
+		$("div.fixturecontent").hide();
+		$("#contentA").show();
+		$("li.tab").removeClass("active");
+		$("li#A").addClass("active");
 		$("#f"+fid).show();
 		//$( "div.fixturecontent" ).show();
 		console.log(fid);
@@ -106,6 +111,104 @@ $('.lockteam').click(function() {
 			$(this).attr("style","background:;");
 			$(this).children("td.powerornot").attr("style","background:;");
 		}
+		//do the checking and update error displaying 
+		var fid=$(this).parents('div.fixturecontent').attr("id");
+		var totalprice=0;
+		var totalbat=0;
+		var totalbowl=0;
+		var totalwk=0;
+		var totalallround=0;
+		var teamA="";
+		var teamB="";
+		var Acount=0;
+		var Bcount=0;
+		var tpowp=0;
+		console.log(fid);
+		{%for fixture in allfixtures%}
+			//console.log("{{fixture.teamA}}");
+			if ("{{fixture.fixtureid}}" == fid)
+			{
+				teamA=String("{{fixture.teamA}}");
+				teamB=String("{{fixture.teamB}}");
+			}
+		{%endfor%}
+		console.log(String(teamA));
+		console.log(String(teamB));		
+		$( "div#"+fid+" tr.clickablepl" ).each(function( i ) {
+				if($(this).attr("style")=="background:white;")
+				{
+					//console.log($(this).children("td.c2").html().trim());
+					totalprice+=parseInt($(this).children("td.c3").text());
+					if($(this).children("td.c4").text()=="bowl")
+						totalbowl+=1;
+					if($(this).children("td.c4").text()=="bat")
+						totalbat+=1;
+					if($(this).children("td.c4").text()=="wk")
+						totalwk+=1;
+					if($(this).children("td.c4").text()=="allround")
+						totalallround+=1;
+					if($(this).children("td.c5").attr("style")==("background:green;"))
+						tpowp+=1;
+					if($(this).children("td.c2").html().trim()==String(teamA))
+						Acount+=1;
+					if($(this).children("td.c2").html().trim()==String(teamB))
+						{Bcount+=1;
+						//console.log("ddd");
+						}
+				}
+				
+				//do the checking
+				
+				if(Acount>6 || Bcount>6)
+					$("p#fixterror1").attr("style","color:red");
+				else
+					$("p#fixterror1").attr("style","color:black");
+					//"Maximum players from a single team exceeded!"
+				
+				if(totalwk != 1)
+					$("p#fixterror2").attr("style","color:red");
+				else
+					$("p#fixterror2").attr("style","color:black");
+				// "You must keep only one wicketkeeper!"		
+				
+				if(totalbat<4)
+					$("p#fixterror3").attr("style","color:red");
+				else
+					$("p#fixterror3").attr("style","color:black");
+				// "Batsmen insufficient!"
+				
+				
+				if(totalbowl<2)
+					$("p#fixterror4").attr("style","color:red");
+				else
+					$("p#fixterror4").attr("style","color:black");
+				// "Bowlers insufficient!"
+				
+				
+				if(totalallround<2)
+					$("p#fixterror5").attr("style","color:red");
+				else
+					$("p#fixterror5").attr("style","color:black");				
+				// "Allrounders insufficient!"
+				
+				
+				if(tpowp != 1)
+					$("p#fixterror6").attr("style","color:red");
+				else
+					$("p#fixterror6").attr("style","color:black");				
+				//"Power player missing"
+				
+				
+				if(totalprice>800)
+					$("p#fixterror7").attr("style","color:red");
+				else
+					$("p#fixterror7").attr("style","color:black");
+				//"Total Budget Exceeded!"
+				var moneyleft = 800-totalprice;
+				if(moneyleft<0)
+				moneyleft=0;
+				$("p#fixterror8").html("Total money left: "+moneyleft);
+		});
 		return false;
 	});
 
@@ -175,24 +278,27 @@ $('.lockteam').click(function() {
 		
 		//function for powerplayer clicking
 		$("td.powerornot").click(function(){
-				$("tr.clickablepl td.powerornot").each(function(){
-				
+		
+			if($(this).parent("tr").hasClass("clickablepl"))
+			{
+				$("tr.clickablepl td.powerornot").each(function(){	
 				if($(this).attr("style")==("background:green;"))
 					{
 						$(this).attr("style","background:white;");}
 				});
-			if($(this).parent("tr.clickablepl").attr("style")=="background:white;")
-			{
-	
-				if($(this).attr("style")=="background:green;")
-				$(this).attr("style","background:;");
+				if($(this).parent("tr.clickablepl").attr("style")=="background:white;")
+				{
+		
+					if($(this).attr("style")=="background:green;")
+					$(this).attr("style","background:;");
+					else
+					$(this).attr("style","background:green;");
+				}
 				else
-				$(this).attr("style","background:green;");
-			}
-			else
-			{
-				$(this).parent("tr.clickablepl").attr("style","background:white;");
-				$(this).attr("style","background:green;")
+				{
+					$(this).parent("tr.clickablepl").attr("style","background:white;");
+					$(this).attr("style","background:green;");
+				}
 			}
 			return false;
 		});
@@ -222,13 +328,13 @@ $('.lockteam').click(function() {
 <ul>
    <li id="A" class='has-sub active tab'><a href='#'><span>Fixtures</span></a>
 	  <ul class="bg">
-		  {% for fixture,b,c in fixnteamsnpow %}
-         <li class='last fixture' class="bg" id={{fixture.id}} >{#this is why i have to use pid,fid n stuff..#}
-			 <a href='#' class="bg">
-				 <span> {{fixture.teamA}} vs {{fixture.teamB}} on {{fixture.date}}</span>
-			 </a>
-         </li>
-         {% endfor %}
+		{% for fixture,b,c in fixnteamsnpow %}
+		    <li class='last fixture' class="bg" id={{fixture.id}} >{#this is why i have to use pid,fid n stuff..#}
+				    <a href='#' class="bg">
+					    <span> {{fixture.teamA}} vs {{fixture.teamB}} on {{fixture.date}}</span>
+				    </a>
+		    </li>
+		{% endfor %}
       </ul>
    </li>
    
@@ -244,48 +350,61 @@ $('.lockteam').click(function() {
 		
 		{% for fixture,team_list,teampowerpid in fixnteamsnpow %}
 		<div class="fixturecontent" id={{fixture.fixtureid}}>
-			
-			<p class="fixturelabel">Fixture: {{fixture.teamA}} vs {{fixture.teamB}} on {{fixture.date}}</p>
-			<hr id="fxtr_hr"></hr>
-			{% if fixture.isactive %}
-					{% csrf_token %}
-					{%if not team_list%}
+			{% if fixture.isactive %}			
+			  <p class="fixturelabel">Fixture: {{fixture.teamA}} vs {{fixture.teamB}} on {{fixture.date}}</p>
+			  <hr id="fxtr_hr"></hr>
+				{%if not team_list and not fixture.isover %}
+				<div class="rules">
+					<h2>Rules</h2>
+					<p id="fixterror" style="width:1000px;"></p>
+					<p id="fixterror1" style="color:yellow;width:1000px;">Maximum players from a single team can't exceed 6</p>
+					<p id="fixterror2" style="width:1000px;color:yellow;">You must have only one wicketkeeper</p>
+					<p id="fixterror3" style="width:1000px;color:yellow;">Batsmen must be atleast 4 in number</p>
+					<p id="fixterror4" style="width:1000px;color:yellow;">Bowlers must be atleast 2 in number</p>
+					<p id="fixterror5" style="width:1000px;color:yellow;">Allrounders must be atleast 2 in number</p>
+					<p id="fixterror6" style="width:1000px;color:yellow;">There must be exactly one power player</p>
+					<p id="fixterror7" style="width:1000px;color:yellow;">Total budget must not exceed 800</p>
+					<p id="fixterror8" style="width:1000px;color:yellow;">Total money left: 800</p>
+							
+				</div>
+					{% csrf_token %}					
 					<input class="teamname" placeholder="Enter Your team name"></input>
 					<button class="lockteam submitbutton">Lock the team</button>
-					<div style="width:1000px;" class="rght_table">
-						<p id="fixterror" style="width:1000px;"></p>
-					</div>
-					{%endif%}
+
+				{%endif%}
 					<table class="allplayer" {% if fixture.isover and not team_list %}style="display:none;"{% endif %} >	
-						<tr id="tableheader" style={% if fixture.isover %}"display:none;"{% endif %}>
-							<td>  Name  </td>
-							<td>  Country  </td>
-							<td>  Price  </td>
-							<td>  Points So Far!  </td>
-							<td>  Role  </td>
-							<td>  Power or not  </td>
+						<tr id="tableheader" }>
+							<td >  Name  </td>
+							<td >  Country  </td>
+							<td >  Price  </td>
+							<!--td>  Points So Far!  </td-->
+							<td >  Role  </td>
+							<td >  Power or not  </td>
 						
 						</tr>
 						{% if team_list %}
 							<div><p>You locked your team!</p></div>
 							{% for player in team_list %}				
 							<tr>
-								<td>  {{player.firstname}} {{player.lastname}} </td>
-								<td>  {{player.country}}  </td>
-								<td>  {{player.price}}  </td>
-								<td>  {{player.netperformance}}  </td>
-								<td id={{player.role}}> {{player.role}}</td>
+								<td >{{player.firstname}} {{player.lastname}}</td>
+								<td >{{player.country}}</td>
+								<td >{{player.price}}</td>
+								<!--td>  {{player.netperformance}}  </td!-->
+								<td id={{player.role}}>{{player.role}}</td>
 								{% if player.playerid == teampowerpid %}
-								<td class="powerornot" style="background:#94ff32;">        p</td>
+								<td class="powerornot" style="background:green;">        p</td>
 								{% else %}
 								<td class="powerornot" style="background:;">        p</td>		
 								{% endif %}
 							</tr>
 							{% endfor %}
 							{% if fixture.isover %}
-								<p>Your team scored {{ok}} fantasy points.</p>
+							    {%for result in myresults%}
+								{%if result.fixtureid == fixture.fixtureid%}
+								  <p>Your team scored {{result.score}} freepl points.</p>
+								{%endif%}
+							    {%endfor%}
 							{% endif %}
-							</table>
 						{% else %}
 							{% if fixture.isover %}
 								<p>Sorry but the fixture is over, and you did not make any team</p>
@@ -294,35 +413,41 @@ $('.lockteam').click(function() {
 								{% for player in playerlist %}
 									{% if fixture.teamA == player.country or fixture.teamB == player.country %}				
 										<tr class="clickablepl" id={{player.playerid}} style="background:;" >
-											<td>  {{player.firstname}} {{player.lastname}}  </td>
-											<td>  {{player.country}}  </td>
-											<td>  {{player.price}}  </td>
-											<td>  {{player.netperformance}}  </td>
-											<td id={{player.role}}>{{player.role}}</td>
-											<td class="powerornot">           </td>
+											<td class="c1">  {{player.firstname}} {{player.lastname}}  </td>
+											<td class="c2">  {{player.country}}  </td>
+											<td class="c3">  {{player.price}}  </td>
+											<!--td>  {{player.netperformance}}  </td-->
+											<td class="c4" id={{player.role}}>{{player.role}}</td>
+											<td class="powerornot c5">           </td>
 										</tr>
 									{% endif %}
 								{% endfor %}	
 							</table>
 
-							{% 	endif %}
+							{%endif %}
 						{% endif %}
 					{% if fixture.isover %}
-							<table class="allteams" style="width:500px;">
+							<table class="allteams">
+									<tr id="tbheader_allteams">
+										<td>Team names</td>
+										<td> Score </td>
+									</tr>
 								{% for obj in fixtureresults %}
 									{% if obj.fixtureid == fixture.fixtureid %}
+									
 									<tr>
-										<td>{{obj.teamname}}</td><td>{{obj.points}}</td>
+										<td>{{obj.teamname}}</td>
+										<td>{{obj.score}}</td>
 									</tr>
 									{% endif %}
 								{% endfor %}
 							</table>
 					{% endif %}			
-				{%else%}{#fixture is not active#}
-					<p>You can lock your team 24 hours before the match.</p>
-				{%endif%}
+			{%else%}{#fixture is not active#}
+				<p>You can lock your team 24 hours before the match.</p>
+			{%endif%}
 			</div>
-			{%endfor%}
+		{%endfor%}
 
 		
 	</div>

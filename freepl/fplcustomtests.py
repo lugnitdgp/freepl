@@ -5,6 +5,7 @@ class istheteamvalid:
 	teamAcount=0
 	teamBcount=0
 	powp=""
+	totalprice=0
 	plrcount={"bat":0,"bowl":0,"wk":0,"allround":0}
 	def __init__(self,ply,rivals,powp):
 		self.plrcount["bat"]=0
@@ -12,6 +13,7 @@ class istheteamvalid:
 		self.plrcount["wk"]=0
 		self.plrcount["allround"]=0
 		for i in range(0,len(ply)):
+			self.totalprice+=ply[i].price
 			if ply[i].role=="wk":
 				print ply[i].playerid
 			self.plrcount[ply[i].role]+=1
@@ -37,4 +39,6 @@ class istheteamvalid:
 			return "Allrounders insufficient!"
 		if self.powp=="":
 			return "Power player missing"
+		if self.totalprice>800:
+			return "Total Budget Exceeded!"
 		return "yes"
