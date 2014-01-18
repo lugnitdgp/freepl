@@ -134,8 +134,12 @@ def mainpage(request):
 	allfixtures=fixtures.objects.all()
 	teamlists=[]
 	powerpids=[]
+	teamnames=[]
+	tt=fixtureTeams.objects.filter(username=request.user.username)
+	myresults=list(tt)
+	print myresults
+	print "fd"
 	for fix in allfixtures:
-		tt=fixtureTeams.objects.filter(username=request.user.username)
 		userfixtured=[]
 		if tt:
 			print tt			
@@ -143,9 +147,11 @@ def mainpage(request):
 			if userfixtured:
 				teamlists.append(make_playerlist_from_config(userfixtured[0].teamconfig))
 				powerpids.append(userfixtured[0].powerpid)
+				teamnames.append(userfixtured[0].teamname)
 			else:
 				teamlists.append([])
 				powerpids.append("")
+				teamnames.append("")
 		else:
 			teamlists.append([])
 			powerpids.append("")
@@ -153,13 +159,13 @@ def mainpage(request):
 	"""
 	following is a three-in-one list zipped into one.
 	"""
-	fixnteamsnpow=zip(allfixtures,teamlists,powerpids)
+	fixnteamsnpowname=zip(allfixtures,teamlists,powerpids,teamnames)
 	fixtureresults=fixtureTeams.objects.all().order_by('score')
 	cumusers=fplUser.objects.all().order_by('cumulativescore')
 	recentusers=fplUser.objects.all().order_by('recentscore')
 	return render(request,'main/logged.html',{"username":request.user.username,\
-	"playerlist":playerlist,"fixnteamsnpow":fixnteamsnpow,"fixtureresults":fixtureresults,\
-	"cumusers":cumusers,"recentusers":recentusers,"allfixtures":allfixtures})
+	"playerlist":playerlist,"fixnteamsnpowname":fixnteamsnpowname,"fixtureresults":fixtureresults,\
+	"cumusers":cumusers,"myresults":myresults,"allfixtures":allfixtures})
 
 def logoutit(request):
 	logout(request)
@@ -182,9 +188,11 @@ def locktheteamit(request):
 		if tmp["teamconfig"]=="" or tmp["teamname"]=="" or len(tmp2)!=12:
 			response_dict={"server_response":"no","server_message":"Improper team name or configuration."}
 			return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')
-		if fixtureTeams.objects.filter(teamname=tmp["teamname"],fixtureid=tmp["fixtureid"]):
-			response_dict={"server_response":"no","server_message":"Team Name already taken for the fixture."}
+		allfixteams=fixtureTeams.objects.filter(teamname=tmp["teamname"],fixtureid=tmp["fixtureid"])
+		if not (allfixteams.filter(username=request.user.username)) and allfixteams:
+			response_dict={"server_response":"no","server_message":"someone already took the team name for the fixture."}
 			return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')			
+		
 		rivals=[]
 		rivals.append(fixtures.objects.get(fixtureid=tmp["fixtureid"]).teamA)
 		rivals.append(fixtures.objects.get(fixtureid=tmp["fixtureid"]).teamB)
@@ -200,6 +208,8 @@ def locktheteamit(request):
 			in the fixtureteams db
 			"""
 			#print ftdobj
+			#deleting any old teams
+			fixtureTeams.objects.filter(fixtureid=tmp["fixtureid"],username=request.user.username).delete()			
 			ftdbobj=fixtureTeams(teamname=tmp["teamname"],username=request.user.username,\
 			fixtureid=tmp["fixtureid"],teamconfig=tmp["teamconfig"],powerpid=tmp["powerpid"],score=0)
 			ftdbobj.save()

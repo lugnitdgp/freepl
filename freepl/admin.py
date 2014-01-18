@@ -37,7 +37,8 @@ def update_scores_of_fixture_teams(modeladmin, request, queryset):
 			queryset.filter(fixtureid=fixture.fixtureid).filter(teamname=teamname).update(score=points)
 			#fplUser.objects.all().filter(username=username).update(cumulativescore=cumulativescore+points)
 			fu=fplUser.objects.filter(username=username)
-			print fu			
+			print fu
+			print points
 			fu[0].cumulativescore+=points
 			fu[0].save()
 """
@@ -47,7 +48,7 @@ fixtureCricketPlayer table.
 def update_scores_of_cricket_plys(modeladmin, request, queryset):
 	cal=mainscore()
 	queryset.update(funscore=cal.do(runsmade,wickets,ballsfaced,fours,\
-	sixes,oversbowled,maidenovers,runsgiven,catches,stumpings,runouts,dotsbowled,mom))
+	sixes,oversbowled,maidenovers,runsgiven,catches,stumpings,runouts,dotsbowled,mom,dnb))
 	
 	
 class fplUserAdmin(admin.ModelAdmin):
@@ -73,12 +74,12 @@ class fixtureTeamsAdmin(admin.ModelAdmin):
 	actions=[update_scores_of_fixture_teams]
 
 class fixtureCricketPlayersAdmin(admin.ModelAdmin):
-	list_display=('fixtureid','playerid','runsmade','runsmade','wickets','ballsfaced','fours',\
-	'sixes','oversbowled','maidenovers','runsgiven','catches','stumpings','runouts','dotsbowled','mom')
+	list_display=('fixtureid','playerid','runsmade','wickets','ballsfaced','fours',\
+	'sixes','oversbowled','maidenovers','runsgiven','catches','stumpings','runouts','dotsbowled','mom','funscore')
 	list_display_links=['fixtureid','playerid']
 	list_editable=('runsmade','wickets','ballsfaced','fours',\
-	'sixes','oversbowled','maidenovers','runsgiven','catches','stumpings','runouts','dotsbowled','mom')
-	actions=[update_scores_of_cricket_plys]
+	'sixes','oversbowled','maidenovers','runsgiven','catches','stumpings','runouts','dotsbowled','mom','funscore')
+	#actions=[update_scores_of_cricket_plys]
 
 	
 admin.site.register(fplUser,fplUserAdmin)

@@ -39,6 +39,6 @@ class istheteamvalid:
 			return "Allrounders insufficient!"
 		if self.powp=="":
 			return "Power player missing"
-		if self.totalprice>800:
+		if self.totalprice>850:
 			return "Total Budget Exceeded!"
 		return "yes"

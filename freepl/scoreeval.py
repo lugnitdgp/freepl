@@ -2,10 +2,10 @@ class mainscore:
 	def __init__():
 		print "recvd for score eval"
 	def do(runsmade,wickets,ballsfaced,fours,sixes,oversbowled,maidenovers,\
-	runsgiven,catches,stumpings,runouts,dotsbowled,mom):
+	runsgiven,catches,stumpings,runouts,dotsbowled,mom,dnb):
 		s1=runsmade
 		s2=2*sixes
-		if (runsmade==0):
+		if (runsmade==0 and not dnb):
 			s2-=5
 		s3=(runsmade/25)*10
 		s4=runsmade-ballsfaced

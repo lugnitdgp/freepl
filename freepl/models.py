@@ -50,14 +50,16 @@ class CricketPlayer(models.Model):
 		super(CricketPlayer, self).save(*args, **kwargs) # Call the "real" save() method.
 		self.playerid="p"+str(self.id)
 		super(CricketPlayer, self).save(*args, **kwargs) # Call the "real" save() method.
+		"""
 		for fixture in fixtures.objects.all():
 			if(fixture.teamA==self.country or fixture.teamB==self.country):
 				print self.playerid,fixture.fixtureid
 				fcp=fixtureCricketPlayers(playerid=self.playerid,fixtureid=fixture.fixtureid,\
 				mom=False,runsmade=0,wickets=0,ballsfaced=0,fours=0,sixes=0,oversbowled=0,\
 				maidenovers=0,runsgiven=0,catches=0,stumpings=0,runouts=0,dotsbowled=0,\
-				funscore=0)
+				funscore=0,dnb=0)
 				fcp.save()
+		"""
 #table is useless for displaying purpose in django admin
 #But is heavily used for calculating scores for each team in a fixture
 
@@ -79,6 +81,7 @@ class fixtureCricketPlayers(models.Model):
 	runouts=models.PositiveSmallIntegerField()
 	dotsbowled=models.PositiveSmallIntegerField()
 	mom=models.BooleanField()
+	dnb=models.BooleanField()
 	funscore=models.PositiveSmallIntegerField()
 	
 	def __unicode__(self):
@@ -102,15 +105,17 @@ class fixtures(models.Model):
 		"""
 		updating the fixtureCricketPlayers, using this and CricketPlayer
 		"""
+		"""
 		tobeinsert=CricketPlayer.objects.filter(Q(country=self.teamA)|Q(country=self.teamB))
 		tobeinsert=list(tobeinsert)
-		"""
+		
 		inserting the players as soon as the fixture is made
-		"""
+		
 		for c in tobeinsert:
 			fcp=fixtureCricketPlayers(playerid=c.playerid,fixtureid=self.fixtureid,\
 			mom=False,runsmade=0,wickets=0,ballsfaced=0,fours=0,sixes=0,oversbowled=0,\
 			maidenovers=0,runsgiven=0,catches=0,stumpings=0,runouts=0,dotsbowled=0,\
-			funscore=0)
+			funscore=0,dnb=0)
 			fcp.save()
+		"""
 		super(fixtures, self).save(*args, **kwargs) # Call the "real" save() method.
