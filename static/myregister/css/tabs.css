@@ -24,6 +24,10 @@
 .stuck
 {
 position:fixed;
+top:-10px;
+z-index:5;
+width:100%;
+  
 }
 #cssmenu:after,
 #cssmenu ul:after {

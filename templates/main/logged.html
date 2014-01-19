@@ -19,6 +19,21 @@
 
 $(document).ready(function() {
 
+	//initialising conditions for the tabs
+	$("#contentB").hide();
+	$("#contentC").hide();
+	$("#contentD").hide();
+	$("#contentE").hide();
+	$( "div.fixturecontent" ).hide();
+
+	{% for fixture in allfixtures %}
+	   {%if fixture.isover%}
+		$("div.fixturecontent").each(function(i){
+		  $(this).children("table.allplayer").addClass("tbleft");
+		  $(this).children("table.allteams").removeClass("tbleft");
+	      }); 
+	   {%endif%}
+	{% endfor %}
 
 
 	var errorfunction = function(){
@@ -154,14 +169,7 @@ $(document).ready(function() {
 	
 	
 	
-	//initialising conditions for the tabs
-	$("#contentB").hide();
-	$("#contentC").hide();
-	$("#contentD").hide();
-	$("#contentE").hide();
-	$( "div.fixturecontent" ).hide();
-	var wdth=$(window).innerWidth();
-	$('.fr').css("width","wdth");
+
 
 
 
@@ -224,10 +232,10 @@ $(document).ready(function() {
 		//should be getting rid of this hack!!!!
 		var fid=$(this).attr("id");
 		//$("div.tabcontent").hide();
-		$("div.fixturecontent").hide();
-		//$("#contentA").show();
-		//$("li.tab").removeClass("active");
-		//$("li#A").addClass("active");
+		$("div.tabcontent").hide();
+		$("#contentA").show();
+		$("li.tab").removeClass("active");
+		$("li#A").addClass("active");
 		$("#f"+fid).show(errorfunction);
 		//$( "div.fixturecontent" ).show();
 		console.log(fid);
@@ -364,26 +372,20 @@ $(document).ready(function() {
 
 </head>
 
-<div>
-	<table>
-	<tr>
-	<td><img src="{% static 'myregister/images/fpl.png' %}" style="margin-bottom:0px;"></td>
-	<td style="font-size:18px;">Welcomes you, {{ username }}</td>
-	<td class="fr">{% csrf_token %}<button id="logoutbtn" class="submitbutton"  type="button">Log out</button>
-</td>
-	</tr>
-	</table>
-	
+<div class="header">
+	<div class="mainheadelement"><img src="{% static 'myregister/images/fpl.png' %}" style="margin-bottom:0px;"></div>
+	<div class="mainheadelement" id="welcomesu" style="font-size:18px;">Welcomes you, {{ username }}</div>
+	<div class="mainheadelement" id="logoutbtn">{% csrf_token %}<button  class="submitbutton"  type="button">Log out</button></div>	
 </div>
 <body>
 
 <div id='cssmenu' class="sticky">
 <ul>
    <li id="A" class='has-sub active tab'><a href='#'><span>Fixtures</span></a>
-	  <ul class="bg">
+	  <ul>
 		{% for fixture,b,c in fixnteamsnpowname %}
-		    <li class='last fixture' class="bg" id={{fixture.id}} >{#this is why i have to use pid,fid n stuff..#}
-				    <a href='#' class="bg">
+		    <li class='last fixture'  id={{fixture.id}} >{#this is why i have to use pid,fid n stuff..#}
+				    <a href='#' >
 					    <span> {{fixture.teamA}} vs {{fixture.teamB}} on {{fixture.date}}</span>
 				    </a>
 		    </li>
@@ -406,7 +408,8 @@ $(document).ready(function() {
 			{% if fixture.isactive %}			
 			  <p class="fixturelabel">Fixture: {{fixture.teamA}} vs {{fixture.teamB}} on {{fixture.date}}</p>
 			  <hr id="fxtr_hr"></hr>
-				{%if not fixture.isover %}
+				{%if fixture.isover or fixture.nomoreteams %}
+				{%else%}
 				<div class="rules">
 					<h2>Rules</h2>
 					<p class="fixterror" style="width:1000px;color:yellow"></p>
@@ -431,7 +434,7 @@ $(document).ready(function() {
 				<!-- condition for rendering of the table -->
 				{% if fixture.isover and team_list or not fixture.isover  %}
 					<table class="allplayer">	
-						<tr id="tableheader">
+						<tr class="tableheader">
 							<td >  Name  </td>
 							<td >  Country  </td>
 							<td >  Price  </td>
@@ -440,7 +443,7 @@ $(document).ready(function() {
 							<td >  Power or not  </td>
 						
 						</tr>
-						   {%if fixture.isover%}
+						   {%if fixture.isover or fixture.nomoreteams%}
 						   	<!-- if fixture is over display a static table -->
 							{% for player in team_list %}
 							      <tr id="{{player.playerid}}" >
@@ -484,31 +487,35 @@ $(document).ready(function() {
 				<!-- apart from displaying or not displaying the table -->
 				{% if fixture.isover %}
 				    {% if team_list %}
-				      {%for result in myresults%}
-					{%if result.fixtureid == fixture.fixtureid%}
-					    <p>Your team {{tname}} scored {{result.score}} freepl points.</p>
-					{%endif%}
-				      {%endfor%}
+					{%for result in myresults%}
+					    {%if result.fixtureid == fixture.fixtureid%}
+						<p>Your team {{tname}} scored {{result.score}} freepl points.</p>
+					    {%endif%}
+					 {%endfor%}
 				    {%else%}
-					<p>Sorry but the fixture is over, and you did not make any team</p>					
+					  <p>Sorry but the fixture is over, and you did not make any team</p>					
 				    {% endif %}
+				{%else%}
+				      {%if fixture.nomoreteams%}
+					  <p>Thank you for selecting your team! Enjoy the match :D </p>
+				      {%endif%}
 				{% endif %}
 				
 				{% if fixture.isover %}
-				<table class="allteams">
-				    <tr id="tbheader_allteams">
-					<td>Team names</td>
-					<td> Score </td>
-				    </tr>
-				    {% for obj in fixtureresults %}
-					 {% if obj.fixtureid == fixture.fixtureid %}
-					    <tr>
-						<td>{{obj.teamname}}</td>
-						<td>{{obj.score}}</td>
-					    </tr>
-					  {% endif %}
-				     {% endfor %}
-				</table>
+				    <table class="allteams allplayer tbright">
+					<tr class="tableheader">
+					    <td>Team names</td>
+					    <td> Score </td>
+					</tr>
+					{% for obj in fixtureresults %}
+					    {% if obj.fixtureid == fixture.fixtureid %}
+						<tr>
+						    <td>{{obj.teamname}}</td>
+						    <td>{{obj.score}}</td>
+						</tr>
+					      {% endif %}
+					{% endfor %}
+				    </table>
 				{% endif %}			
 			  <!--- fixture active ends here -->
 			

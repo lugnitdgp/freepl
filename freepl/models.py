@@ -92,6 +92,7 @@ class fixtures(models.Model):
 	fixtureid=models.CharField(max_length=5,blank=True)
 	isactive=models.BooleanField()
 	isover=models.BooleanField()
+	nomoreteams=models.BooleanField()
 	teamA=models.CharField(max_length=100)
 	teamB=models.CharField(max_length=100)
 	date=models.CharField(max_length=20)

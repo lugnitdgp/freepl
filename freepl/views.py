@@ -47,10 +47,9 @@ def user_verify(request,activation_key):
 	
 # Create your views here.
 def init(request):
-	if User.objects.filter(username='majal'):
-		print "oye"
+
 	if request.user.is_authenticated():
-		return render(request,'main/logged.html',{"username":request.user.username})
+		return mainpage(request)#,'main/logged.html',{"username":request.user.username})	
 	else:
 		return render(request,'startpage/start.html')
 from django.contrib.auth.decorators import login_required

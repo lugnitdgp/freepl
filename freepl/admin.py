@@ -63,9 +63,9 @@ class CricketPlayerAdmin(admin.ModelAdmin):
 
 
 class fixturesAdmin(admin.ModelAdmin):
-	list_display=('fixtureid','teamA','teamB','isactive','isover')
+	list_display=('fixtureid','teamA','teamB','isactive','isover','nomoreteams')
 	list_display_links=['fixtureid']
-	list_editable=('teamA','teamB','isactive','isover')
+	list_editable=('teamA','teamB','isactive','isover','nomoreteams')
 
 class fixtureTeamsAdmin(admin.ModelAdmin):
 	list_display=('fixtureid','username','teamname','teamconfig','powerpid','score')
