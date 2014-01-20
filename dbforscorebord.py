@@ -1,19 +1,32 @@
 def do(runsmade,wickets,ballsfaced,fours,sixes,oversbowled,maidenovers,\
 runsgiven,catches,stumpings,runouts,dotsbowled,mom,dnb):
 	s1=runsmade
+	print "runs score",s1
 	s2=2*sixes
-	if (runsmade==0 and not dnb):
-		s2-=5
-	s3=(runsmade/25)*10
+	print "sixes points",s2
+	s3=int(runsmade/25)*10
+	print "milestone bonus",s3
 	s4=runsmade-ballsfaced
+	print "bat pace bonus",s4
 	batscore=s1+s2+s3+s4
+	if (runsmade==0 and not dnb):
+		batscore-=5
+	print batscore
+	
 	s1=20*wickets
+	print "wickets",s1
 	s2=dotsbowled
-	s3=10*(wickets-1)
-	s4=1.5*(10*oversbowled-9*int(oversbowled))-runsgiven
+	s3=0
+	if wickets>0:
+		s3=10*(wickets-1)
+	print "wickets extra",s3
+	ballsbowled=int(oversbowled)*6+(oversbowled-int(oversbowled))*10
+	s4=ballsbowled-runsgiven
 	if s4>0:
 		s4*=2
+	print "bowlpace bonus",s4
 	bowlscore=s1+s2+s3+s4
+	print "bowlscore",bowlscore
 	fieldscore=catches*10+stumpings*15+runouts*10
 	return int(batscore+fieldscore+bowlscore+25*mom)
 
@@ -41,6 +54,7 @@ query = """INSERT INTO freepl_fixturecricketplayers (fixtureid, playerid, firstn
 #print query
 
 # Create a For loop to iterate through each row in the XLS file, starting at row 2 to skip the headers
+pids=["p31","p33","p34","p41","p42","p45","p46","p52","p57","p60","p61"]
 fixtureid=str(filen[0])
 for r in range(1, sheet.nrows):
       playerid  = (sheet.cell(r,1).value)
@@ -65,6 +79,9 @@ for r in range(1, sheet.nrows):
       funscore=do(runsmade,wickets,ballsfaced,fours,sixes,oversbowled,maidenovers,\
       runsgiven,catches,stumpings,runouts,dotsbowled,mom,dnb)
       # Assign values from each row
+      print firstname,lastname,funscore
+      print ""
+      print ""
       values = (fixtureid,playerid, firstname, lastname,runsmade,wickets,\
       ballsfaced,fours,sixes,oversbowled,maidenovers,runsgiven,catches,\
       stumpings,runouts,dotsbowled,mom,funscore,dnb)

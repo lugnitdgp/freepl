@@ -155,6 +155,7 @@ def mainpage(request):
 			teamlists.append([])
 			powerpids.append("")
 	playerlist=CricketPlayer.objects.all()
+	allcricketplayers=CricketPlayer.objects.all()
 	"""
 	following is a three-in-one list zipped into one.
 	"""
@@ -164,7 +165,7 @@ def mainpage(request):
 	recentusers=fplUser.objects.all().order_by('recentscore')
 	return render(request,'main/logged.html',{"username":request.user.username,\
 	"playerlist":playerlist,"fixnteamsnpowname":fixnteamsnpowname,"fixtureresults":fixtureresults,\
-	"cumusers":cumusers,"myresults":myresults,"allfixtures":allfixtures})
+	"cumusers":cumusers,"myresults":myresults,"allfixtures":allfixtures,"allcricketplayers":allcricketplayers})
 
 def logoutit(request):
 	logout(request)
@@ -184,6 +185,13 @@ def locktheteamit(request):
 		print tmp["teamconfig"],tmp["fixtureid"],tmp["teamname"]
 		tmp2=tmp["teamconfig"].split(',')
 		#pretest
+		fixt=fixtures.objects.get(fixtureid=tmp["fixtureid"]
+		"""
+		very very important check!!!!!!!
+		"""
+		if fixt.nomoreteams or not fixt.isactive or fixt.isover:
+			response_dict={"server_response":"no","server_message":"Fixture either inactive, closed or over."}
+			return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')			
 		if tmp["teamconfig"]=="" or tmp["teamname"]=="" or len(tmp2)!=12:
 			response_dict={"server_response":"no","server_message":"Improper team name or configuration."}
 			return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')

@@ -15,6 +15,8 @@ def update_scores_of_fixture_teams(modeladmin, request, queryset):
 	for fixture in fixtures.objects.all():
 		curfixCP=allfixCP.filter(fixtureid=fixture.fixtureid)
 		curfixteams=queryset.filter(fixtureid=fixture.fixtureid)
+		print "dsdsd"
+		print curfixteams
 		for team in curfixteams:
 			plyrids=team.teamconfig.split(',')
 			teamname=team.teamname

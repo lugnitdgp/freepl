@@ -28,7 +28,9 @@ $(document).ready(function() {
 
 	{% for fixture in allfixtures %}
 	   {%if fixture.isover%}
+		console.log("fixture is over baby!");
 		$("div.fixturecontent").each(function(i){
+		  if($(this).attr("id")=="{{fixture.fixtureid}}")
 		  $(this).children("table.allplayer").addClass("tbleft");
 		  $(this).children("table.allteams").removeClass("tbleft");
 	      }); 
@@ -233,6 +235,7 @@ $(document).ready(function() {
 		var fid=$(this).attr("id");
 		//$("div.tabcontent").hide();
 		$("div.tabcontent").hide();
+		$("div.fixturecontent").hide();
 		$("#contentA").show();
 		$("li.tab").removeClass("active");
 		$("li#A").addClass("active");
@@ -529,7 +532,12 @@ $(document).ready(function() {
 	</div>
 	
 	<div id="contentB" class="tabcontent">
-		<table class="userstandings">
+		<table class="userstandings allplayer">
+		    	<tr class="tableheader">
+			      <td >  Name  </td>
+			      <td >  Net Points  </td>
+						
+			</tr>
 			{% for user in cumusers %}
 				<tr>
 					<td>{{user.username}}</td>
@@ -537,12 +545,16 @@ $(document).ready(function() {
 				</tr>
 			{% endfor %}
 		</table>
-	<p>Ispum B.</p>
 	</div>
 	
 	<div id="contentC" class="tabcontent">
-		<table class="ongoingmatches">
-			{% for fixture,b,c,d in fixnteamsnpowname %}
+		<table class="ongoingmatches allplayer">
+		    	<tr class="tableheader">
+			      <td >  Fixture  </td>
+			      <td >  Date  </td>
+						
+			</tr>
+			{% for fixture in allfixtures %}
 				{% if fixture.isactive and not fixture.isover %}
 				<tr>
 					<td>{{fixture.teamA}} vs {{fixture.teamB}}</td>
@@ -551,10 +563,26 @@ $(document).ready(function() {
 				{% endif %}
 			{% endfor %}
 		</table>
-	<p>Ispum C.</p>
 	</div>
 	
 	<div id="contentD" class="tabcontent">
+	    	<table class="playerperformances allplayer">
+		    	<tr class="tableheader">
+			      <td >   Player  </td>
+			      <td >   Country </td>
+			      <td >   Points accumulated </td>
+			      <td >   Price </td>
+						
+			</tr>
+			{% for cplayer in allcricketplayers %}
+				<tr>
+					<td>{{cplayer.firstname}} {{cplayer.lastname}}</td>
+					<td>{{cplayer.country}}</td>
+					<td>{{cplayer.netperformance}}</td>
+					<td>{{cplayer.price}}</td>
+				</tr>
+			{% endfor %}
+		</table>
 		Page under construction. 
 	<p>Ispum D.</p>
 	</div>
@@ -590,9 +618,8 @@ Run Out:	10 points for each player involved.
 BONUS POINTS
  Player of the Match:	25 points.
 The points of your power player gets doubled.
-	<p>Ispum E.</p>
 	</div>
 
 </div>
-
+		<p>Developed by GLUG, NIT Durgapur, licensed under GPL, Copyleft</p>
 </html>
