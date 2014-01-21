@@ -74,6 +74,12 @@ def registerit(request):
 	print "jh"
 	if chkkey(tmp,['email','username','phone','password','passwordagain']):
 		#check if user already exists
+		"""
+		to prevent the sending of large size data
+		"""
+		if len(tmp['username'])>29 or len(tmp['username'])>29 or len(tmp['password'])>29:
+			response_dict.update({"server_message":"You have exceeded the limit for text entry. MaxLength: 30 chars "})
+			return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')			
 		if User.objects.filter(username=tmp['username']):
 			response_dict.update({"server_message":"username already exists"})
 			return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')
@@ -148,24 +154,27 @@ def mainpage(request):
 				powerpids.append(userfixtured[0].powerpid)
 				teamnames.append(userfixtured[0].teamname)
 			else:
+				print "hh"
 				teamlists.append([])
 				powerpids.append("")
 				teamnames.append("")
 		else:
+			print "hh"
 			teamlists.append([])
 			powerpids.append("")
-	playerlist=CricketPlayer.objects.all()
-	allcricketplayers=CricketPlayer.objects.all()
+			teamnames.append("")
+	playerlist=CricketPlayer.objects.all().order_by('netperformance')
 	"""
 	following is a three-in-one list zipped into one.
 	"""
-	fixnteamsnpowname=zip(allfixtures,teamlists,powerpids,teamnames)
+	fixturewiseteams=zip(allfixtures,teamlists,powerpids,teamnames)
+	print len(fixturewiseteams),"sdsd"
 	fixtureresults=fixtureTeams.objects.all().order_by('score')
 	cumusers=fplUser.objects.all().order_by('cumulativescore')
 	recentusers=fplUser.objects.all().order_by('recentscore')
 	return render(request,'main/logged.html',{"username":request.user.username,\
-	"playerlist":playerlist,"fixnteamsnpowname":fixnteamsnpowname,"fixtureresults":fixtureresults,\
-	"cumusers":cumusers,"myresults":myresults,"allfixtures":allfixtures,"allcricketplayers":allcricketplayers})
+	"playerlist":playerlist,"fixturewiseteams":fixturewiseteams,"fixtureresults":fixtureresults,\
+	"cumusers":cumusers,"myresults":myresults,"allfixtures":allfixtures})
 
 def logoutit(request):
 	logout(request)
@@ -185,9 +194,9 @@ def locktheteamit(request):
 		print tmp["teamconfig"],tmp["fixtureid"],tmp["teamname"]
 		tmp2=tmp["teamconfig"].split(',')
 		#pretest
-		fixt=fixtures.objects.get(fixtureid=tmp["fixtureid"]
+		fixt=fixtures.objects.get(fixtureid=tmp["fixtureid"])
 		"""
-		very very important check!!!!!!!
+		#very very important check!!!!!!!
 		"""
 		if fixt.nomoreteams or not fixt.isactive or fixt.isover:
 			response_dict={"server_response":"no","server_message":"Fixture either inactive, closed or over."}

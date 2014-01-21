@@ -49,17 +49,19 @@ class CricketPlayer(models.Model):
 	def save(self, *args, **kwargs):
 		super(CricketPlayer, self).save(*args, **kwargs) # Call the "real" save() method.
 		self.playerid="p"+str(self.id)
+		print "new player added"
 		super(CricketPlayer, self).save(*args, **kwargs) # Call the "real" save() method.
-		"""
 		for fixture in fixtures.objects.all():
 			if(fixture.teamA==self.country or fixture.teamB==self.country):
-				print self.playerid,fixture.fixtureid
-				fcp=fixtureCricketPlayers(playerid=self.playerid,fixtureid=fixture.fixtureid,\
-				mom=False,runsmade=0,wickets=0,ballsfaced=0,fours=0,sixes=0,oversbowled=0,\
-				maidenovers=0,runsgiven=0,catches=0,stumpings=0,runouts=0,dotsbowled=0,\
-				funscore=0,dnb=0)
-				fcp.save()
-		"""
+				if fixtureCricketPlayers.objects.filter(playerid=self.playerid,fixtureid=fixture.fixtureid):
+					print "fixtureid and playerid, already exist, hence insertion skipped"
+				else:
+					print self.playerid,fixture.fixtureid
+					fcp=fixtureCricketPlayers(playerid=self.playerid,fixtureid=fixture.fixtureid,\
+					mom=False,runsmade=0,wickets=0,ballsfaced=0,fours=0,sixes=0,oversbowled=0,\
+					maidenovers=0,runsgiven=0,catches=0,stumpings=0,runouts=0,dotsbowled=0,\
+					funscore=0,dnb=0)
+					fcp.save()
 #table is useless for displaying purpose in django admin
 #But is heavily used for calculating scores for each team in a fixture
 
@@ -103,20 +105,21 @@ class fixtures(models.Model):
 	def save(self, *args, **kwargs):
 		super(fixtures, self).save(*args, **kwargs) # Call the "real" save() method.
 		self.fixtureid="f"+str(self.id)
+		super(fixtures, self).save(*args, **kwargs) # Call the "real" save() method.
 		"""
 		updating the fixtureCricketPlayers, using this and CricketPlayer
 		"""
-		"""
 		tobeinsert=CricketPlayer.objects.filter(Q(country=self.teamA)|Q(country=self.teamB))
 		tobeinsert=list(tobeinsert)
-		
-		inserting the players as soon as the fixture is made
-		
-		for c in tobeinsert:
-			fcp=fixtureCricketPlayers(playerid=c.playerid,fixtureid=self.fixtureid,\
-			mom=False,runsmade=0,wickets=0,ballsfaced=0,fours=0,sixes=0,oversbowled=0,\
-			maidenovers=0,runsgiven=0,catches=0,stumpings=0,runouts=0,dotsbowled=0,\
-			funscore=0,dnb=0)
-			fcp.save()
 		"""
-		super(fixtures, self).save(*args, **kwargs) # Call the "real" save() method.
+		inserting the players as soon as the fixture is made
+		"""
+		for c in tobeinsert:
+			if fixtureCricketPlayers.objects.filter(playerid=c.playerid,fixtureid=self.fixtureid):
+				 print "fixtureid and playerid, already exist, hence insertion skipped"
+			else:
+				  fcp=fixtureCricketPlayers(playerid=c.playerid,fixtureid=self.fixtureid,\
+				  mom=False,runsmade=0,wickets=0,ballsfaced=0,fours=0,sixes=0,oversbowled=0,\
+				  maidenovers=0,runsgiven=0,catches=0,stumpings=0,runouts=0,dotsbowled=0,\
+				  funscore=0,dnb=0)
+				  fcp.save()

@@ -62,12 +62,58 @@ class CricketPlayerAdmin(admin.ModelAdmin):
 	list_display=('firstname','lastname','playerid','country','role','netperformance','price')
 	list_display_links=['playerid']
 	list_editable=('firstname','lastname','country','role','netperformance','price')
+	
+	actions=['really_delete_selected','export_to_FixtureCricketPlayer']
+	def get_actions(self, request):
+	    actions = super(CricketPlayerAdmin, self).get_actions(request)
+	    del actions['delete_selected']
+	    return actions
+
+	def really_delete_selected(self, request, queryset):
+	    for obj in queryset:
+		fixtureCricketPlayer.objects.filter(playerid=obj.playerid).delete()
+		obj.delete()
+
+	    if queryset.count() == 1:
+		message_bit = "1 photoblog entry was"
+	    else:
+		message_bit = "%s photoblog entries were" % queryset.count()
+	    self.message_user(request, "%s successfully deleted." % message_bit)
+	really_delete_selected.short_description = "Delete selected entries"
+	
+	def export_to_FixtureCricketPlayer(self, request, queryset):
+	    for fixture in fixtures.objects.all():
+		for obj in queryset:
+		    if obj.country==fixture.teamA or obj.country==fixture.teamB:
+			fcp=fixtureCricketPlayers(playerid=obj.playerid,fixtureid=fixture.fixtureid,\
+			mom=False,runsmade=0,wickets=0,ballsfaced=0,fours=0,sixes=0,oversbowled=0,\
+			maidenovers=0,runsgiven=0,catches=0,stumpings=0,runouts=0,dotsbowled=0,\
+			funscore=0,dnb=0)
+			fcp.save()
 
 
 class fixturesAdmin(admin.ModelAdmin):
 	list_display=('fixtureid','teamA','teamB','isactive','isover','nomoreteams')
 	list_display_links=['fixtureid']
 	list_editable=('teamA','teamB','isactive','isover','nomoreteams')
+	
+	actions=['really_delete_selected']
+	def get_actions(self, request):
+	    actions = super(PhotoBlogEntryAdmin, self).get_actions(request)
+	    del actions['delete_selected']
+	    return actions
+
+	def really_delete_selected(self, request, queryset):
+	    for obj in queryset:
+		obj.delete()
+
+	    if queryset.count() == 1:
+		message_bit = "1 photoblog entry was"
+	    else:
+		message_bit = "%s photoblog entries were" % queryset.count()
+	    self.message_user(request, "%s successfully deleted." % message_bit)
+	really_delete_selected.short_description = "Delete selected entries"
+
 
 class fixtureTeamsAdmin(admin.ModelAdmin):
 	list_display=('fixtureid','username','teamname','teamconfig','powerpid','score')
@@ -76,12 +122,12 @@ class fixtureTeamsAdmin(admin.ModelAdmin):
 	actions=[update_scores_of_fixture_teams]
 
 class fixtureCricketPlayersAdmin(admin.ModelAdmin):
-	list_display=('fixtureid','playerid','runsmade','wickets','ballsfaced','fours',\
+	list_display=('fixtureid','playerid','firstname','lastname','runsmade','wickets','ballsfaced','fours',\
 	'sixes','oversbowled','maidenovers','runsgiven','catches','stumpings','runouts','dotsbowled','mom','funscore')
 	list_display_links=['fixtureid','playerid']
 	list_editable=('runsmade','wickets','ballsfaced','fours',\
-	'sixes','oversbowled','maidenovers','runsgiven','catches','stumpings','runouts','dotsbowled','mom','funscore')
-	#actions=[update_scores_of_cricket_plys]
+	'sixes','oversbowled','maidenovers','runsgiven','catches','stumpings','runouts','dotsbowled','mom')
+	actions=[update_scores_of_cricket_plys]
 
 	
 admin.site.register(fplUser,fplUserAdmin)

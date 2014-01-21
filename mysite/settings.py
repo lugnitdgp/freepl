@@ -38,6 +38,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.humanize',
 	'freepl',
+	'lockdown',
 )
 """
 here mention where your templates are. so wherever you put the repo, 
@@ -53,8 +54,11 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'lockdown.middleware.LockdownMiddleware', 
 )
 
+LOCKDOWN_PASSWORDS = ('iwantaccess', )
+LOCKDOWN_FORM = 'lockdown.forms.LockdownForm'
 ROOT_URLCONF = 'mysite.urls'
 
 WSGI_APPLICATION = 'mysite.wsgi.application'

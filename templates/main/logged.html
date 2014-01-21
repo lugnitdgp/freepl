@@ -218,6 +218,7 @@ $(document).ready(function() {
 	//function for the tab change feature
 	$(".tab").click(function()
 	{
+		$("div.landingpg").hide();
 		$(".active").removeClass("active");
 		$(this).addClass("active");
 		var alph=$(this).attr("id");
@@ -371,22 +372,18 @@ $(document).ready(function() {
 </script>
 
 
-
-
-</head>
-
 <div class="header">
-	<div class="mainheadelement"><img src="{% static 'myregister/images/fpl.png' %}" style="margin-bottom:0px;"></div>
-	<div class="mainheadelement" id="welcomesu" style="font-size:18px;">Welcomes you, {{ username }}</div>
-	<div class="mainheadelement" id="logoutbtn">{% csrf_token %}<button  class="submitbutton"  type="button">Log out</button></div>	
-</div>
-<body>
+
+	<img src="{% static 'myregister/images/fpl.png' %}" style="margin-bottom:0px;">
+	<label id="welcomesu">Welcomes you, {{ username }}</label>
+	{% csrf_token %}<button id="logoutbtn" class="submitbutton"  type="button">Log out</button>
+
 
 <div id='cssmenu' class="sticky">
 <ul>
    <li id="A" class='has-sub active tab'><a href='#'><span>Fixtures</span></a>
 	  <ul>
-		{% for fixture,b,c in fixnteamsnpowname %}
+		{% for fixture in allfixtures %}
 		    <li class='last fixture'  id={{fixture.id}} >{#this is why i have to use pid,fid n stuff..#}
 				    <a href='#' >
 					    <span> {{fixture.teamA}} vs {{fixture.teamB}} on {{fixture.date}}</span>
@@ -403,10 +400,14 @@ $(document).ready(function() {
 </ul>
 </div>
 
-<div id="content">{#This is for the main container for tabwise contents#}
-	<div id="contentA" class="tabcontent">
-		
-		{% for fixture,team_list,teampowerpid,tname in fixnteamsnpowname %}
+</head>
+<body>
+
+
+<div id="content" style="min-height:500px;">{#This is for the main container for tabwise contents#}
+
+	<div id="contentA" class="tabcontent">	
+		{% for fixture,team_list,teampowerpid,tname in fixturewiseteams %}
 		<div class="fixturecontent" id="{{fixture.fixtureid}}">
 			{% if fixture.isactive %}			
 			  <p class="fixturelabel">Fixture: {{fixture.teamA}} vs {{fixture.teamB}} on {{fixture.date}}</p>
@@ -429,7 +430,7 @@ $(document).ready(function() {
 							
 				</div>
 					{% csrf_token %}					
-					<input class="teamnameentry" placeholder={% if team_list %}"{{tname}}" {%else%} "Enter your teamname"{%endif%}></input>
+					<input class="teamnameentry" {% if team_list %} text="{{tname}}" {% else %} placeholder= "Enter your teamname"{%endif%} ></input>
 					<button class="lockteam submitbutton">Lock the team</button>
 
 				{%endif%}
@@ -443,11 +444,11 @@ $(document).ready(function() {
 							<td >  Price  </td>
 							<!--td>  Points So Far!  </td-->
 							<td >  Role  </td>
-							<td >  Power or not  </td>
+							<td >  Power Player </td>
 						
 						</tr>
 						   {%if fixture.isover or fixture.nomoreteams%}
-						   	<!-- if fixture is over display a static table -->
+						   	<!-- if fixture is over or no more teams display a static table -->
 							{% for player in team_list %}
 							      <tr id="{{player.playerid}}" >
 								    <td class="c1">{{player.firstname}} {{player.lastname}}</td>
@@ -463,7 +464,7 @@ $(document).ready(function() {
 							      </tr>
 							 {% endfor %}
 						   {%else%}
-						   	<!-- if fixture is not over display a dynamic table -->
+						   	<!-- if fixture is not over, or teams still avl. display a dynamic table -->
 							{% for player in playerlist %}
 							  {%if player.country == fixture.teamA or player.country == fixture.teamB %}
 							      {%if player in team_list%}  
@@ -532,7 +533,7 @@ $(document).ready(function() {
 	</div>
 	
 	<div id="contentB" class="tabcontent">
-		<table class="userstandings allplayer">
+		<table class="userstandings allplayer" style="width:50%; margin-left:20%;">
 		    	<tr class="tableheader">
 			      <td >  Name  </td>
 			      <td >  Net Points  </td>
@@ -566,7 +567,7 @@ $(document).ready(function() {
 	</div>
 	
 	<div id="contentD" class="tabcontent">
-	    	<table class="playerperformances allplayer">
+	    	<table class="allplayer playerperformances " style="width:80%;margin-left:10%;">
 		    	<tr class="tableheader">
 			      <td >   Player  </td>
 			      <td >   Country </td>
@@ -574,7 +575,7 @@ $(document).ready(function() {
 			      <td >   Price </td>
 						
 			</tr>
-			{% for cplayer in allcricketplayers %}
+			{% for cplayer in playerlist %}
 				<tr>
 					<td>{{cplayer.firstname}} {{cplayer.lastname}}</td>
 					<td>{{cplayer.country}}</td>
@@ -583,43 +584,113 @@ $(document).ready(function() {
 				</tr>
 			{% endfor %}
 		</table>
-		Page under construction. 
-	<p>Ispum D.</p>
 	</div>
 
 	<div id="contentE" class="tabcontent">
-		<p>TEAM SELECTION</p>
+	<div class="allrules">
+	<h3> TEAM COMPOSITION </h3>
+	<table class="rulestable">
+	  <tr>
+	    <td>Batsmen</td>
+	    <td> At least 4</td>
+	  </tr>
+	  <tr>
+	    <td>All-rounders</td>
+	    <td>At least 2 </td>
+	  </tr>
+	  <tr>
+	    <td>Wicket keeper</td>
+	    <td>Exactly 1 </td>
+	  </tr>
+	  <tr>
+	    <td>Bowlers</td>
+	    <td>At least 2</td>
+	  </tr>
+	  <tr>
+	      <td>Make one of your player the power-player</td>
+	  </tr>
+	 </table>
+	 
+	 <h3>TEAM SPREAD </h3>
+	 <h4 style="text-align:left; margin-left:12%;"> You can pick a maximum of 6 players from a single team. </h4>
+	 <h3 style="font-size:26px"> SCORING </h3>
+	 <h3>Batting Points</h3>
+	
+	<table  class="rulestable">
+	    <tr>
+	      <td>Base Score</td>
+	      <td>1 point per run.</td>
+	    </tr>
+	    <tr>
+	      <td>Impact Score</td>
+	      <td>2 points per six, -5 for a duck.</td>
+	    </tr>
+	    <tr>
+	      <td>Milestone Score</td>
+	      <td>10 points for every 25 runs scored. </td>
+	    </tr>
+	    <tr>
+	      <td>Pace Bonus </td>
+	      <td> Runs Scored – Balls faced. </td>
+	    </tr>
+         </table>
+	 <h3>Bowling Points</h3>
+	
+	<table  class="rulestable">
+	    <tr>
+	      <td>Base Score</td>
+	      <td>20 points per wicket.</td>
+	    </tr>
+	    <tr>
+	      <td>Impact Score</td>
+	      <td>1 point per dot ball, 20 points for a maiden over.</td>
+	    </tr>
+	    <tr>
+	      <td>Milestone Score</td>
+	      <td> 10 points for each subsequent wicket. </td>
+	    </tr>
+	    <tr>
+	      <td>Pace Bonus </td>
+	      <td>  Balls bowled – Runs conceded. If positive, then it is doubled. </td>
+	    </tr>
+         </table>
+          
+         
+         <h3> Fielding Points </h3>
+         <table  class="rulestable">
+	     <tr>
+         	<td>Catch</td>
+		<td>10 points </td>
+	      </tr>
+	      <tr>
+            	<td>Stumping </td>
+                <td> 15 points </td>
+                </tr>
+               <tr>
+		  <td> Run Out</td>
+                   <td> 10 points for each player involved. </td>
+               </tr>
+            </table>
+                
+            <h3> Bonus Points </h3>
+            <table  class="rulestable">
+	      <tr>
+              	<td>Player of the Match</td>
+                <td> 25 points </td>
+              </tr>
+              <tr>
+                <td> The points of your power player gets doubled </td>
+              </tr>
+             </table>
+          </div>
 
-BALANCE
-Batsmen:		At least 4
-All-Rounders:		At least 2
-Wicket Keeper:		Exactly 1
-Bowlers:		At least 2
-Make one player of you’re the powerplayer
-TEAM SPREAD
-You can pick a maximum of 6 players from a single Team.
-
-SCORING
-
-BATTING POINTS
-Base Score:		1 point per run.
-Impact Score:		2 points per six, -5 for a duck.
-Milestone Bonus:		10 points for every 25 runs scored.
-Pace Bonus:		Runs Scored – Balls faced.
-BOWLING POINTS
-Base Score:		20 points per wicket.
-Impact Score:		1 point per dot ball, 20 points for a maiden over.
-Milestone Bonus:		10 points for the 2nd wicket, 10 points for each subsequent wicket.
-Pace Bonus:		1.5 x Balls – Runs conceded. If it is positive, it is doubled.
-FIELDING POINTS
-Catch:		10 points.
-Stumping:	15 points.
-Run Out:	10 points for each player involved.
-BONUS POINTS
- Player of the Match:	25 points.
-The points of your power player gets doubled.
 	</div>
-
+	  
+  </div>
+<div id="footer">
+	    <p>Developed by GNU/Linux Users' Group, NIT Durgapur</p>
+	    <p>Licensed under GPL, Copyleft</p>
 </div>
-		<p>Developed by GLUG, NIT Durgapur, licensed under GPL, Copyleft</p>
+</body>
+
 </html>
