@@ -71,7 +71,7 @@ class CricketPlayerAdmin(admin.ModelAdmin):
 
 	def really_delete_selected(self, request, queryset):
 	    for obj in queryset:
-		fixtureCricketPlayer.objects.filter(playerid=obj.playerid).delete()
+		fixtureCricketPlayers.objects.filter(playerid=obj.playerid).delete()
 		obj.delete()
 
 	    if queryset.count() == 1:
@@ -93,13 +93,13 @@ class CricketPlayerAdmin(admin.ModelAdmin):
 
 
 class fixturesAdmin(admin.ModelAdmin):
-	list_display=('fixtureid','teamA','teamB','isactive','isover','nomoreteams')
+	list_display=('fixtureid','teamA','teamB','isactive','isover','nomoreteams','date')
 	list_display_links=['fixtureid']
 	list_editable=('teamA','teamB','isactive','isover','nomoreteams')
 	
 	actions=['really_delete_selected']
 	def get_actions(self, request):
-	    actions = super(PhotoBlogEntryAdmin, self).get_actions(request)
+	    actions = super(fixturesAdmin, self).get_actions(request)
 	    del actions['delete_selected']
 	    return actions
 
