@@ -4,7 +4,7 @@
 <head>
 <link rel="stylesheet" type="text/css" href="{% static 'myregister/css/style.css' %}">
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<title>Login Modal Dialog Window with CSS and jQuery</title>
+<title>FreePL</title>
 <script type='text/javascript' src="{% static 'myregister/js/jquery.js' %}"></script>
 <script type="text/javascript" src="{% static 'myregister/js/start.js' %}"></script>
 <script type="text/javascript">
@@ -36,6 +36,7 @@ $(document).ready(function() {
 							{
 								if(hill.server_response=="yes")
 								{
+									alert("Check your mail for activation link!")
 									location.href="/";
 								}
 								else
@@ -107,7 +108,7 @@ $(document).ready(function() {
           <form id="signin" method="post" class="popupform" >
 	     {% csrf_token %}
              <fieldset class="textbox">
-                <input class="textbox" id="username" name="username" value="" type="text" autocomplete="on" placeholder="Username">
+                <input class="textbox" id="username" name="username" value="" type="text" autocomplete="on" placeholder="User Handle">
                 <input class="textbox" id="password" name="password" value="" type="password" placeholder="Password">
 		<button id="loginbtn" class=" submitbutton" type="button">Log In</button></td>
 		<button id="signupbtn" class=" submitbutton" type="button">New User ?</button>
@@ -118,11 +119,11 @@ $(document).ready(function() {
 	 <form id="signup" method="post" class="popupform" action="#">
                 {% csrf_token %}
              <fieldset class="textbox">
-                <input class="textbox" id="username1" name="username1" value="" type="text" autocomplete="on" placeholder="User Name">
+                <input class="textbox" id="username1" name="username1" value="" type="text" autocomplete="on" placeholder="User Handle">
                 <input class="textbox" id="useremail1" name="useremail1" value="" type="text" autocomplete="on" placeholder="Your Email">
-                <input class="textbox" id="phonenumber1" name="phonenumber1" value="" type="text" autocomplete="on" placeholder="Your Phone">
+                <input class="textbox" id="phonenumber1" name="phonenumber1" value="" type="text" autocomplete="on" placeholder="Your Mobile Number">
                 <input class="textbox" id="password1" name="password1" value="" type="password" placeholder="Password">
-                <input class="textbox" id="repeatpassword1" name="repeatpassword1" value="" type="password" placeholder="Password Again">
+                <input class="textbox" id="repeatpassword1" name="repeatpassword1" value="" type="password" placeholder="Confirm Password">
 		<button id="signupnlog" class="submitbutton" type="button">Register me!</button>
              </fieldset>
           </form>

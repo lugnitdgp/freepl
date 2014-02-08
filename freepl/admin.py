@@ -49,9 +49,11 @@ fixtureCricketPlayer table.
 """
 def update_scores_of_cricket_plys(modeladmin, request, queryset):
 	cal=mainscore()
-	queryset.update(funscore=cal.do(runsmade,wickets,ballsfaced,fours,\
-	sixes,oversbowled,maidenovers,runsgiven,catches,stumpings,runouts,dotsbowled,mom,dnb))
-	
+	for b in queryset:
+		b.funscore=cal.do(b.runsmade,b.wickets,b.ballsfaced,b.fours,\
+		b.sixes,b.oversbowled,b.maidenovers,b.runsgiven,b.catches,b.stumpings,b.runouts,b.dotsbowled,b.mom,b.dnb)
+		print b.funscore
+		b.save()
 	
 class fplUserAdmin(admin.ModelAdmin):
 	list_display=('username','email','recentscore','cumulativescore','phonenumber')
@@ -72,6 +74,7 @@ class CricketPlayerAdmin(admin.ModelAdmin):
 	def really_delete_selected(self, request, queryset):
 	    for obj in queryset:
 		fixtureCricketPlayers.objects.filter(playerid=obj.playerid).delete()
+		print "playerid",obj.id
 		obj.delete()
 
 	    if queryset.count() == 1:
@@ -85,10 +88,10 @@ class CricketPlayerAdmin(admin.ModelAdmin):
 	    for fixture in fixtures.objects.all():
 		for obj in queryset:
 		    if obj.country==fixture.teamA or obj.country==fixture.teamB:
-			fcp=fixtureCricketPlayers(playerid=obj.playerid,fixtureid=fixture.fixtureid,\
-			mom=False,runsmade=0,wickets=0,ballsfaced=0,fours=0,sixes=0,oversbowled=0,\
+			fcp=fixtureCricketPlayers(firstname=obj.firstname,lastname=obj.lastname,playerid=obj.playerid,fixtureid=fixture.fixtureid,\
+			country=obj.country,mom=False,runsmade=0,wickets=0,ballsfaced=0,fours=0,sixes=0,oversbowled=0,\
 			maidenovers=0,runsgiven=0,catches=0,stumpings=0,runouts=0,dotsbowled=0,\
-			funscore=0,dnb=0)
+			funscore=0,dnb=True)
 			fcp.save()
 
 
@@ -122,11 +125,11 @@ class fixtureTeamsAdmin(admin.ModelAdmin):
 	actions=[update_scores_of_fixture_teams]
 
 class fixtureCricketPlayersAdmin(admin.ModelAdmin):
-	list_display=('fixtureid','playerid','firstname','lastname','runsmade','wickets','ballsfaced','fours',\
-	'sixes','oversbowled','maidenovers','runsgiven','catches','stumpings','runouts','dotsbowled','mom','funscore')
+	list_display=('fixtureid','playerid','firstname','lastname','country','dnb','runsmade','ballsfaced','fours',\
+	'sixes','oversbowled','wickets','maidenovers','runsgiven','catches','stumpings','runouts','dotsbowled','mom','funscore')
 	list_display_links=['fixtureid','playerid']
-	list_editable=('runsmade','wickets','ballsfaced','fours',\
-	'sixes','oversbowled','maidenovers','runsgiven','catches','stumpings','runouts','dotsbowled','mom')
+	list_editable=('dnb','runsmade','ballsfaced','fours',\
+	'sixes','oversbowled','wickets','maidenovers','runsgiven','catches','stumpings','runouts','dotsbowled','mom','funscore')
 	actions=[update_scores_of_cricket_plys]
 
 	

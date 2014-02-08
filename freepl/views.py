@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from freepl.models import fplUser,fixtures,fixtureCricketPlayers,CricketPlayer,fixtureTeams
 from django.core.validators import validate_email
 from fplcustomtests import istheteamvalid
-
+from django.core.mail import send_mail
 def chkkey(dic,li):
 	flag=1
 	for l in li:
@@ -31,7 +31,7 @@ def user_verify(request,activation_key):
 	flag=0
 	pwd=""
 	#print "82ghzsF8itjyckjm9tVNbGLItbcFPckIxOhVbqtQFCI="
-	print User.objects.all().filter(username="tutogaya")[0].password
+	#print User.objects.all().filter(username="tutogaya")[0].password
 	activation_key=activation_key.decode("hex")
 	for user in User.objects.all():
 		pwd=user.password
@@ -112,14 +112,14 @@ def registerit(request):
 		print user.password+" ee "
 		user.save()
 		hexkey=(user.password.split('$')[3]).encode("hex")
-		activation_url="http://<domain-name>/activate/"+hexkey
+		activation_url="http://freepl.mkti.in/activate/"+hexkey
 		
 		"""
 		we send email of the activation_url to the user email address here
 		"""
 		
 		#creating the fplUser object
-		
+		send_mail("Congratulations! You have been registered for FreePL 2014" , activation_url , 'freepl@mkti.com', [user.email], fail_silently = False)	
 		fpluser=fplUser(username=tmp['username'],email=tmp['email'],phonenumber=tmp['phone'],\
 		cumulativescore=0,recentscore=0)
 		fpluser.save()
@@ -164,6 +164,13 @@ def mainpage(request):
 			powerpids.append("")
 			teamnames.append("")
 	playerlist=CricketPlayer.objects.all().order_by('netperformance')
+	for obj in fplUser.objects.all():
+		eachscore=0
+		for team in fixtureTeams.objects.all():
+			if team.username==obj.username:
+				eachscore+=team.score
+		obj.cumulativescore=eachscore
+		obj.save()
 	"""
 	following is a three-in-one list zipped into one.
 	"""

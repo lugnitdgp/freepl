@@ -15,8 +15,8 @@ class fplUser(models.Model):
 	username=models.CharField(max_length=100)
 	email=models.EmailField(max_length=100)
 	phonenumber=models.CharField(max_length=20)
-	cumulativescore=models.PositiveSmallIntegerField()	
-	recentscore=models.PositiveSmallIntegerField()	
+	cumulativescore=models.IntegerField()	
+	recentscore=models.IntegerField()	
 
 	def __unicode__(self):
 		return (self.username)
@@ -29,7 +29,7 @@ class fixtureTeams(models.Model):
 	teamconfig=models.CharField(max_length=700)
 	createdon = models.DateTimeField(auto_now_add=True)
 	powerpid=models.CharField(max_length=5)	
-	score=models.PositiveSmallIntegerField()
+	score=models.IntegerField()
 	
 	def __unicode__(self):
 		return '%s %s ' % (self.username,self.teamname)
@@ -40,7 +40,7 @@ class CricketPlayer(models.Model):
 	lastname=models.CharField(max_length=30)
 	country=models.CharField(max_length=50)
 	role=models.CharField(max_length=50)
-	netperformance=models.PositiveSmallIntegerField()
+	netperformance=models.IntegerField()
 	price=models.PositiveSmallIntegerField()
 
 	def __unicode__(self):
@@ -48,8 +48,8 @@ class CricketPlayer(models.Model):
 
 	def save(self, *args, **kwargs):
 		super(CricketPlayer, self).save(*args, **kwargs) # Call the "real" save() method.
+		print "new player added",self.id
 		self.playerid="p"+str(self.id)
-		print "new player added"
 		super(CricketPlayer, self).save(*args, **kwargs) # Call the "real" save() method.
 		for fixture in fixtures.objects.all():
 			if(fixture.teamA==self.country or fixture.teamB==self.country):
@@ -58,9 +58,10 @@ class CricketPlayer(models.Model):
 				else:
 					print self.playerid,fixture.fixtureid
 					fcp=fixtureCricketPlayers(playerid=self.playerid,fixtureid=fixture.fixtureid,\
+					country=self.country,firstname=self.firstname,lastname=self.lastname,\
 					mom=False,runsmade=0,wickets=0,ballsfaced=0,fours=0,sixes=0,oversbowled=0,\
 					maidenovers=0,runsgiven=0,catches=0,stumpings=0,runouts=0,dotsbowled=0,\
-					funscore=0,dnb=0)
+					funscore=0,dnb=True)
 					fcp.save()
 #table is useless for displaying purpose in django admin
 #But is heavily used for calculating scores for each team in a fixture
@@ -70,12 +71,13 @@ class fixtureCricketPlayers(models.Model):
 	fixtureid=models.CharField(max_length=5,blank=True)
 	firstname=models.CharField(max_length=30)
 	lastname=models.CharField(max_length=30)
+	country=models.CharField(max_length=50)
 	runsmade=models.PositiveSmallIntegerField()
 	wickets=models.PositiveSmallIntegerField()
 	ballsfaced=models.PositiveSmallIntegerField()
 	fours=models.PositiveSmallIntegerField()
 	sixes=models.PositiveSmallIntegerField()
-	oversbowled=models.PositiveSmallIntegerField()
+	oversbowled=models.DecimalField(max_digits=3,decimal_places=1)
 	maidenovers=models.PositiveSmallIntegerField()
 	runsgiven=models.PositiveSmallIntegerField()
 	catches=models.PositiveSmallIntegerField()
@@ -84,12 +86,12 @@ class fixtureCricketPlayers(models.Model):
 	dotsbowled=models.PositiveSmallIntegerField()
 	mom=models.BooleanField()
 	dnb=models.BooleanField()
-	funscore=models.PositiveSmallIntegerField()
+	funscore=models.IntegerField()
 	
 	def __unicode__(self):
 		return u'%s %s' % (self.playerid,self.fixtureid)
 
-
+0
 class fixtures(models.Model):
 	fixtureid=models.CharField(max_length=5,blank=True)
 	isactive=models.BooleanField()
@@ -118,8 +120,9 @@ class fixtures(models.Model):
 			if fixtureCricketPlayers.objects.filter(playerid=c.playerid,fixtureid=self.fixtureid):
 				 print "fixtureid and playerid, already exist, hence insertion skipped"
 			else:
-				  fcp=fixtureCricketPlayers(playerid=c.playerid,fixtureid=self.fixtureid,\
-				  mom=False,runsmade=0,wickets=0,ballsfaced=0,fours=0,sixes=0,oversbowled=0,\
-				  maidenovers=0,runsgiven=0,catches=0,stumpings=0,runouts=0,dotsbowled=0,\
-				  funscore=0,dnb=0)
-				  fcp.save()
+				fcp=fixtureCricketPlayers(playerid=c.playerid,fixtureid=self.fixtureid,\
+				country=c.country,firstname=c.firstname,lastname=c.lastname,\
+				mom=False,runsmade=0,wickets=0,ballsfaced=0,fours=0,sixes=0,oversbowled=0,\
+				maidenovers=0,runsgiven=0,catches=0,stumpings=0,runouts=0,dotsbowled=0,\
+				funscore=0,dnb=True)
+				fcp.save()

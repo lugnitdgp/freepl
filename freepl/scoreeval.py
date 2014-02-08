@@ -1,8 +1,8 @@
 class mainscore:
-	def __init__():
+	def __init__(self):
 		print "recvd for score eval"
 
-	def do(runsmade,wickets,ballsfaced,fours,sixes,oversbowled,maidenovers,\
+	def do(self,runsmade,wickets,ballsfaced,fours,sixes,oversbowled,maidenovers,\
 	runsgiven,catches,stumpings,runouts,dotsbowled,mom,dnb):
 		s1=runsmade
 		print "runs score",s1

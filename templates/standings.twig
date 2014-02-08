@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<head>
+	{% set standings = true %}
+	<title>Standings</title>
+	{% include 'headsection.twig' %}
+	<style>
+		
+	</style>
+</head>
+<body>
+	<header>
+		{% include 'navbar.twig' %}
+		{% include 'analytics.twig' %}
+	</header>
+	<section class = "content">
+		<div class = "container-fluid">
+			<div class = "row-fluid">
+				<div class = "span6 well">
+					<h2 class = "pull-center">Standings for {{ date }}</h2>
+						<table class = "table table-striped">
+							<tr>
+								<th>Rank</th>
+								<th>Team Name</th>
+								<th>Score</th>
+							</tr>
+							{% for scores in daily %}
+								<tr>
+									<td>{{ loop.index }}</td>
+									<td>{{ scores.name }}</td>
+									<td>{{ scores.score }}
+								</tr>
+							{% endfor %}
+						</table>
+				</div>
+				<div class = "span6 well">
+					<h1 class = "pull-center">Overall standings</h1>
+					<table class = "table table-striped">
+							<tr>
+								<th>Rank</th>
+								<th>Team Name</th>
+								<th>Score</th>
+							</tr>
+							{% for scores in overall %}
+								<tr>
+									<td>{{ loop.index }}</td>
+									<td>{{ scores.name }}</td>
+									<td>{{ scores.score }}
+								</tr>
+							{% endfor %}
+						</table>
+				</div>
+			</div>
+		</div>
+	</section>

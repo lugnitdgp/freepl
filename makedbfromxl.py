@@ -2,11 +2,11 @@ import xlrd
 import MySQLdb
 
 # Open the workbook and define the worksheet
-book = xlrd.open_workbook("cricketplayers.xls")
+book = xlrd.open_workbook("cricplayers.xls")
 sheet = book.sheet_by_name("playerlist")
 
 # Establish a MySQL connection
-database = MySQLdb.connect (host="localhost", user = "root", passwd = "123456", db = "mydja")
+database = MySQLdb.connect (host="", user = "root", passwd = "mukti123!", db = "mydja")
 
 # Get the cursor, which is used to traverse the database, line by line
 cursor = database.cursor()
@@ -14,7 +14,7 @@ cursor = database.cursor()
 # Create the INSERT INTO sql query
 query = """INSERT INTO freepl_cricketplayer (playerid, firstname, lastname, country, role, netperformance, price) VALUES (%s, %s, %s, %s, %s, %s, %s)"""
 #print query
-
+print "qwert"
 # Create a For loop to iterate through each row in the XLS file, starting at row 2 to skip the headers
 for r in range(1, sheet.nrows):
       playerid  = sheet.cell(r,0).value

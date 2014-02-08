@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Welcome to FreePL</title>
+		{% include 'headsection.twig' %}
+		<style>
+			#loginform input{
+				height:35px;
+			}
+			#hero{
+				padding-top:20px;
+			}
+			#signupform input{
+				height:25px;
+			}
+			#resetpasswordform input{
+				height:25px;
+			}
+			#checkbox{
+				position:relative;
+				bottom:5px;
+				margin-right:5px;
+			}
+			
+			#header{
+				margin-bottom:10px;
+				margin-top:0px;
+			}
+			#myCarousel{
+				max-width:600px;
+				max-height:400px;
+			}
+			.carouselimg{
+				width:600px;
+				height:400px;
+			}
+		</style>
+		{% include 'analytics.twig' %}
+	</head>
+	<body>
+	<header>
+		<div class = "navbar navbar-fixed-top" id = "landingNavbar">
+			<div class = "navbar-inner">
+				<div class = "container-fluid">
+				<a href = "index.php" class = "brand" style = "font-size:30px;">FreePL</a>
+				<ul class = "nav pull-right">
+					<li><a href = "http://mkti.in">Mukti</a></li>
+					<li><a href = "#signupmodal" data-toggle = "modal">Signup</a></li>
+					<li><a href = "#loginmodal" data-toggle = "modal" >Login</a>
+				</ul>
+				</div>
+			</div>
+		</div>
+	</header>
+	<section class = "content">
+	<div class = "container-fluid">
+		<div class = "row-fluid">
+			<div class = "hero-unit" id = "hero">
+				<h1 class = "pull-center" id = "header">Welcome to FreePL!</h1>
+				<div id="myCarousel" class="carousel slide pull-center">
+				  <!-- Carousel items -->
+				  <div class="carousel-inner">
+				    <div class="active item">
+				    	<img src = "img/1.jpg" class = "carouselimg img img-polaroid"/>
+				    </div>
+				    <div class="item">
+				    	<img src = "img/3.jpg" class = "carouselimg img img-polaroid"/>
+				    </div>
+				    <div class="item">
+				    	<img src = "img/2.jpg" class = "carouselimg img img-polaroid"/>
+				    </div>
+				    <div class="item">
+				    	<img src = "img/4.jpg" class = "carouselimg img img-polaroid"/>
+				    </div>
+				  </div>
+				   
+				  </div>
+				<h2 class = "pull-center">It's the online cricket simulator developed by
+				GNU/Linux Users' Group NIT Durgapur. Have fun 
+				</h2>
+			</div>
+		</div>
+	</div>
+	</section>
+	<div class = "modal hide fade" id = "loginmodal">
+		<div class = "modal-header">
+			<h3 class = "pull-center block">Login</h3>
+		</div>
+		<div class = "modal-body">
+		{% include 'alertdivs.twig' %}
+			<form id = "loginform" class = "pull-center">
+				<input type = "text" name = "user_email" class = "span6" placeholder = "Your Email Address"/>
+				<input type = "password" name = "user_password" class = "span6" placeholder = "Password"/><br/>
+				<input type = "checkbox"  name = "rememberme" value = "remember" id = "checkbox"/>Remember Me
+			</form>
+		</div>
+		<div class = "modal-footer">
+			<button role = "submit" form = "loginform" class = "pull-right btn btn-primary">Login</button>
+			<button class = "btn pull-left" id = "forgotpassword">Forgot password?</button> 
+			
+		</div>
+	</div>
+	<div class = "modal hide fade" id = "resetpasswordmodal">
+		<div class = "modal-header">
+			<h3 class = "pull-center block">Reset Your Password</h3>
+		</div>
+		<div class = "modal-body">
+		{% include 'alertdivs.twig' %}
+			<form id = "resetpasswordform" class = "pull-center">
+				<input type = "text" name = "user_email" class = "span6" placeholder = "Enter Your registered email"/>
+			</form>
+		</div>
+		<div class = "modal-footer">
+			<button role = "submit" form = "resetpasswordform" class = "btn pull-right btn-primary">Submit</button>
+		</div>
+	</div>
+	<div class = "modal hide fade" id = "signupmodal">
+		<div class = "modal-header">
+			<h3 class = "pull-center block">Signup</h3>
+		</div>
+		<div class = "modal-body">
+			{% include 'alertdivs.twig' %}
+			<form id = "signupform" class = "pull-center">
+				<input type = "text" name = "user_email" class = "span6" placeholder = "Your Email Address"/>
+				<input type = "text" name = "user_name" class = "span6" placeholder = "Your Name"/>
+				<input type = "password" name = "user_password" class = "span6" placeholder = "Password"/>
+				<input type = "password" name = "user_confirmpassword" class = "span6" placeholder = "Confirm Password"/>
+			</form>
+		</div>
+		<div class = "modal-footer">
+			<button role = "submit" form = "signupform" class = "pull-right btn btn-primary">Signup</button>
+			<button class = "btn pull-left" id = "registered">Already Registered?</button> 
+			
+		</div>
+	</div>
+	<script src = "js/index.js"></script>
+	</body>
+</html>
