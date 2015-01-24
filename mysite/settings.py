@@ -12,12 +12,13 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
+from secrets import DB_NAME, DB_USER, APP_SECRET, DB_PASSWORD
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '@ujyvdv8t5ua7b6=(cxdt=+#zs9s@=jyym$ni12=^v984g9^4p'
+SECRET_KEY = APP_SECRET
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -38,7 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.humanize',
 	'freepl',
-	'lockdown',
+	#'lockdown',
 )
 """
 here mention where your templates are. so wherever you put the repo, 
@@ -54,11 +55,11 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'lockdown.middleware.LockdownMiddleware', 
+    #'lockdown.middleware.LockdownMiddleware', 
 )
 
-LOCKDOWN_PASSWORDS = ('iwantaccess', )
-LOCKDOWN_FORM = 'lockdown.forms.LockdownForm'
+#LOCKDOWN_PASSWORDS = ('iwantaccess', )
+#LOCKDOWN_FORM = 'lockdown.forms.LockdownForm'
 ROOT_URLCONF = 'mysite.urls'
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
@@ -76,17 +77,15 @@ You should first create a database on your own system and then replace
 DATABASES = {
     'default': {
         'ENGINE':'django.db.backends.mysql',
-        'NAME': 'mydja',
-        'USER': 'root',
-        'PASSWORD': 'mukti123!', 
+        'NAME': DB_NAME,
+        'USER': DB_USER,
+        'PASSWORD': DB_PASSWORD, 
         'HOST': '',
         'PORT': '',
     }
 }
 
-TEMPLATE_DIRS = '/var/www/FREEPL/templates'
-PROJECT_DIR='/var/www/FREEPL'
-STATIC_ROOT = '/var/www/FREEPL'
+TEMPLATE_DIRS = os.path.join(BASE_DIR, 'templates')
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
 
@@ -108,7 +107,12 @@ for the following only the /home/mj part will change depending on where
 you keep this repo
 """
 #PROJECT_DIR='/home/jayabrata/freepl/'
-STATICFILES_DIRS = (os.path.join(PROJECT_DIR, 'static'),)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
-STATIC_ROOT = '/var/www/FREEPL'
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
+
+FIXTURE_DIRS = (os.path.join(BASE_DIR, 'fixtures'),)

@@ -2,11 +2,14 @@ from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseRedirect
 import json
 from django.contrib.auth import authenticate,login,logout
+
+from django.db.models import Q
+
 from django.contrib.auth.models import User
-from freepl.models import fplUser,fixtures,fixtureCricketPlayers,CricketPlayer,fixtureTeams
+from freepl.models import fplUser,fixtures,players,fixtureTeams
 from django.core.validators import validate_email
-from fplcustomtests import istheteamvalid
 from django.core.mail import send_mail
+
 def chkkey(dic,li):
 	flag=1
 	for l in li:
@@ -16,17 +19,39 @@ def chkkey(dic,li):
 	return flag
 
 
-"""
-makes the player object list from a given teamconfig
-"""
-def make_playerlist_from_config(teamconfig):
-	tmp=teamconfig.split(',')
-	del tmp[len(tmp)-1]
-	playerlist=[]
-	for i in range(0,len(tmp)):
-		playerlist.append(CricketPlayer.objects.get(playerid=tmp[i]))
-	return playerlist
+def validate_team(teamconfig,teamname,fixtureid):
+    try:
+	fixture = fixtures.objects.get(id=fixtureid)
+	teamconfig_list = map(int,teamconfig.split(','))
+	teamconfig_list.pop()
+	playersinfixture = player.filter(Q(country=teamA)|Q(country=teamB)).order_by('netperformance')
 	
+	#constraint parameters
+	cons = {'bat': 0,'bowl':0,'wk':0,'allround':0, fixture.teamA:0,fixture.teamB:0,'price':0,'power':0}
+	low_limits = {'bat':4,'bowl':2,'wk':1,'allround':2,fixture.teamA:0,fixture.teamB:0,'price':0,'power':1}
+	up_limits = {'bat':11,'bowl':11,'wk':1,'allround':11,fixture.teamA:6,fixture.teamB:6,'price':850,'power':1}
+	error_messages = {'bat':'Batsmen insufficient!','bowl':'Bowlers insufficient!','wk':'You must keep only one wicketkeeper!','allround':'Allrounders insufficient!',fixture.teamA:'aximum players from a single team exceeded!',fixture.teamB:'aximum players from a single team exceeded!','price':'Total Budget Exceeded!','power':'Must have one power player'}
+
+
+	for i in xrange(len(teamconfig_list)):
+	    cons[playersinfixture[i].role]+=1
+	    cons['price']+=playersinfixture[i].price
+	    cons[playersinfixture[i].country]+=1
+	    if p[i]==2:
+		cons['power']+=1
+	    for key in cons:
+		if (cons[key]>=low_limits[key] and cons[key]<=up_limits[key]) or key=='power':
+		    continue
+		else:
+		    return error_messages[key]
+	
+	if cons['power']!=1:
+	    return error_messages['power']
+	
+	return 'yes'
+    except:
+	return 'bad request'
+
 def user_verify(request,activation_key):
 	flag=0
 	pwd=""
@@ -46,15 +71,77 @@ def user_verify(request,activation_key):
 	
 	
 # Create your views here.
-def init(request):
+def home(request):
+	if request.method=='GET':
+	    #if logged in
+	    if request.user.is_authenticated():
+		"""
+		here we need to add the various context parameters needed for 
+		the template logged.html template which includes really the entire 
+		content of the site 
+		"""
+		allfixtures = fixtures.objects.all()
+		teamlists = []
+		player_fixture = []
+		teams = []
 
-	if request.user.is_authenticated():
-		return mainpage(request)#,'main/logged.html',{"username":request.user.username})	
-	else:
+		playerlist = players.objects.order_by('netperformance')
+		userfixtureteams = fixtureTeams.objects.filter(user=request.user)
+
+		for fixture in allfixtures:
+			teamA = fixture.teamA
+			teamB = fixture.teamB
+			playersinfixture = playerlist.filter(Q(country=teamA)|Q(country=teamB))
+			#print playersinfixture
+			#If the user made any fixture team
+			teamconfig = []
+			try:
+			    userfixtureteam = fixtureTeams.objects.get(fixture=fixture,user=request.user)
+			    s = userfixtureteam.teamconfig
+			    teamconfig = map(int,s.split(','))
+			    teamconfig.pop()
+			    teams.append(userfixtureteam)
+			
+			#Complete new team
+			except fixtureTeams.DoesNotExist:
+			    #teamconfig 0-not selected, 1-selected, 2-powerplayer
+			    n = len(playersinfixture)
+			    s = '0,'*n
+			    newfixtureteam = fixtureTeams()
+			    newfixtureteam.user = fplUser.objects.get(id=request.user.id)#.objects.get(id = request.user.id)
+			    newfixtureteam.fixture = fixture
+			    newfixtureteam.teamname = ''
+			    newfixtureteam.teamconfig = s[:-1]
+			    newfixtureteam.save()
+
+			    teamconfig = map(int,s[:-1].split(','))
+			    teamconfig.pop()
+			    teams.append(newfixtureteam)
+			player_fixture.append(zip(teamconfig,playersinfixture))
+			
+		"""
+		for obj in fplUser.objects.all():
+			eachscore=0
+			for team in fixtureTeams.objects.all():
+			    if team.username==obj.username:
+					eachscore+=team.score
+			obj.cumulativescore=eachscore
+			obj.save()
+		"""
+		
+		"""
+		following is a three-in-one list zipped into one.
+		"""
+		
+		fixturewiseteams = zip(allfixtures,teams,player_fixture)
+		return render(request,'main/logged.html',{"username":request.user.username,"fixturewiseteams":fixturewiseteams,"fixtures":allfixtures,"fplUsers":fplUser.objects.all(),"players":players.objects.all()})
+
+	    else:
 		return render(request,'startpage/start.html')
+
 from django.contrib.auth.decorators import login_required
 
-def loginit(request):
+def login_(request):
 	tmp=request.POST
 	print tmp
 	response_dict={'server_response': "no" }
@@ -68,7 +155,8 @@ def loginit(request):
 			response_dict.update({'server_response': "yes" })                                                                  
 	return HttpResponse(json.dumps(response_dict), mimetype='application/javascript')
 
-def registerit(request):
+
+def register(request):
 	tmp=request.POST
 	response_dict={"server_reponse":"no","server_message":"Data recieved was incomplete, check for errors!"}
 	print "jh"
@@ -77,167 +165,96 @@ def registerit(request):
 		"""
 		to prevent the sending of large size data
 		"""
-		if len(tmp['username'])>29 or len(tmp['username'])>29 or len(tmp['password'])>29:
+		
+		if len(tmp['username'])>30 or len(tmp['email'])>30 or len(tmp['password'])>30:
 			response_dict.update({"server_message":"You have exceeded the limit for text entry. MaxLength: 30 chars "})
-			return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')			
-		if User.objects.filter(username=tmp['username']):
+		elif fplUser.objects.filter(username=tmp['username']):
 			response_dict.update({"server_message":"username already exists"})
-			return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')
 		#check if the phone number is valid
-		if len(tmp['phone'])!=10:
+		elif len(tmp['phone'])!=10:
 			response_dict.update({"server_message":"Wrong Mobile Number"})
-			return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')			
 		#check if the password is not blank
-		if tmp['password']=="":
+		elif tmp['password']=="":
 			response_dict.update({"server_message":"Password is blank"})
-			return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')			
 		#check if the password is matching the previous one
-		if tmp['passwordagain']!=tmp['password']:
+		elif tmp['passwordagain']!=tmp['password']:
 			response_dict.update({"server_message":"Retyped password does not match"})
-			return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')			
 		#check if the email is unique 
 		#if not validate_email("mayankgmail.com"):
 		#	print "fucke "
-		try:
-			validate_email(tmp['email'])
-		except:
-			response_dict.update({"server_message":"Email is invalid"})
-			return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')			
-		if fplUser.objects.filter(email=tmp['email']):
-			response_dict.update({"server_message":"Email is already registered"})
-			return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')						
-		#creating the User object
-		user = User.objects.create_user(tmp['username'], tmp['email'],tmp['password'])
-		user.is_active = False
-		print user.password+" ee "
-		user.save()
-		hexkey=(user.password.split('$')[3]).encode("hex")
-		activation_url="http://freepl.mkti.in/activate/"+hexkey
-		
-		"""
-		we send email of the activation_url to the user email address here
-		"""
-		
-		#creating the fplUser object
-		send_mail("Congratulations! You have been registered for FreePL 2014" , activation_url , 'freepl@mkti.com', [user.email], fail_silently = False)	
-		fpluser=fplUser(username=tmp['username'],email=tmp['email'],phonenumber=tmp['phone'],\
-		cumulativescore=0,recentscore=0)
-		fpluser.save()
-		#userd=authenticate(username=tmp['username'],password=tmp['password'])
-		#login(request,userd)
-		response_dict.update({"server_response":"yes","server_message":"Registration Successful"})
-		return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')
-	return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')
-
-@login_required
-def mainpage(request):
-	"""
-	here we need to add the various context parameters needed for 
-	the template logged.html template which includes really the entire 
-	content of the site 
-	"""
-	allfixtures=fixtures.objects.all()
-	teamlists=[]
-	powerpids=[]
-	teamnames=[]
-	tt=fixtureTeams.objects.filter(username=request.user.username)
-	myresults=list(tt)
-	print myresults
-	print "fd"
-	for fix in allfixtures:
-		userfixtured=[]
-		if tt:
-			print tt			
-			userfixtured=tt.filter(fixtureid=fix.fixtureid)
-			if userfixtured:
-				teamlists.append(make_playerlist_from_config(userfixtured[0].teamconfig))
-				powerpids.append(userfixtured[0].powerpid)
-				teamnames.append(userfixtured[0].teamname)
-			else:
-				print "hh"
-				teamlists.append([])
-				powerpids.append("")
-				teamnames.append("")
 		else:
-			print "hh"
-			teamlists.append([])
-			powerpids.append("")
-			teamnames.append("")
-	playerlist=CricketPlayer.objects.all().order_by('netperformance')
-	for obj in fplUser.objects.all():
-		eachscore=0
-		for team in fixtureTeams.objects.all():
-			if team.username==obj.username:
-				eachscore+=team.score
-		obj.cumulativescore=eachscore
-		obj.save()
-	"""
-	following is a three-in-one list zipped into one.
-	"""
-	fixturewiseteams=zip(allfixtures,teamlists,powerpids,teamnames)
-	print len(fixturewiseteams),"sdsd"
-	fixtureresults=fixtureTeams.objects.all().order_by('score')
-	cumusers=fplUser.objects.all().order_by('cumulativescore')
-	recentusers=fplUser.objects.all().order_by('recentscore')
-	return render(request,'main/logged.html',{"username":request.user.username,\
-	"playerlist":playerlist,"fixturewiseteams":fixturewiseteams,"fixtureresults":fixtureresults,\
-	"cumusers":cumusers,"myresults":myresults,"allfixtures":allfixtures})
+		    try:
+			validate_email(tmp['email'])
+		    except:
+			response_dict.update({"server_message":"Email is invalid"})
+		    if fplUser.objects.filter(email=tmp['email']):
+			response_dict.update({"server_message":"Email is already registered"})
+		    else:
+			#creating the User object
+			user = fplUser.objects.create_user(tmp['username'], tmp['email'],tmp['password'])
+			user.is_active = False
+			#print user.password+" ee "
+			user.save()
+			hexkey=(user.password.split('$')[3]).encode("hex")
+			activation_url="http://freepl.mkti.in/activate/"+hexkey    
+			"""
+			we send email of the activation_url to the user email address here
+			"""
+			print "Activation Url ",activation_url
+			#creating the fplUser object
+			#gsend_mail("Congratulations! You have been registered for FreePL 2014" , activation_url , 'freepl@mkti.com', [user.email], fail_silently = False)	
+			#userd=authenticate(username=tmp['username'],password=tmp['password'])
+			#login(request,userd)
+			response_dict.update({"server_response":"yes","server_message":"Registration Successful"})
 
-def logoutit(request):
+	return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')
+
+
+def logout_(request):
 	logout(request)
-	response_dict={'server_response':'yes'}
+	response_dict={}
 	return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')
 
 @login_required
-def locktheteamit(request):
+def locktheteam(request):
 	"""
 	returns whether the team is lockable if not return the error
 	and if lockable then lock it modify the dbs and return the successful
 	team
 	"""
-	response_dict={'server_response':"yes","server_message":"Data recieved was incomplete, check for errors!"};
+	response_dict={'server_response':"no","server_message":"Bad Request!"}
 	tmp=request.POST
-	if chkkey(tmp,["teamconfig","teamname","fixtureid","powerpid"]):
+
+	#Checking if the request has the desired keys.
+	if chkkey(tmp,["teamconfig","teamname","fixtureid"]):
 		print tmp["teamconfig"],tmp["fixtureid"],tmp["teamname"]
 		tmp2=tmp["teamconfig"].split(',')
-		#pretest
-		fixt=fixtures.objects.get(fixtureid=tmp["fixtureid"])
-		"""
-		#very very important check!!!!!!!
-		"""
-		if fixt.nomoreteams or not fixt.isactive or fixt.isover:
-			response_dict={"server_response":"no","server_message":"Fixture either inactive, closed or over."}
-			return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')			
-		if tmp["teamconfig"]=="" or tmp["teamname"]=="" or len(tmp2)!=12:
-			response_dict={"server_response":"no","server_message":"Improper team name or configuration."}
-			return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')
-		allfixteams=fixtureTeams.objects.filter(teamname=tmp["teamname"],fixtureid=tmp["fixtureid"])
-		if not (allfixteams.filter(username=request.user.username)) and allfixteams:
-			response_dict={"server_response":"no","server_message":"someone already took the team name for the fixture."}
-			return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')			
 		
-		rivals=[]
-		rivals.append(fixtures.objects.get(fixtureid=tmp["fixtureid"]).teamA)
-		rivals.append(fixtures.objects.get(fixtureid=tmp["fixtureid"]).teamB)
-		teamrcvd=make_playerlist_from_config(tmp["teamconfig"])
-		resobj=istheteamvalid(teamrcvd,rivals,tmp["powerpid"])
-		res=resobj.evaluate()
-		if res!="yes":
-			response_dict.update({"server_response":"no","server_message":res})
-			return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')
-		else:
-			"""
-			which means that the team is valid and is ready to be written
-			in the fixtureteams db
-			"""
-			#print ftdobj
-			#deleting any old teams
-			fixtureTeams.objects.filter(fixtureid=tmp["fixtureid"],username=request.user.username).delete()			
-			ftdbobj=fixtureTeams(teamname=tmp["teamname"],username=request.user.username,\
-			fixtureid=tmp["fixtureid"],teamconfig=tmp["teamconfig"],powerpid=tmp["powerpid"],score=0)
-			ftdbobj.save()
-			print "Team Successfully saved"
+		val = validate_team(tmp["teamconfig"],tmp["fixtureid"],tmp["teamname"])
+		if val=='yes':
+
+		    if fixtureTeams.objects.filter(teamname = tmp["teamname"]):
+			response_dict.update({"server_message":"Team name already exists!"})
+		    else:
+			fixture = fixtures.objects.get(id = tmp["fixtureid"])
+			try:
+			    alreadythere = fixtureTeams.objects.get(user=request.user,fixture = fixture)
+			    alreadythere.teamconfig = tmp["teamconfig"]
+			    alreadythere.teamname = tmp["teamname"]
+			    alreadythere.save()
+
+			except fixtures.DoesNotExist:
+			    newfixtureteam = fixtureTeams()
+			    newfixtureteam.teamconfig = tmp["teamconfig"]
+			    newfixtureteam.teamname = tmp["teamname"]
+			    newfixtureteam.user= request.user
+			    newfixtureteam.fixture= fixture
+			    newfixtureteam.save()
+
 			response_dict.update({"server_message":"congos"})
-			return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')
+			response_dict.update({"server_response":"yes"})
+		else:
+		    response_dict.update({"server_message":val})
+
 	return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')
 

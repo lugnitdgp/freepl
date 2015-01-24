@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import Q
-
+from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 """
 **************
 #we must note that the team name and configuration are valid only for
@@ -11,118 +12,81 @@ from django.db.models import Q
 # Create your models here.
 
 #used for storing phone numbers and cumulative standings of each username
-class fplUser(models.Model):
-	username=models.CharField(max_length=100)
-	email=models.EmailField(max_length=100)
-	phonenumber=models.CharField(max_length=20)
-	cumulativescore=models.IntegerField()	
-	recentscore=models.IntegerField()	
+class fplUser(User):
+    phonenumber = models.CharField(max_length=20)
+    cumulativescore = models.IntegerField(default=0)	
 
-	def __unicode__(self):
-		return (self.username)
+    def __unicode__(self):
+	return (self.username)
 
-#to be used in per fixture standings
+class teams(models.Model):
+    country = models.CharField(max_length=10)
+    
+    def __unicode__(self):
+	return self.country
+
+class fixtures(models.Model):
+    active = models.BooleanField(default=False)
+    locked = models.BooleanField(default=False)
+    teamA = models.ForeignKey(teams,related_name='teamA')
+    teamB = models.ForeignKey(teams,related_name='teamB')
+    date = models.DateTimeField()
+    def __unicode__(self):
+	return '%s %s %s' % (self.teamA,self.teamB,self.date)
+    
+    def save(self,*args,**kwargs):
+	if self.teamA==self.teamB:
+	    raise ValidationError('Team A and Team B cannot be the same!')
+	else:
+	    super(fixtures,self).save(*args,**kwargs)
+
 class fixtureTeams(models.Model):
-	fixtureid=models.CharField(max_length=5,blank=True)	
-	username=models.CharField(max_length=100)
-	teamname=models.CharField(max_length=100)
-	teamconfig=models.CharField(max_length=700)
-	createdon = models.DateTimeField(auto_now_add=True)
-	powerpid=models.CharField(max_length=5)	
-	score=models.IntegerField()
-	
-	def __unicode__(self):
-		return '%s %s ' % (self.username,self.teamname)
+    fixture = models.ForeignKey(fixtures)	
+    user = models.ForeignKey(fplUser)
+    teamname = models.CharField(max_length=100)
+    teamconfig = models.CharField(max_length=700)
+    createdon = models.DateTimeField(auto_now_add=True)
+    updatedon = models.DateTimeField(auto_now=True)
+    score=models.IntegerField(default=0)
 
-class CricketPlayer(models.Model):
-	playerid=models.CharField(max_length=5,blank=True)
-	firstname=models.CharField(max_length=30)
-	lastname=models.CharField(max_length=30)
-	country=models.CharField(max_length=50)
-	role=models.CharField(max_length=50)
-	netperformance=models.IntegerField()
-	price=models.PositiveSmallIntegerField()
+    def __unicode__(self):
+	return '%s %s %s %s' % (self.user.username,self.teamname,self.fixture.teamA,self.fixture.teamB)
 
-	def __unicode__(self):
-		return '%s %s' % (self.firstname,self.lastname)
 
-	def save(self, *args, **kwargs):
-		super(CricketPlayer, self).save(*args, **kwargs) # Call the "real" save() method.
-		print "new player added",self.id
-		self.playerid="p"+str(self.id)
-		super(CricketPlayer, self).save(*args, **kwargs) # Call the "real" save() method.
-		for fixture in fixtures.objects.all():
-			if(fixture.teamA==self.country or fixture.teamB==self.country):
-				if fixtureCricketPlayers.objects.filter(playerid=self.playerid,fixtureid=fixture.fixtureid):
-					print "fixtureid and playerid, already exist, hence insertion skipped"
-				else:
-					print self.playerid,fixture.fixtureid
-					fcp=fixtureCricketPlayers(playerid=self.playerid,fixtureid=fixture.fixtureid,\
-					country=self.country,firstname=self.firstname,lastname=self.lastname,\
-					mom=False,runsmade=0,wickets=0,ballsfaced=0,fours=0,sixes=0,oversbowled=0,\
-					maidenovers=0,runsgiven=0,catches=0,stumpings=0,runouts=0,dotsbowled=0,\
-					funscore=0,dnb=True)
-					fcp.save()
+class players(models.Model):
+    ROLES = (('bat', 'Batsmen'),('bowl','Bowler'),('wk','Wicket Keeper'),('allround','All Rounder'))
+    firstname = models.CharField(max_length=50)
+    lastname = models.CharField(max_length=50)
+    country = models.ForeignKey(teams)	
+    role = models.CharField(max_length=8, choices=ROLES)
+    netperformance = models.IntegerField(default=0)
+    price = models.PositiveSmallIntegerField()
+
+    def __unicode__(self):
+	return '%s %s %s' % (self.firstname,self.lastname,self.role)
+
 #table is useless for displaying purpose in django admin
 #But is heavily used for calculating scores for each team in a fixture
 
-class fixtureCricketPlayers(models.Model):
-	playerid=models.CharField(max_length=5,blank=True)	
-	fixtureid=models.CharField(max_length=5,blank=True)
-	firstname=models.CharField(max_length=30)
-	lastname=models.CharField(max_length=30)
-	country=models.CharField(max_length=50)
-	runsmade=models.PositiveSmallIntegerField()
-	wickets=models.PositiveSmallIntegerField()
-	ballsfaced=models.PositiveSmallIntegerField()
-	fours=models.PositiveSmallIntegerField()
-	sixes=models.PositiveSmallIntegerField()
-	oversbowled=models.DecimalField(max_digits=3,decimal_places=1)
-	maidenovers=models.PositiveSmallIntegerField()
-	runsgiven=models.PositiveSmallIntegerField()
-	catches=models.PositiveSmallIntegerField()
-	stumpings=models.PositiveSmallIntegerField()
-	runouts=models.PositiveSmallIntegerField()
-	dotsbowled=models.PositiveSmallIntegerField()
-	mom=models.BooleanField()
-	dnb=models.BooleanField()
-	funscore=models.IntegerField()
-	
-	def __unicode__(self):
-		return u'%s %s' % (self.playerid,self.fixtureid)
+class playerstats(models.Model):
+    player = models.ForeignKey(players)	
+    fixture = models.ForeignKey(fixtures)
+    runsmade = models.PositiveSmallIntegerField(default=0)	
+    wickets = models.PositiveSmallIntegerField(default=0)
+    ballsfaced = models.PositiveSmallIntegerField(default=0)
+    fours = models.PositiveSmallIntegerField(default=0)
+    sixes = models.PositiveSmallIntegerField(default=0)
+    oversbowled = models.DecimalField(max_digits=3,decimal_places=1,default=0)
+    maidenovers = models.PositiveSmallIntegerField(default=0)
+    runsgiven = models.PositiveSmallIntegerField(default=0)
+    catches = models.PositiveSmallIntegerField(default=0)
+    stumpings = models.PositiveSmallIntegerField(default=0)
+    runouts = models.PositiveSmallIntegerField(default=0)
+    dotsbowled = models.PositiveSmallIntegerField(default=0)
+    mom = models.BooleanField(default=False)
+    dnb = models.BooleanField(default=True)
+    funscore = models.IntegerField(default=-1)
 
-0
-class fixtures(models.Model):
-	fixtureid=models.CharField(max_length=5,blank=True)
-	isactive=models.BooleanField()
-	isover=models.BooleanField()
-	nomoreteams=models.BooleanField()
-	teamA=models.CharField(max_length=100)
-	teamB=models.CharField(max_length=100)
-	date=models.CharField(max_length=20)
-	
-	def __unicode__(self):
-		return u'%s %s'%(self.teamA,self.teamB)
-
-	def save(self, *args, **kwargs):
-		super(fixtures, self).save(*args, **kwargs) # Call the "real" save() method.
-		self.fixtureid="f"+str(self.id)
-		super(fixtures, self).save(*args, **kwargs) # Call the "real" save() method.
-		"""
-		updating the fixtureCricketPlayers, using this and CricketPlayer
-		"""
-		tobeinsert=CricketPlayer.objects.filter(Q(country=self.teamA)|Q(country=self.teamB))
-		tobeinsert=list(tobeinsert)
-		"""
-		inserting the players as soon as the fixture is made
-		"""
-		for c in tobeinsert:
-			if fixtureCricketPlayers.objects.filter(playerid=c.playerid,fixtureid=self.fixtureid):
-				 print "fixtureid and playerid, already exist, hence insertion skipped"
-			else:
-				fcp=fixtureCricketPlayers(playerid=c.playerid,fixtureid=self.fixtureid,\
-				country=c.country,firstname=c.firstname,lastname=c.lastname,\
-				mom=False,runsmade=0,wickets=0,ballsfaced=0,fours=0,sixes=0,oversbowled=0,\
-				maidenovers=0,runsgiven=0,catches=0,stumpings=0,runouts=0,dotsbowled=0,\
-				funscore=0,dnb=True)
-				fcp.save()
+    def __unicode__(self):
+	return '%s %s' % (self.player.firstname+' '+self.player.lastname,self.fixture.teamA+' '+self.fixture.teamB)
+    

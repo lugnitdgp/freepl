@@ -1,7 +1,5 @@
 from django.contrib import admin
-from freepl.models import fplUser,fixtures,fixtureCricketPlayers,\
-CricketPlayer,fixtureTeams
-from scoreeval import mainscore
+from freepl.models import fplUser,fixtures,playerstats,fixtureTeams,players,teams
 
 
 """
@@ -9,133 +7,134 @@ update action for the fixtureTeams class.
 What does it do ? It takes data from the fixtureCricketPlayers table
 and calculates the score of each team for each fixture.
 """
-def update_scores_of_fixture_teams(modeladmin, request, queryset):
-	allfixCP=fixtureCricketPlayers.objects.all().order_by('fixtureid')
 
-	for fixture in fixtures.objects.all():
-		curfixCP=allfixCP.filter(fixtureid=fixture.fixtureid)
-		curfixteams=queryset.filter(fixtureid=fixture.fixtureid)
-		print "dsdsd"
-		print curfixteams
-		for team in curfixteams:
-			plyrids=team.teamconfig.split(',')
-			teamname=team.teamname
-			username=team.username
-			del plyrids[11]
-			points=0
-			tmp=0
-			for plyrid in plyrids:
-				#print curfixCP.get(playerid=plyrid).funscore
-				try:
-					tmp=curfixCP.get(playerid=plyrid).funscore
-				except:
-					tmp=0
-				points+=tmp
-			
-			try:
-				points+=curfixCP.get(playerid=powerpid).funscore
-			except:
-				points+=0
-			queryset.filter(fixtureid=fixture.fixtureid).filter(teamname=teamname).update(score=points)
-			#fplUser.objects.all().filter(username=username).update(cumulativescore=cumulativescore+points)
-			fu=fplUser.objects.filter(username=username)
-			print fu
-			print points
-			fu[0].cumulativescore+=points
-			fu[0].save()
-"""
-this updates the funscore field for each entry in the 
-fixtureCricketPlayer table.
-"""
-def update_scores_of_cricket_plys(modeladmin, request, queryset):
-	cal=mainscore()
-	for b in queryset:
-		b.funscore=cal.do(b.runsmade,b.wickets,b.ballsfaced,b.fours,\
-		b.sixes,b.oversbowled,b.maidenovers,b.runsgiven,b.catches,b.stumpings,b.runouts,b.dotsbowled,b.mom,b.dnb)
-		print b.funscore
-		b.save()
-	
+def calculate_fun_score(playerstats):
+    s1 = playerstats.runsmade
+    s2 = 2*playerstats.sixes
+    s3 = int(playerstats.runsmade/25)*10
+    
+    s4 = playerstats.wickets
+    s5 = playerstats.ballsbowled
+    s6 = 10*(playerstats.wickets-1) if wickets>0 else 0
+    s7 = playerstats.ballsbowled - playerstats.runsgiven
+
+    s8 = playerstats.catches*10+playerstats.stumpings*15+playerstats.runouts*10
+    s9 = int(playerstats.mom)*25
+    return s1+s2+s3+s4+s5+s6+s7+s8+s9
+
+class PlayerStatsListFilter(admin.SimpleListFilter):
+    # Human-readable title which will be displayed in the
+    # right admin sidebar just above the filter options.
+    title = ('Fixture Filter')
+
+    # Parameter for the filter that will be used in the URL query.
+    parameter_name = 'fixture'
+    allfixtures = fixtures.objects.all()
+    
+    def lookups(self, request, model_admin):
+        """
+        Returns a list of tuples. The first element in each
+        tuple is the coded value for the option that will
+        appear in the URL query. The second element is the
+        human-readable name for the option that will appear
+        in the right sidebar.
+        """
+        tup=[]
+        for fixture in self.allfixtures:
+	    tup.append((fixture.id,fixture.teamA+' '+fixture.teamB+str(fixture.date)))
+        return tuple(tup)
+
+    def queryset(self, request, queryset):
+        """
+        Returns the filtered queryset based on the value
+        provided in the query string and retrievable via
+        `self.value()`.
+        """
+        # Compare the requested value (either '80s' or '90s')
+        # to decide how to filter the queryset.
+        for fixture in self.allfixtures:    
+	    if self.value() == fixture.id:
+		return queryset.filter(fixture = fixture)
+
+def fixtureteamscoreupdate(modeladmin,request,queryset):
+    n=len(queryset)
+    for i in xrange(n):
+	fixtureteam = queryset[i]
+	l = map(int,fixtureteam.teamconfig.split(','))[:-1]
+	score = 0
+	for pid in range(l):
+	    player = players.objects.get(id=pid)
+	    playerstats = playerstats.objects.get(player=player,fixture = fixtureteam.fixture)		
+	    score += playerstats.funscore
+	fixtureteam.score = score
+	fixtureteam.save()
+
+def playerstatsupdate(modeladmin,request,queryset):
+    n=len(queryset)
+    for i in xrange(n):
+	playerstats = queryset[i]
+	playerstats.funscore = calculate_fun_score(playerstats)
+	playerstats.save()
+
+def cumulativescoreupdate(modeladmin,request,queryset):
+    n=len(queryset)
+    for i in xrange(n):
+	user = queryset[i]
+	allfixtureteamsofuser = fixtureTeams.objects.filter(user=user)
+	m = len(allfixtureteamsofuser)
+	cums = 0
+	for j in xrange(m):
+	    cums += allfixtureteamsofuser[j].score
+	user.cumulativescore = cums
+	user.save()
+
+def netperformanceupdate(modeladmin,request,queryset):
+    n=len(queryset)
+    for i in xrange(n):
+	player = queryset[i]
+	allmatches = playerstats.objects.filter(player=player)
+	m = len(allmatches)
+	cums = 0
+	for j in xrange(m):
+	    cums += allmatches[j].score
+	player.cumulativescore = cums
+	player.save()
+
 class fplUserAdmin(admin.ModelAdmin):
-	list_display=('username','email','recentscore','cumulativescore','phonenumber')
-	list_display_links=['username']
-	list_editable=('email','recentscore','cumulativescore','phonenumber')
+    list_display = ('username','email','cumulativescore','phonenumber')
+    list_display_links = ['username']
+    list_editable = ('cumulativescore',)
+    list_actions = [cumulativescoreupdate]
 
-class CricketPlayerAdmin(admin.ModelAdmin):
-	list_display=('firstname','lastname','playerid','country','role','netperformance','price')
-	list_display_links=['playerid']
-	list_editable=('firstname','lastname','country','role','netperformance','price')
-	
-	actions=['really_delete_selected','export_to_FixtureCricketPlayer']
-	def get_actions(self, request):
-	    actions = super(CricketPlayerAdmin, self).get_actions(request)
-	    del actions['delete_selected']
-	    return actions
-
-	def really_delete_selected(self, request, queryset):
-	    for obj in queryset:
-		fixtureCricketPlayers.objects.filter(playerid=obj.playerid).delete()
-		print "playerid",obj.id
-		obj.delete()
-
-	    if queryset.count() == 1:
-		message_bit = "1 photoblog entry was"
-	    else:
-		message_bit = "%s photoblog entries were" % queryset.count()
-	    self.message_user(request, "%s successfully deleted." % message_bit)
-	really_delete_selected.short_description = "Delete selected entries"
-	
-	def export_to_FixtureCricketPlayer(self, request, queryset):
-	    for fixture in fixtures.objects.all():
-		for obj in queryset:
-		    if obj.country==fixture.teamA or obj.country==fixture.teamB:
-			fcp=fixtureCricketPlayers(firstname=obj.firstname,lastname=obj.lastname,playerid=obj.playerid,fixtureid=fixture.fixtureid,\
-			country=obj.country,mom=False,runsmade=0,wickets=0,ballsfaced=0,fours=0,sixes=0,oversbowled=0,\
-			maidenovers=0,runsgiven=0,catches=0,stumpings=0,runouts=0,dotsbowled=0,\
-			funscore=0,dnb=True)
-			fcp.save()
+class playersAdmin(admin.ModelAdmin):
+    list_display = ('id','firstname','lastname','country','role','netperformance','price')
+    list_display_links = ['id']
+    list_editable = ('firstname','lastname','country','role','netperformance','price')
+    list_actions = [netperformanceupdate]
 
 
 class fixturesAdmin(admin.ModelAdmin):
-	list_display=('fixtureid','teamA','teamB','isactive','isover','nomoreteams','date')
-	list_display_links=['fixtureid']
-	list_editable=('teamA','teamB','isactive','isover','nomoreteams')
-	
-	actions=['really_delete_selected']
-	def get_actions(self, request):
-	    actions = super(fixturesAdmin, self).get_actions(request)
-	    del actions['delete_selected']
-	    return actions
-
-	def really_delete_selected(self, request, queryset):
-	    for obj in queryset:
-		obj.delete()
-
-	    if queryset.count() == 1:
-		message_bit = "1 photoblog entry was"
-	    else:
-		message_bit = "%s photoblog entries were" % queryset.count()
-	    self.message_user(request, "%s successfully deleted." % message_bit)
-	really_delete_selected.short_description = "Delete selected entries"
-
+    list_display = ('id','teamA','teamB','active','locked','date')
+    list_display_links = ['id']
+    list_editable = ('teamA','teamB','active','locked','date')
 
 class fixtureTeamsAdmin(admin.ModelAdmin):
-	list_display=('fixtureid','username','teamname','teamconfig','powerpid','score')
-	list_display_links=['fixtureid']
-	list_editable=('username','teamname','score')
-	actions=[update_scores_of_fixture_teams]
+    list_display = ('user','teamname','score')
+    list_display_links = ['user']
+    list_editable = ('teamname','score')
+    list_actions = [fixtureteamscoreupdate] 
 
-class fixtureCricketPlayersAdmin(admin.ModelAdmin):
-	list_display=('fixtureid','playerid','firstname','lastname','country','dnb','runsmade','ballsfaced','fours',\
-	'sixes','oversbowled','wickets','maidenovers','runsgiven','catches','stumpings','runouts','dotsbowled','mom','funscore')
-	list_display_links=['fixtureid','playerid']
-	list_editable=('dnb','runsmade','ballsfaced','fours',\
-	'sixes','oversbowled','wickets','maidenovers','runsgiven','catches','stumpings','runouts','dotsbowled','mom','funscore')
-	actions=[update_scores_of_cricket_plys]
 
-	
+class playerstatsAdmin(admin.ModelAdmin):
+    list_display = ('player','fixture','runsmade','wickets' ,'ballsfaced' ,'fours' ,'sixes' ,'oversbowled','maidenovers' ,'runsgiven' ,'catches' ,'stumpings' ,'runouts' ,'dotsbowled' ,'mom','dnb' ,'funscore') 
+    list_display_links = ['player']
+    list_editable = ('fixture','runsmade','wickets' ,'ballsfaced' ,'fours' ,'sixes' ,'oversbowled','maidenovers' ,'runsgiven' ,'catches' ,'stumpings' ,'runouts' ,'dotsbowled' ,'mom','dnb' ,'funscore') 
+    list_filter = (PlayerStatsListFilter,)
+    list_actions = [playerstatsupdate]
+
 admin.site.register(fplUser,fplUserAdmin)
 admin.site.register(fixtures,fixturesAdmin)
 admin.site.register(fixtureTeams,fixtureTeamsAdmin)
-admin.site.register(fixtureCricketPlayers,fixtureCricketPlayersAdmin)
-admin.site.register(CricketPlayer,CricketPlayerAdmin)
-# Register your models here.
+admin.site.register(players,playersAdmin)
+admin.site.register(playerstats,playerstatsAdmin)
+admin.site.register(teams)
