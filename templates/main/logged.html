@@ -11,13 +11,14 @@
     <script type="text/javascript" src="{% static 'freepl/js/waypoints.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'freepl/js/jquery.mCustomScrollbar.min.js' %}"></script-->
     <script type="text/javascript" src="{% static 'freepl/js/start.js' %}"></script>
+    <script type="text/javascript" src="{% static 'freepl/js/blockui.js' %}"></script>
 
 
 
     <script type="text/javascript">	
 
     $(document).ready(function() {
-
+	    $(document).ajaxStop($.unblockUI);
 	    //initialising conditions for the tabs
 	    $("#contentB").hide();
 	    $("#contentC").hide();
@@ -42,6 +43,7 @@
 	    //function for the logout button
 	    $("#logoutbtn").click(function() {
 		    console.log("logout");
+		    $.blockUI({ message: '<h1><img src="{% static 'freepl/images/busy.gif' %}" /> Just a moment...</h1>' }); 
 		    $.ajax({
 			    url : "/dummylogout",
 			    type : "POST",
@@ -162,6 +164,7 @@
 					    teamconfig=teamconfig+'0,';
 				    }
 		    });
+		    $.blockUI({ message: '<h1><img src="{% static 'freepl/images/busy.gif' %}" /> Just a moment...</h1>' }); 
 		    var teamnameentry = $("#bf"+fixtureid+"e").text();
 			    $.ajax({
 				    url : "/dummylocktheteam",

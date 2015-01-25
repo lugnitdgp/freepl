@@ -7,9 +7,10 @@
 <title>FreePL</title>
 <script type='text/javascript' src="{% static 'freepl/js/jquery.js' %}"></script>
 <script type="text/javascript" src="{% static 'freepl/js/start.js' %}"></script>
+<script type="text/javascript" src="{% static 'freepl/js/blockui.js' %}"></script>
 <script type="text/javascript">
 $(document).ready(function() {
-		
+		$(document).ajaxStop($.unblockUI);	
 		{% if alert == "activated" %}
 			alert('Your User Profile has been activated, Please login to play the game.')
 		{% endif %}
