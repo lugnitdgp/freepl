@@ -16,10 +16,12 @@ $(document).ready(function() {
 		{% endif %}
 		//signup button 
 		$("#signupbtn").click(function(){
-					
 					$('#signup').show();
-					$('#signin').hide();			
+					$('#signin').hide();
+
 					$("#signupnlog").click(function(){
+					$('#login-box').hide();
+					$.blockUI({ message: '<h1><img src="{% static 'freepl/images/busy.gif' %}" /> Just a moment...</h1>' }); 
 					console.log("ok test!");
 						$.ajax({
 							url:"/dummyregister",
@@ -43,6 +45,7 @@ $(document).ready(function() {
 								else
 								{
 									$("#errormsg").text(hill.server_message);
+									$('#login-box').show();
 								}
 							},
 							error : function(xhr,errmsg,err)
@@ -50,6 +53,7 @@ $(document).ready(function() {
 								alert(xhr.status + ": " + xhr.responseText);
 							}
 						});
+					$('#signup').show();
 						return false;
 					});
 				return false;
@@ -57,6 +61,9 @@ $(document).ready(function() {
 		
 		//login button click function
 		$("#loginbtn").click(function() {
+					$('#login-box').hide();
+		    $.blockUI({ message: '<h1><img src="{% static 'freepl/images/busy.gif' %}" /> Just a moment...</h1>' }); 
+		    
 			$.ajax({
 					url : "/dummylogin",
 					type : "POST",
@@ -78,6 +85,7 @@ $(document).ready(function() {
 						else
 						{
 							console.log(hill.server_response);
+							$('#login-box').show();
 							$("#errormsg").text("Invalid Login Credentials!");
 						}
 					//$('#result').append( 'Server Response: ' + hill.server_response);
@@ -105,34 +113,30 @@ $(document).ready(function() {
         
        <div id="login-box" class="login-popup">
 
-          
-          <form id="signin" method="post" class="popupform" >
-	     {% csrf_token %}
-             <fieldset class="textbox">
-                <input class="textbox" id="username" name="username" value="" type="text" autocomplete="on" placeholder="User Handle">
-                <input class="textbox" id="password" name="password" value="" type="password" placeholder="Password">
-		<button id="loginbtn" class=" submitbutton" type="button">Log In</button></td>
-		<button id="signupbtn" class=" submitbutton" type="button">New User ?</button>
-                <p><a class="forgot" href="#">Forgot your password?</a></p>
-              </fieldset>
-	</form>
-	
-	 <form id="signup" method="post" class="popupform" action="#">
-                {% csrf_token %}
-             <fieldset class="textbox">
-                <input class="textbox" id="username1" name="username1" value="" type="text" autocomplete="on" placeholder="User Handle">
-                <input class="textbox" id="useremail1" name="useremail1" value="" type="text" autocomplete="on" placeholder="Your Email">
-                <input class="textbox" id="phonenumber1" name="phonenumber1" value="" type="text" autocomplete="on" placeholder="Your Mobile Number">
-                <input class="textbox" id="password1" name="password1" value="" type="password" placeholder="Password">
-                <input class="textbox" id="repeatpassword1" name="repeatpassword1" value="" type="password" placeholder="Confirm Password">
-		<button id="signupnlog" class="submitbutton" type="button">Register me!</button>
-             </fieldset>
-          </form>
+	    <form id="signin" method="post" class="popupform" >
+		{% csrf_token %}
+		<fieldset class="textbox">
+		    <input class="textbox" id="username" name="username" value="" type="text" autocomplete="on" placeholder="User Handle">
+		    <input class="textbox" id="password" name="password" value="" type="password" placeholder="Password">
+		    <button id="loginbtn" class=" submitbutton" type="button">Log In</button></td>
+		    <button id="signupbtn" class=" submitbutton" type="button">New User ?</button>
+		    <p><a class="forgot" href="#">Forgot your password?</a></p>
+		</fieldset>
+	    </form>
+	    
+	    <form id="signup" method="post" class="popupform" action="#">
+		    {% csrf_token %}
+		<fieldset class="textbox">
+		    <input class="textbox" id="username1" name="username1" value="" type="text" autocomplete="on" placeholder="User Handle">
+		    <input class="textbox" id="useremail1" name="useremail1" value="" type="text" autocomplete="on" placeholder="Your Email">
+		    <input class="textbox" id="phonenumber1" name="phonenumber1" value="" type="text" autocomplete="on" placeholder="Your Mobile Number">
+		    <input class="textbox" id="password1" name="password1" value="" type="password" placeholder="Password">
+		    <input class="textbox" id="repeatpassword1" name="repeatpassword1" value="" type="password" placeholder="Confirm Password">
+		    <button id="signupnlog" class="submitbutton" type="button">Register me!</button>
+		</fieldset>
+	    </form>
 		  <div id="errormsg"></div>
 	</div>
-		<div id="signup-box">
-            	
-	</div>
-
+    </div>
 </body>
 </html>
