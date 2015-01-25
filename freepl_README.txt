@@ -65,6 +65,7 @@ For Admins:
 
 Note: Admin cannot play the game with the superuser created in step 3, create a normal user by registering
       yourself :P.
+
 Note: The rules for score calculation, is in the function calculate_fun_score, in freepl/admin.py
 
 
