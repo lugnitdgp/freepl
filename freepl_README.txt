@@ -23,6 +23,9 @@ For Admins:
    
    You would be prompted to add an admin user, this would be your username
    and password, for administering. DO NOT DISCLOSE IT to anyone.
+   
+   Then do 'python manage.py collectstatic', this will place all the static 
+   files of the installed apps like admin into the static root.
 
 4. Create an .xls file as given in the repo, and place it at the same place,
    for the player list.
@@ -64,7 +67,7 @@ For Admins:
 	  f. Sit back and chill, and prepare for the next fixture.
 
 Note: Admin cannot play the game with the superuser created in step 3, create a normal user by registering
-      yourself :P.
+      yourself :P. So be sure to logout the admin, before playing yourself.
 
 Note: The rules for score calculation, is in the function calculate_fun_score, in freepl/admin.py
 
