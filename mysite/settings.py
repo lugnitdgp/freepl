@@ -28,6 +28,7 @@ TEMPLATE_DEBUG = True
 ALLOWED_HOSTS = []
 
 SEND_MAIL = False
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # Application definition
 
 INSTALLED_APPS = (
