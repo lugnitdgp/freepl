@@ -61,8 +61,10 @@ For Admins:
 	     team made by the users.
 	  e. Now, Go to Users model in the freepl section( Not the Auth section). Select all players on each page, and
 	     run the action 'Cumulativescoreupdate'. This will update the cumulative score of each user over the fixtures.
-	  f. Sit back and chill, and prepare for the net fixture.
+	  f. Sit back and chill, and prepare for the next fixture.
 
+Note: Admin cannot play the game with the superuser created in step 3, create a normal user by registering
+      yourself :P.
 Note: The rules for score calculation, is in the function calculate_fun_score, in freepl/admin.py
 
 
