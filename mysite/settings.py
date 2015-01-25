@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/1.6/ref/settings/
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
-from secrets import DB_NAME, DB_USER, APP_SECRET, DB_PASSWORD
+from secrets import DB_NAME, DB_USER, APP_SECRET, DB_PASSWORD, LOCKDOWN_PASSWORD
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
@@ -39,7 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.humanize',
 	'freepl',
-	#'lockdown',
+	'lockdown',
 )
 """
 here mention where your templates are. so wherever you put the repo, 
@@ -55,11 +55,11 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    #'lockdown.middleware.LockdownMiddleware', 
+    'lockdown.middleware.LockdownMiddleware', 
 )
 
-#LOCKDOWN_PASSWORDS = ('iwantaccess', )
-#LOCKDOWN_FORM = 'lockdown.forms.LockdownForm'
+LOCKDOWN_PASSWORDS = (LOCKDOWN_PASSWORD, )
+LOCKDOWN_FORM = 'lockdown.forms.LockdownForm'
 ROOT_URLCONF = 'mysite.urls'
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
@@ -76,7 +76,7 @@ You should first create a database on your own system and then replace
 """
 DATABASES = {
     'default': {
-        'ENGINE':'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.mysql',
         'NAME': DB_NAME,
         'USER': DB_USER,
         'PASSWORD': DB_PASSWORD, 
