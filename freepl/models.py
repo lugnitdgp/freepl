@@ -88,5 +88,5 @@ class playerstats(models.Model):
     funscore = models.IntegerField(default=-1)
 
     def __unicode__(self):
-	return '%s %s' % (self.player.firstname+' '+self.player.lastname,self.fixture.teamA+' '+self.fixture.teamB)
+	return '%s %s' % (self.player.firstname+' '+self.player.lastname,self.fixture.teamA.country+' '+self.fixture.teamB.country)
     

@@ -10,6 +10,8 @@ from freepl.models import fplUser,fixtures,players,fixtureTeams
 from django.core.validators import validate_email
 from django.core.mail import send_mail
 
+from mysite.settings import SEND_MAIL
+
 def chkkey(dic,li):
 	flag=1
 	for l in li:
@@ -193,16 +195,20 @@ def register(request):
 			#creating the User object
 			user = fplUser.objects.create_user(tmp['username'], tmp['email'],tmp['password'])
 			user.is_active = False
+			user.phone = tmp['phonenumber']
 			#print user.password+" ee "
 			user.save()
 			hexkey=(user.password.split('$')[3]).encode("hex")
-			activation_url="http://freepl.mkti.in/activate/"+hexkey    
+			activation_url = "http://freepl.mkti.in/activate/"+hexkey    
+			test_url = "http://localhost:8000/activate/"+hexkey
 			"""
 			we send email of the activation_url to the user email address here
 			"""
-			print "Activation Url ",activation_url
 			#creating the fplUser object
-			#gsend_mail("Congratulations! You have been registered for FreePL 2014" , activation_url , 'freepl@mkti.com', [user.email], fail_silently = False)	
+			if SEND_MAIL:
+			    send_mail("Congratulations! You have been registered for FreePL 2014" , activation_url , 'freepl@mkti.com', [user.email], fail_silently = False)	
+			else:#Testing
+			    print "Activation Url ",test_url
 			#userd=authenticate(username=tmp['username'],password=tmp['password'])
 			#login(request,userd)
 			response_dict.update({"server_response":"yes","server_message":"Registration Successful"})

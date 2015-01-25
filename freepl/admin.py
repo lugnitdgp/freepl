@@ -41,7 +41,41 @@ class PlayerStatsListFilter(admin.SimpleListFilter):
         """
         tup=[]
         for fixture in self.allfixtures:
-	    tup.append((fixture.id,fixture.teamA+' '+fixture.teamB+str(fixture.date)))
+	    tup.append((fixture.id,fixture.teamA.country+' '+fixture.teamB.country+str(fixture.date)))
+        return tuple(tup)
+
+    def queryset(self, request, queryset):
+        """
+        Returns the filtered queryset based on the value
+        provided in the query string and retrievable via
+        `self.value()`.
+        """
+        # Compare the requested value (either '80s' or '90s')
+        # to decide how to filter the queryset.
+        for fixture in self.allfixtures:    
+	    if self.value() == fixture.id:
+		return queryset.filter(fixture = fixture)
+
+class FixtureTeamsListFilter(admin.SimpleListFilter):
+    # Human-readable title which will be displayed in the
+    # right admin sidebar just above the filter options.
+    title = ('Fixture Filter')
+
+    # Parameter for the filter that will be used in the URL query.
+    parameter_name = 'fixture'
+    allfixtures = fixtures.objects.all()
+    
+    def lookups(self, request, model_admin):
+        """
+        Returns a list of tuples. The first element in each
+        tuple is the coded value for the option that will
+        appear in the URL query. The second element is the
+        human-readable name for the option that will appear
+        in the right sidebar.
+        """
+        tup=[]
+        for fixture in self.allfixtures:
+	    tup.append((fixture.id,fixture.teamA.country+' '+fixture.teamB.country+str(fixture.date)))
         return tuple(tup)
 
     def queryset(self, request, queryset):
@@ -104,13 +138,13 @@ class fplUserAdmin(admin.ModelAdmin):
     list_display = ('username','email','cumulativescore','phonenumber')
     list_display_links = ['username']
     list_editable = ('cumulativescore',)
-    list_actions = [cumulativescoreupdate]
+    actions = [cumulativescoreupdate]
 
 class playersAdmin(admin.ModelAdmin):
     list_display = ('id','firstname','lastname','country','role','netperformance','price')
     list_display_links = ['id']
     list_editable = ('firstname','lastname','country','role','netperformance','price')
-    list_actions = [netperformanceupdate]
+    actions = [netperformanceupdate]
 
 
 class fixturesAdmin(admin.ModelAdmin):
@@ -122,7 +156,8 @@ class fixtureTeamsAdmin(admin.ModelAdmin):
     list_display = ('user','teamname','score')
     list_display_links = ['user']
     list_editable = ('teamname','score')
-    list_actions = [fixtureteamscoreupdate] 
+    list_filter = (FixtureTeamsListFilter,)
+    actions = [fixtureteamscoreupdate] 
 
 
 class playerstatsAdmin(admin.ModelAdmin):
@@ -130,7 +165,7 @@ class playerstatsAdmin(admin.ModelAdmin):
     list_display_links = ['player']
     list_editable = ('fixture','runsmade','wickets' ,'ballsfaced' ,'fours' ,'sixes' ,'oversbowled','maidenovers' ,'runsgiven' ,'catches' ,'stumpings' ,'runouts' ,'dotsbowled' ,'mom','dnb' ,'funscore') 
     list_filter = (PlayerStatsListFilter,)
-    list_actions = [playerstatsupdate]
+    actions = [playerstatsupdate]
 
 admin.site.register(fplUser,fplUserAdmin)
 admin.site.register(fixtures,fixturesAdmin)

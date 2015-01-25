@@ -27,7 +27,7 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
-
+SEND_MAIL = False
 # Application definition
 
 INSTALLED_APPS = (
@@ -39,7 +39,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.humanize',
 	'freepl',
-	'lockdown',
+	#'lockdown',
 )
 """
 here mention where your templates are. so wherever you put the repo, 
@@ -55,7 +55,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'lockdown.middleware.LockdownMiddleware', 
+    #'lockdown.middleware.LockdownMiddleware', 
 )
 
 LOCKDOWN_PASSWORDS = (LOCKDOWN_PASSWORD, )
