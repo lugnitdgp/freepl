@@ -1,6 +1,7 @@
 from django.db import models
 from django.db.models import Q
 from django.contrib.auth.models import User
+from django.contrib.auth.models import UserManager
 from django.core.exceptions import ValidationError
 """
 **************
@@ -16,6 +17,7 @@ class fplUser(User):
     phonenumber = models.CharField(max_length=20)
     cumulativescore = models.IntegerField(default=0)	
 
+    objects = UserManager()
     def __unicode__(self):
 	return (self.username)
 

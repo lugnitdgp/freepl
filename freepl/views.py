@@ -195,7 +195,7 @@ def register(request):
 			#creating the User object
 			user = fplUser.objects.create_user(tmp['username'], tmp['email'],tmp['password'])
 			user.is_active = False
-			user.phone = tmp['phonenumber']
+			user.phone = tmp['phone']
 			#print user.password+" ee "
 			user.save()
 			hexkey=(user.password.split('$')[3]).encode("hex")
