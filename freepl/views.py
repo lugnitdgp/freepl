@@ -162,19 +162,16 @@ def locktheteam(request):
 			else:
 			    fixture = fixtures.objects.get(id = tmp["fixtureid"])
 			    print 'finally'
+			    team_  = None
 			    try:
-				alreadythere = fixtureTeams.objects.get(user=request.facebook.user,fixture = fixture)
-				alreadythere.teamconfig = tmp["teamconfig"]
-				alreadythere.teamname = tmp["teamname"]
-				alreadythere.save()
-
+				team_ = fixtureTeams.objects.get(user=request.facebook.user,fixture = fixture)
 			    except fixtures.DoesNotExist:
-				newfixtureteam = fixtureTeams()
-				newfixtureteam.teamconfig = tmp["teamconfig"]
-				newfixtureteam.teamname = tmp["teamname"]
-				newfixtureteam.user= request.facebook.user
-				newfixtureteam.fixture= fixture
-				newfixtureteam.save()
+				team_ = fixtureTeams()
+			    team_.teamconfig = tmp["teamconfig"]
+			    team_.teamname = tmp["teamname"]
+			    team_.user= request.facebook.user
+			    team_.fixture= fixture
+			    team_.save()
 
 			    response_dict.update({"server_message":"congos"})
 			    response_dict.update({"server_response":"yes"})
