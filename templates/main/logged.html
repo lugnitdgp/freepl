@@ -39,7 +39,7 @@
 
 
 
-
+	    /*
 	    //function for the logout button
 	    $("#logoutbtn").click(function() {
 		    console.log("logout");
@@ -60,7 +60,7 @@
 		    });
 		return false;
 	    });
-
+	    */
 	    var st=$('.sticky').offset().top;
 	    var stik=function() {
 	    var scrollTop=$(window).scrollTop();
@@ -208,7 +208,9 @@
     <div class="header">
 	    <img src="{% static 'freepl/images/fpl.png' %}" style="margin-bottom:0px;">
 	    <label id="welcomesu">Welcomes you, {{ name }}</label>
-	    {% csrf_token %}<button id="logoutbtn" class="submitbutton"  type="button">Log out</button>
+	    <form id="logoutform" action="/dummylogout">
+		{% csrf_token %}<button id="logoutbtn" class="submitbutton"  type="button">Log out</button>
+	    </form>
 	<div id='cssmenu' class="sticky">
 	    <ul>
 		<li id="A" class='has-sub active tab'><a href='#'><span>Fixtures</span></a>

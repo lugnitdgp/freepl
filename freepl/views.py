@@ -137,8 +137,7 @@ def authorize(request):
 
 def logout_(request):
 	request.facebook = None
-	response_dict={}
-	return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')
+	return HttpResponseRedirect('/')
 
 @facebook_authorization_required
 def locktheteam(request):
