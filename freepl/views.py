@@ -85,35 +85,22 @@ def home(request):
 		#print playersinfixture
 		#If the user made any fixture team
 		teamconfig = []
-		try:
-		    userfixtureteam = fixtureTeams.objects.get(user=request.facebook.user,fixture = fixture)
-		    s = userfixtureteam.teamconfig
-		    #print teamconfig
-		    teamconfig = map(int,s[:-1].split(','))
-		    teams.append(userfixtureteam)
+
+		obj, created = fixtureTeams.objects.get_or_create(user=request.facebook.user,fixture = fixture)
+		if created:
+		    s = obj.teamconfig
 		    
-		    #Complete new team
-		except fixtureTeams.DoesNotExist:
-		    #teamconfig 0-not selected, 1-selected, 2-powerplayer
-		    n = len(playersinfixture)
-		    s = '0,'*n
-		    newfixtureteam = fixtureTeams()
-		    newfixtureteam.user = fplUser.objects.get(user=request.facebook.user)#.objects.get(id = request.facebook.user.id)
-		    newfixtureteam.fixture = fixture
-		    newfixtureteam.teamname = ''
-		    newfixtureteam.teamconfig = s
-		    newfixtureteam.save()
+		    teams.append(obj)
 		    teamconfig = map(int,s[:-1].split(','))
-		    teams.append(newfixtureteam)
-		    """
-		    for obj in fplUser.objects.all():
-			    eachscore=0
-			    for team in fixtureTeams.objects.all():
-				if team.username==obj.username:
-					    eachscore+=team.score
-			    obj.cumulativescore=eachscore
-			    obj.save()
-		    """
+		else:
+		    obj.user = fplUser.objects.get(user=request.facebook.user)
+		    obj.fixture = fixture
+		    obj.teamname = ''
+		    obj.teamconfig = '0,'*n
+		    obj.save()
+		    
+		    teamconfig = map(int,obj.teamconfig[:-1].split(','))
+		    teams.append(obj)
 		    
 		    """
 		    following is a three-in-one list zipped into one.
