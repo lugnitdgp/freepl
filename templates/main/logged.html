@@ -138,6 +138,7 @@
 		    if($(this).parent("tr").hasClass("clickablepl") && $(this).parent("tr").hasClass("selected"))
 		    {
 			    $(this).parent("tr").removeClass("selected");
+			    $('.powerplayer').addClass('selected');
 			    $('.powerplayer').removeClass('powerplayer');
 			    $(this).parent("tr").addClass("powerplayer");
 		    }
