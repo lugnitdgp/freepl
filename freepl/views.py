@@ -52,7 +52,8 @@ def validate_team(teamconfig,teamname,fixtureid):
 	    return error_messages['power']
 	
 	return 'yes'
-    except:
+    except Exception as e:
+	print e
 	return 'bad request'
 	
 # Create your views here.
@@ -81,6 +82,7 @@ def home(request):
 		#If the user made any fixture team
 		teamconfig = []
 		try:
+		    print fixture,request.facebook.user
 		    userfixtureteam = fixtureTeams.objects.get(fixture=fixture,user=request.facebook.user)
 		    s = userfixtureteam.teamconfig
 		    teamconfig = map(int,s.split(','))

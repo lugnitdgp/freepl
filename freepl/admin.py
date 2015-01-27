@@ -14,9 +14,12 @@ def calculate_fun_score(playerstats):
     s3 = int(playerstats.runsmade/25)*10
     
     s4 = playerstats.wickets
-    s5 = playerstats.ballsbowled
-    s6 = 10*(playerstats.wickets-1) if wickets>0 else 0
-    s7 = playerstats.ballsbowled - playerstats.runsgiven
+    
+    ballsb = int(playerstats.oversbowled)
+    ballsbowled = int(playerstats.oversbowled-ballsb) + ballsb
+    s5 = ballsbowled
+    s6 = 10*(playerstats.wickets-1) if playerstats.wickets>0 else 0
+    s7 = ballsbowled - playerstats.runsgiven
 
     s8 = playerstats.catches*10+playerstats.stumpings*15+playerstats.runouts*10
     s9 = int(playerstats.mom)*25
@@ -96,7 +99,7 @@ def fixtureteamscoreupdate(modeladmin,request,queryset):
 	fixtureteam = queryset[i]
 	l = map(int,fixtureteam.teamconfig.split(','))[:-1]
 	score = 0
-	for pid in range(l):
+	for pid in l:
 	    player = players.objects.get(id=pid)
 	    playerstats = playerstats.objects.get(player=player,fixture = fixtureteam.fixture)		
 	    score += playerstats.funscore

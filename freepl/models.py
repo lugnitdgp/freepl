@@ -19,7 +19,7 @@ class fplUser(models.Model):
     cumulativescore = models.IntegerField(default=0)	
 
     def __unicode__(self):
-	return (self.username)
+	return (self.user.first_name+' '+self.user.last_name)
 
 class teams(models.Model):
     country = models.CharField(max_length=10)
@@ -34,7 +34,7 @@ class fixtures(models.Model):
     teamB = models.ForeignKey(teams,related_name='teamB')
     date = models.DateTimeField()
     def __unicode__(self):
-	return '%s %s %s' % (self.teamA,self.teamB,self.date)
+	return '%s %s %s' % (self.teamA.country,self.teamB.country,self.date)
     
     def save(self,*args,**kwargs):
 	if self.teamA==self.teamB:
@@ -52,7 +52,7 @@ class fixtureTeams(models.Model):
     score=models.IntegerField(default=0)
 
     def __unicode__(self):
-	return '%s %s %s %s' % (self.user.username,self.teamname,self.fixture.teamA,self.fixture.teamB)
+	return '%s %s %s %s' % (self.user.user.first_name+' '+self.user.user.last_name,self.teamname,self.fixture.teamA.country,self.fixture.teamB.country)
 
 
 class players(models.Model):
