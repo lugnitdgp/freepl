@@ -51,7 +51,7 @@ FACEBOOK_APPLICATION_ID = '183216621874530'
 FACEBOOK_APPLICATION_SECRET_KEY = '60d4f52542b5fb445a08c49449982163'
 FACEBOOK_APPLICATION_NAMESPACE = 'muktinitdurgapur'
 FACEBOOK_APPLICATION_INITIAL_PERMISSIONS = ['read_stream', 'publish_stream']
-FANDJANGO_SITE_URL = 'http://localhost:8000'
+FANDJANGO_SITE_URL = 'http://freepl.nitdgplug.org'
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',

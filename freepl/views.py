@@ -56,7 +56,7 @@ def validate_team(teamconfig,teamname,fixtureid):
 	return 'bad request'
 	
 # Create your views here.
-@facebook_authorization_required
+#@facebook_authorization_required
 def home(request):
     if request.method=='GET':
 	#if logged in
