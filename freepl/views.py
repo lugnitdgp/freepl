@@ -22,32 +22,36 @@ def chkkey(dic,li):
 	return flag
 
 
-def validate_team(teamconfig,teamname,fixtureid):
+def validate_team(teamconfig,fixtureid,teamname):
+    if teamname=='':
+	return 'Team Name cannot be blank.'
     try:
 	fixture = fixtures.objects.get(id=fixtureid)
 	#print fixture
-	print teamconfig
 	teamconfig_list = map(int,teamconfig[:-1].split(','))
-	playersinfixture = player.filter(Q(country=teamA)|Q(country=teamB)).order_by('netperformance')
+	playersinfixture = players.objects.filter(Q(country=fixture.teamA)|Q(country=fixture.teamB)).order_by('netperformance')
 	
 	#constraint parameters
 	cons = {'bat': 0,'bowl':0,'wk':0,'allround':0, fixture.teamA:0,fixture.teamB:0,'price':0,'power':0}
 	low_limits = {'bat':4,'bowl':2,'wk':1,'allround':2,fixture.teamA:0,fixture.teamB:0,'price':0,'power':1}
 	up_limits = {'bat':11,'bowl':11,'wk':1,'allround':11,fixture.teamA:6,fixture.teamB:6,'price':900,'power':1}
-	error_messages = {'bat':'Batsmen insufficient!','bowl':'Bowlers insufficient!','wk':'You must keep only one wicketkeeper!','allround':'Allrounders insufficient!',fixture.teamA:'aximum players from a single team exceeded!',fixture.teamB:'aximum players from a single team exceeded!','price':'Total Budget Exceeded!','power':'Must have one power player'}
+	error_messages = {'bat':'Batsmen insufficient!','bowl':'Bowlers insufficient!','wk':'You must keep only one wicketkeeper!','allround':'Allrounders insufficient!',fixture.teamA:'Maximum players from a single team exceeded!',fixture.teamB:'aximum players from a single team exceeded!','price':'Total Budget Exceeded!','power':'Must have one power player'}
 
 
 	for i in xrange(len(teamconfig_list)):
-	    cons[playersinfixture[i].role]+=1
-	    cons['price']+=playersinfixture[i].price
-	    cons[playersinfixture[i].country]+=1
-	    if p[i]==2:
-		cons['power']+=1
-	    for key in cons:
-		if (cons[key]>=low_limits[key] and cons[key]<=up_limits[key]) or key=='power':
-		    continue
-		else:
-		    return error_messages[key]
+	    if teamconfig_list[i]>0:
+		#print playersinfixture[i].role
+		cons[playersinfixture[i].role]+=1
+		cons['price']+=playersinfixture[i].price
+		cons[playersinfixture[i].country]+=1
+		if teamconfig_list[i]==2:
+		    cons['power']+=1
+
+	for key in cons:
+	    if (cons[key]>=low_limits[key] and cons[key]<=up_limits[key]) or key=='power':
+		continue
+	    else:
+		return error_messages[key]+'Budget '+str(cons['price'])
 	
 	if cons['power']!=1:
 	    return error_messages['power']
@@ -83,11 +87,10 @@ def home(request):
 		#If the user made any fixture team
 		teamconfig = []
 		try:
-		    print fixture,request.facebook.user
 		    userfixtureteam = fixtureTeams.objects.filter(user=request.facebook.user).get(fixture = fixture)
 		    s = userfixtureteam.teamconfig
-		    print s
-		    teamconfig = map(int,s[:-1].split(','))
+		    #print teamconfig
+		    teamconfig = map(int,s.split(','))
 		    teams.append(userfixtureteam)
 		    
 		    #Complete new team
@@ -104,8 +107,6 @@ def home(request):
 		    teamconfig = map(int,s[:-1].split(','))
 		    teamconfig.pop()
 		    teams.append(newfixtureteam)
-		    player_fixture.append(zip(teamconfig,playersinfixture))
-	    
 		    """
 		    for obj in fplUser.objects.all():
 			    eachscore=0
@@ -119,7 +120,7 @@ def home(request):
 		    """
 		    following is a three-in-one list zipped into one.
 		    """
-		    
+	    player_fixture.append(zip(teamconfig,playersinfixture))
 	    fixturewiseteams = zip(allfixtures,teams,player_fixture)
 	    return render(request,'main/logged.html',{"name":username,"fixturewiseteams":fixturewiseteams,"fixtures":allfixtures,"fplUsers":fplUser.objects.all(),"players":players.objects.all()})
 
@@ -142,7 +143,7 @@ def logout_(request):
 	request.facebook = None
 	return HttpResponseRedirect('/')
 
-@facebook_authorization_required
+#@facebook_authorization_required
 def locktheteam(request):
 	"""
 	#returns whether the team is lockable if not return the error
@@ -153,14 +154,14 @@ def locktheteam(request):
 	tmp=request.POST
 	if request.facebook:
 	    #Checking if the request has the desired keys.
+	    print tmp
 	    if chkkey(tmp,["teamconfig","teamname","fixtureid"]):
-		    print tmp["teamconfig"],tmp["fixtureid"],tmp["teamname"]
-		    tmp2=tmp["teamconfig"].split(',')
-		    
+		    #print tmp["teamconfig"],tmp["fixtureid"],tmp["teamname"]
 		    val = validate_team(tmp["teamconfig"],tmp["fixtureid"],tmp["teamname"])
 		    if val=='yes':
-
-			if fixtureTeams.objects.filter(teamname = tmp["teamname"]):
+			print tmp['teamname']
+			print fixtureTeams.objects.filter(teamname = tmp["teamname"])[0].teamname
+			if fixtureTeams.objects.filter(teamname = tmp["teamname"]) is not None:
 			    response_dict.update({"server_message":"Team name already exists!"})
 			else:
 			    fixture = fixtures.objects.get(id = tmp["fixtureid"])

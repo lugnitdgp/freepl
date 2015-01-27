@@ -165,7 +165,8 @@
 				    }
 		    });
 		    $.blockUI({ message: '<h1><img src="{% static 'freepl/images/busy.gif' %}" /> Just a moment...</h1>' }); 
-		    var teamnameentry = $("#bf"+fixtureid+"e").text();
+		    var teamnameentry = $("#bf"+fixtureid+"e").val();
+		    console.log(teamnameentry);
 			    $.ajax({
 				    url : "/dummylocktheteam",
 				    type : "POST",
