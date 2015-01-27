@@ -13,7 +13,6 @@ from fandjango.decorators import facebook_authorization_required
 
 from mysite.settings import SEND_MAIL
 
-from forms import CaptchaTestForm
 
 def chkkey(dic,li):
 	flag=1

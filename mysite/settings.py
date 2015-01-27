@@ -13,7 +13,6 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 from secrets import DB_NAME, DB_USER, APP_SECRET, DB_PASSWORD, LOCKDOWN_PASSWORD
-from secrets import MANDRILL_PASSWORD, MANDRILL_USER, MANDRILL_PORT, MANDRILL_HOST
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
@@ -27,18 +26,6 @@ TEMPLATE_DEBUG = True
 
 ALLOWED_HOSTS = []
 
-SEND_MAIL = False
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-# Host for sending e-mail.
-EMAIL_HOST = MANDRILL_HOST
-
-# Port for sending e-mail.
-EMAIL_PORT = MANDRILL_PORT
-
-# Optional SMTP authentication information for EMAIL_HOST.
-EMAIL_HOST_USER = MANDRILL_USER
-EMAIL_HOST_PASSWORD = MANDRILL_PASSWORD
-EMAIL_USE_TLS = False
 # Application definition
 
 INSTALLED_APPS = (
@@ -50,7 +37,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.humanize',
 	'freepl',
-	'captcha',
 	'fandjango',
 	#'lockdown',
 )
