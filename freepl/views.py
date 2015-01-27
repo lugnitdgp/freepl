@@ -25,8 +25,9 @@ def chkkey(dic,li):
 def validate_team(teamconfig,teamname,fixtureid):
     try:
 	fixture = fixtures.objects.get(id=fixtureid)
-	teamconfig_list = map(int,teamconfig.split(','))
-	teamconfig_list.pop()
+	#print fixture
+	print teamconfig
+	teamconfig_list = map(int,teamconfig[:-1].split(','))
 	playersinfixture = player.filter(Q(country=teamA)|Q(country=teamB)).order_by('netperformance')
 	
 	#constraint parameters
@@ -85,8 +86,8 @@ def home(request):
 		    print fixture,request.facebook.user
 		    userfixtureteam = fixtureTeams.objects.filter(user=request.facebook.user).get(fixture = fixture)
 		    s = userfixtureteam.teamconfig
-		    teamconfig = map(int,s.split(','))
-		    teamconfig.pop()
+		    print s
+		    teamconfig = map(int,s[:-1].split(','))
 		    teams.append(userfixtureteam)
 		    
 		    #Complete new team
