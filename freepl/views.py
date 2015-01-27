@@ -32,7 +32,7 @@ def validate_team(teamconfig,teamname,fixtureid):
 	#constraint parameters
 	cons = {'bat': 0,'bowl':0,'wk':0,'allround':0, fixture.teamA:0,fixture.teamB:0,'price':0,'power':0}
 	low_limits = {'bat':4,'bowl':2,'wk':1,'allround':2,fixture.teamA:0,fixture.teamB:0,'price':0,'power':1}
-	up_limits = {'bat':11,'bowl':11,'wk':1,'allround':11,fixture.teamA:6,fixture.teamB:6,'price':850,'power':1}
+	up_limits = {'bat':11,'bowl':11,'wk':1,'allround':11,fixture.teamA:6,fixture.teamB:6,'price':900,'power':1}
 	error_messages = {'bat':'Batsmen insufficient!','bowl':'Bowlers insufficient!','wk':'You must keep only one wicketkeeper!','allround':'Allrounders insufficient!',fixture.teamA:'aximum players from a single team exceeded!',fixture.teamB:'aximum players from a single team exceeded!','price':'Total Budget Exceeded!','power':'Must have one power player'}
 
 
