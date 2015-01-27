@@ -293,10 +293,12 @@
 			<table class="userstandings allplayer" style="width:50%; margin-left:20%;">
 				<tr class="tableheader">
 				    <td >  Name  </td>
+				    <td >  Email  </td>
 				    <td >  Net Points  </td>
 				    {%for f in fplUsers%}
 				    <tr>
-					<td>{{f.username}}</td>
+					<td>{{f.user.first_name }} {{ {{f.user.last_name }} }}</td>
+					<td>{{f.user.email}}</td>
 					<td>{{f.cumulativescore}}</td>
 				    </tr>
 				    {%endfor%}
@@ -315,7 +317,7 @@
 				{% for fixture in allfixtures %}
 					{% if not fixture.active and fixture.locked %}
 					<tr>
-						<td>{{fixture.teamA}} vs {{fixture.teamB}}</td>
+						<td>{{fixture.teamA.county}} vs {{fixture.teamB.country}}</td>
 						<td>{{fixture.date}}</td>
 					</tr>
 					{% endif %}
