@@ -58,7 +58,7 @@ def validate_team(teamconfig,fixtureid,teamname):
 	return 'yes'
     except Exception as e:
 	print e
-	return 'bad request'
+	return e
 	
 # Create your views here.
 #@facebook_authorization_required
