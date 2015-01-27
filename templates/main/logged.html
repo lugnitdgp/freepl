@@ -194,6 +194,7 @@
 				    },
 				    error : function(xhr,errmsg,err) {
 				    alert(xhr.status + ": " + xhr.responseText);
+				    console.log(xhr.ResponseText);
 				    }
 			    });
 			    return false;
@@ -253,7 +254,7 @@
 						</div>
 					    
 						{% csrf_token %}
-						<input id="bf{{fixture.id}}e" class="teamnameentry" {% if team.name %} text="{{team.name}}" {% else %} placeholder= "Enter your teamname"{%endif%} ></input>
+						<input id="bf{{fixture.id}}e" class="teamnameentry" {% if not team.teamname == '' %} value="{{team.teamname}}" {% else %} placeholder= "Enter your teamname"{%endif%} ></input>
 						<button id="bf{{fixture.id}}" class="lockteam submitbutton">Lock the team</button>
 					    {%endif%}
 
@@ -267,8 +268,8 @@
 							    
 							    </tr>
 								    {% for k in teamlist_plyrs %}
-									<tr id="p{{k.1.id}}" class="{%if not fixture.locked%}clickablepl{%endif%} {%if k.0 %}selected{%endif%}">
-										<td class="c1">{{k.1.firstname}} {{k.1.lastname}}</td>
+									<tr id="p{{k.1.id}}" class="{%if not fixture.locked%}clickablepl{%endif%} {%if k.0 == 1 %}selected {% elif  k.0 == 2 %} powerplayer  {%endif%}">
+										<td class="c1">{{k.1.firstname}} {{k.1.lastname}} </td>
 										<td class="c2">{{k.1.country}}</td>
 										<td class="c3">{{k.1.price}}</td>
 										<td class="c4">{{k.1.role}}</td>

@@ -30,13 +30,13 @@ def validate_team(teamconfig,fixtureid,teamname):
 	#print fixture
 	teamconfig_list = map(int,teamconfig[:-1].split(','))
 	playersinfixture = players.objects.filter(Q(country=fixture.teamA)|Q(country=fixture.teamB)).order_by('netperformance')
-	
+	if len(playersinfixture)!=len(teamconfig_list):
+	    return 'lolwa'
 	#constraint parameters
 	cons = {'bat': 0,'bowl':0,'wk':0,'allround':0, fixture.teamA:0,fixture.teamB:0,'price':0,'power':0}
 	low_limits = {'bat':4,'bowl':2,'wk':1,'allround':2,fixture.teamA:0,fixture.teamB:0,'price':0,'power':1}
 	up_limits = {'bat':11,'bowl':11,'wk':1,'allround':11,fixture.teamA:6,fixture.teamB:6,'price':900,'power':1}
 	error_messages = {'bat':'Batsmen insufficient!','bowl':'Bowlers insufficient!','wk':'You must keep only one wicketkeeper!','allround':'Allrounders insufficient!',fixture.teamA:'Maximum players from a single team exceeded!',fixture.teamB:'aximum players from a single team exceeded!','price':'Total Budget Exceeded!','power':'Must have one power player'}
-
 
 	for i in xrange(len(teamconfig_list)):
 	    if teamconfig_list[i]>0:
@@ -55,7 +55,6 @@ def validate_team(teamconfig,fixtureid,teamname):
 	
 	if cons['power']!=1:
 	    return error_messages['power']
-	
 	return 'yes'
     except Exception as e:
 	print e
@@ -90,7 +89,7 @@ def home(request):
 		    userfixtureteam = fixtureTeams.objects.filter(user=request.facebook.user).get(fixture = fixture)
 		    s = userfixtureteam.teamconfig
 		    #print teamconfig
-		    teamconfig = map(int,s.split(','))
+		    teamconfig = map(int,s[:-1].split(','))
 		    teams.append(userfixtureteam)
 		    
 		    #Complete new team
@@ -102,10 +101,9 @@ def home(request):
 		    newfixtureteam.user = fplUser.objects.get(user=request.facebook.user)#.objects.get(id = request.facebook.user.id)
 		    newfixtureteam.fixture = fixture
 		    newfixtureteam.teamname = ''
-		    newfixtureteam.teamconfig = s[:-1]
+		    newfixtureteam.teamconfig = s
 		    newfixtureteam.save()
 		    teamconfig = map(int,s[:-1].split(','))
-		    teamconfig.pop()
 		    teams.append(newfixtureteam)
 		    """
 		    for obj in fplUser.objects.all():
@@ -159,12 +157,11 @@ def locktheteam(request):
 		    #print tmp["teamconfig"],tmp["fixtureid"],tmp["teamname"]
 		    val = validate_team(tmp["teamconfig"],tmp["fixtureid"],tmp["teamname"])
 		    if val=='yes':
-			print tmp['teamname']
-			print fixtureTeams.objects.filter(teamname = tmp["teamname"])[0].teamname
-			if fixtureTeams.objects.filter(teamname = tmp["teamname"]) is not None:
+			if fixtureTeams.objects.filter(teamname = tmp["teamname"]):
 			    response_dict.update({"server_message":"Team name already exists!"})
 			else:
 			    fixture = fixtures.objects.get(id = tmp["fixtureid"])
+			    print 'finally'
 			    try:
 				alreadythere = fixtureTeams.objects.get(user=request.facebook.user,fixture = fixture)
 				alreadythere.teamconfig = tmp["teamconfig"]
