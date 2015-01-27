@@ -86,7 +86,7 @@ def home(request):
 		#If the user made any fixture team
 		teamconfig = []
 		try:
-		    userfixtureteam = fixtureTeams.objects.filter(user=request.facebook.user).get(fixture = fixture)
+		    userfixtureteam = fixtureTeams.objects.get(user=request.facebook.user,fixture = fixture)
 		    s = userfixtureteam.teamconfig
 		    #print teamconfig
 		    teamconfig = map(int,s[:-1].split(','))
