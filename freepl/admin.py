@@ -135,8 +135,8 @@ def netperformanceupdate(modeladmin,request,queryset):
 	player.save()
 
 class fplUserAdmin(admin.ModelAdmin):
-    list_display = ('username','email','cumulativescore','phonenumber')
-    list_display_links = ['username']
+    list_display = ('user','cumulativescore')
+    list_display_links = ['user']
     list_editable = ('cumulativescore',)
     actions = [cumulativescoreupdate]
 

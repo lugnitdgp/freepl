@@ -1,7 +1,8 @@
 from django.db import models
 from django.db.models import Q
-from django.contrib.auth.models import User
-from django.contrib.auth.models import UserManager
+
+from fandjango.models import User
+
 from django.core.exceptions import ValidationError
 """
 **************
@@ -13,11 +14,10 @@ from django.core.exceptions import ValidationError
 # Create your models here.
 
 #used for storing phone numbers and cumulative standings of each username
-class fplUser(User):
-    phonenumber = models.CharField(max_length=20)
+class fplUser(models.Model):
+    user = models.ForeignKey(User)
     cumulativescore = models.IntegerField(default=0)	
 
-    objects = UserManager()
     def __unicode__(self):
 	return (self.username)
 

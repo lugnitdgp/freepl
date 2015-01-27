@@ -18,7 +18,6 @@ $(document).ready(function() {
 		$("#signupbtn").click(function(){
 					$('#signup').show();
 					$('#signin').hide();
-
 					$("#signupnlog").click(function(){
 					$('#login-box').hide();
 					$.blockUI({ message: '<h1><img src="{% static 'freepl/images/busy.gif' %}" /> Just a moment...</h1>' }); 
@@ -33,6 +32,7 @@ $(document).ready(function() {
 								phone: $('#phonenumber1').val(),
 								passwordagain: $('#repeatpassword1').val(),
 								password: $('#password1').val(),
+								captch_form: ('#captchatest').serialize(),
 								csrfmiddlewaretoken: '{{ csrf_token }}'
 							},
 							success : function(hill)
@@ -107,11 +107,11 @@ $(document).ready(function() {
     
 		<div class="post">
         	<div class="btn-sign">
-				<a href="#login-box" class="login-window">Let the Game Begin!</a>
+				<a href="/authorize" class="login-window">Let the Game Begin!</a>
         	</div>
 		</div>
         
-       <div id="login-box" class="login-popup">
+       <!--div id="login-box" class="login-popup">
 
 	    <form id="signin" method="post" class="popupform" >
 		{% csrf_token %}
@@ -120,10 +120,10 @@ $(document).ready(function() {
 		    <input class="textbox" id="password" name="password" value="" type="password" placeholder="Password">
 		    <button id="loginbtn" class=" submitbutton" type="button">Log In</button></td>
 		    <button id="signupbtn" class=" submitbutton" type="button">New User ?</button>
-		    <p><a class="forgot" href="#">Forgot your password?</a></p>
 		</fieldset>
+
 	    </form>
-	    
+
 	    <form id="signup" method="post" class="popupform" action="#">
 		    {% csrf_token %}
 		<fieldset class="textbox">
@@ -132,11 +132,14 @@ $(document).ready(function() {
 		    <input class="textbox" id="phonenumber1" name="phonenumber1" value="" type="text" autocomplete="on" placeholder="Your Mobile Number">
 		    <input class="textbox" id="password1" name="password1" value="" type="password" placeholder="Password">
 		    <input class="textbox" id="repeatpassword1" name="repeatpassword1" value="" type="password" placeholder="Confirm Password">
+		    <div id='captchatest'>
+			{{ captcha_form }}
+		    </div>
 		    <button id="signupnlog" class="submitbutton" type="button">Register me!</button>
 		</fieldset>
 	    </form>
 		  <div id="errormsg"></div>
-	</div>
+	</div-->
     </div>
 </body>
 </html>

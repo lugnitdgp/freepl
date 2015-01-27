@@ -13,7 +13,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 from secrets import DB_NAME, DB_USER, APP_SECRET, DB_PASSWORD, LOCKDOWN_PASSWORD
-
+from secrets import MANDRILL_PASSWORD, MANDRILL_USER, MANDRILL_PORT, MANDRILL_HOST
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.6/howto/deployment/checklist/
 
@@ -30,14 +30,14 @@ ALLOWED_HOSTS = []
 SEND_MAIL = False
 #EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 # Host for sending e-mail.
-EMAIL_HOST = 'localhost'
+EMAIL_HOST = MANDRILL_HOST
 
 # Port for sending e-mail.
-EMAIL_PORT = 1025
+EMAIL_PORT = MANDRILL_PORT
 
 # Optional SMTP authentication information for EMAIL_HOST.
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_USER = MANDRILL_USER
+EMAIL_HOST_PASSWORD = MANDRILL_PASSWORD
 EMAIL_USE_TLS = False
 # Application definition
 
@@ -50,6 +50,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django.contrib.humanize',
 	'freepl',
+	'captcha',
+	'fandjango',
 	#'lockdown',
 )
 """
@@ -59,6 +61,12 @@ it
 """
 
 
+FACEBOOK_APPLICATION_ID = '183216621874530'
+FACEBOOK_APPLICATION_SECRET_KEY = '60d4f52542b5fb445a08c49449982163'
+FACEBOOK_APPLICATION_NAMESPACE = 'muktinitdurgapur'
+FACEBOOK_APPLICATION_INITIAL_PERMISSIONS = ['read_stream', 'publish_stream']
+FANDJANGO_SITE_URL = 'http://localhost:8000'
+
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -66,6 +74,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+     'fandjango.middleware.FacebookMiddleware',
+    'fandjango.middleware.FacebookWebMiddleware',
     #'lockdown.middleware.LockdownMiddleware', 
 )
 
@@ -75,6 +85,7 @@ ROOT_URLCONF = 'mysite.urls'
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
+CAPTCHA_FONT_SIZE = 50
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
@@ -118,9 +129,9 @@ for the following only the /home/mj part will change depending on where
 you keep this repo
 """
 #PROJECT_DIR='/home/jayabrata/freepl/'
-#STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
 
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+#STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 STATIC_URL = '/static/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

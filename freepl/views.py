@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse,HttpResponseRedirect
 import json
-from django.contrib.auth import authenticate,login,logout
+#from django.contrib.auth import authenticate,login,logout
 
 from django.db.models import Q
 
@@ -9,8 +9,11 @@ from django.contrib.auth.models import User
 from freepl.models import fplUser,fixtures,players,fixtureTeams
 from django.core.validators import validate_email
 from django.core.mail import send_mail
+from fandjango.decorators import facebook_authorization_required
 
 from mysite.settings import SEND_MAIL
+
+from forms import CaptchaTestForm
 
 def chkkey(dic,li):
 	flag=1
@@ -53,214 +56,132 @@ def validate_team(teamconfig,teamname,fixtureid):
 	return 'yes'
     except:
 	return 'bad request'
-
-def user_verify(request,activation_key):
-	flag=0
-	pwd=""
-	#print "82ghzsF8itjyckjm9tVNbGLItbcFPckIxOhVbqtQFCI="
-	#print User.objects.all().filter(username="tutogaya")[0].password
-	activation_key=activation_key.decode("hex")
-	for user in User.objects.all():
-		pwd=user.password
-		tmp=pwd.split('$')
-		if tmp[3]==activation_key:
-			if user.is_active:
-				return HttpResponse("Stop being silly, after activating yourself!")
-			user.is_active=True
-			user.save()
-			return render(request,'startpage/start.html',{'alert':"activated"})
-	return HttpResponse("Invalid confirmation link!")
-	
 	
 # Create your views here.
+@facebook_authorization_required
 def home(request):
-	if request.method=='GET':
-	    #if logged in
-	    if request.user.is_authenticated():
-		"""
-		here we need to add the various context parameters needed for 
-		the template logged.html template which includes really the entire 
-		content of the site 
-		"""
-		allfixtures = fixtures.objects.all()
-		teamlists = []
-		player_fixture = []
-		teams = []
+    if request.method=='GET':
+	#if logged in
+	if request.facebook:
+	    """
+	    here we need to add the various context parameters needed for 
+	    the template logged.html template which includes really the entire 
+	    content of the site 
+	    """
+	    allfixtures = fixtures.objects.all()
+	    teamlists = []
+	    player_fixture = []
+	    teams = []
+	    playerlist = players.objects.order_by('netperformance')
+	    userfixtureteams = fixtureTeams.objects.filter(user=request.facebook.user)
+	    username = request.facebook.user.first_name
+	    for fixture in allfixtures:
+		teamA = fixture.teamA
+		teamB = fixture.teamB
+		playersinfixture = playerlist.filter(Q(country=teamA)|Q(country=teamB))
+		#print playersinfixture
+		#If the user made any fixture team
+		teamconfig = []
+		try:
+		    userfixtureteam = fixtureTeams.objects.get(fixture=fixture,user=request.facebook.user)
+		    s = userfixtureteam.teamconfig
+		    teamconfig = map(int,s.split(','))
+		    teamconfig.pop()
+		    teams.append(userfixtureteam)
+		    
+		    #Complete new team
+		except fixtureTeams.DoesNotExist:
+		    #teamconfig 0-not selected, 1-selected, 2-powerplayer
+		    n = len(playersinfixture)
+		    s = '0,'*n
+		    newfixtureteam = fixtureTeams()
+		    newfixtureteam.user = fplUser.objects.get(user=request.facebook.user)#.objects.get(id = request.facebook.user.id)
+		    newfixtureteam.fixture = fixture
+		    newfixtureteam.teamname = ''
+		    newfixtureteam.teamconfig = s[:-1]
+		    newfixtureteam.save()
+		    teamconfig = map(int,s[:-1].split(','))
+		    teamconfig.pop()
+		    teams.append(newfixtureteam)
+		    player_fixture.append(zip(teamconfig,playersinfixture))
+	    
+		    """
+		    for obj in fplUser.objects.all():
+			    eachscore=0
+			    for team in fixtureTeams.objects.all():
+				if team.username==obj.username:
+					    eachscore+=team.score
+			    obj.cumulativescore=eachscore
+			    obj.save()
+		    """
+		    
+		    """
+		    following is a three-in-one list zipped into one.
+		    """
+		    
+	    fixturewiseteams = zip(allfixtures,teams,player_fixture)
+	    return render(request,'main/logged.html',{"name":username,"fixturewiseteams":fixturewiseteams,"fixtures":allfixtures,"fplUsers":fplUser.objects.all(),"players":players.objects.all()})
 
-		playerlist = players.objects.order_by('netperformance')
-		userfixtureteams = fixtureTeams.objects.filter(user=request.user)
-
-		for fixture in allfixtures:
-			teamA = fixture.teamA
-			teamB = fixture.teamB
-			playersinfixture = playerlist.filter(Q(country=teamA)|Q(country=teamB))
-			#print playersinfixture
-			#If the user made any fixture team
-			teamconfig = []
-			try:
-			    userfixtureteam = fixtureTeams.objects.get(fixture=fixture,user=request.user)
-			    s = userfixtureteam.teamconfig
-			    teamconfig = map(int,s.split(','))
-			    teamconfig.pop()
-			    teams.append(userfixtureteam)
-			
-			#Complete new team
-			except fixtureTeams.DoesNotExist:
-			    #teamconfig 0-not selected, 1-selected, 2-powerplayer
-			    n = len(playersinfixture)
-			    s = '0,'*n
-			    newfixtureteam = fixtureTeams()
-			    newfixtureteam.user = fplUser.objects.get(id=request.user.id)#.objects.get(id = request.user.id)
-			    newfixtureteam.fixture = fixture
-			    newfixtureteam.teamname = ''
-			    newfixtureteam.teamconfig = s[:-1]
-			    newfixtureteam.save()
-
-			    teamconfig = map(int,s[:-1].split(','))
-			    teamconfig.pop()
-			    teams.append(newfixtureteam)
-			player_fixture.append(zip(teamconfig,playersinfixture))
-			
-		"""
-		for obj in fplUser.objects.all():
-			eachscore=0
-			for team in fixtureTeams.objects.all():
-			    if team.username==obj.username:
-					eachscore+=team.score
-			obj.cumulativescore=eachscore
-			obj.save()
-		"""
-		
-		"""
-		following is a three-in-one list zipped into one.
-		"""
-		
-		fixturewiseteams = zip(allfixtures,teams,player_fixture)
-		return render(request,'main/logged.html',{"username":request.user.username,"fixturewiseteams":fixturewiseteams,"fixtures":allfixtures,"fplUsers":fplUser.objects.all(),"players":players.objects.all()})
-
-	    else:
-		return render(request,'startpage/start.html')
-
-from django.contrib.auth.decorators import login_required
-
-def login_(request):
-	tmp=request.POST
-	print tmp
-	response_dict={'server_response': "no" }
-	print "jhg"
-	if chkkey(tmp,['username','password']):
-		print tmp['username']
-		user=authenticate(username=tmp['username'],password=tmp['password'])
-		print user
-		if user is not None and user.is_active:
-			login(request,user)
-			response_dict.update({'server_response': "yes" })                                                                  
-	return HttpResponse(json.dumps(response_dict), mimetype='application/javascript')
+	else:
+	    return render(request,'startpage/start.html')
 
 
-def register(request):
-	tmp=request.POST
-	response_dict={"server_reponse":"no","server_message":"Data recieved was incomplete, check for errors!"}
-	print "jh"
-	if chkkey(tmp,['email','username','phone','password','passwordagain']):
-		#check if user already exists
-		"""
-		to prevent the sending of large size data
-		"""
-		
-		if len(tmp['username'])>30 or len(tmp['email'])>30 or len(tmp['password'])>30:
-			response_dict.update({"server_message":"You have exceeded the limit for text entry. MaxLength: 30 chars "})
-		elif fplUser.objects.filter(username=tmp['username']):
-			response_dict.update({"server_message":"username already exists"})
-		#check if the phone number is valid
-		elif len(tmp['phone'])!=10:
-			response_dict.update({"server_message":"Wrong Mobile Number"})
-		#check if the password is not blank
-		elif tmp['password']=="":
-			response_dict.update({"server_message":"Password is blank"})
-		#check if the password is matching the previous one
-		elif tmp['passwordagain']!=tmp['password']:
-			response_dict.update({"server_message":"Retyped password does not match"})
-		#check if the email is unique 
-		#if not validate_email("mayankgmail.com"):
-		#	print "fucke "
-		else:
-		    try:
-			validate_email(tmp['email'])
-		    except:
-			response_dict.update({"server_message":"Email is invalid"})
-		    if fplUser.objects.filter(email=tmp['email']):
-			response_dict.update({"server_message":"Email is already registered"})
-		    else:
-			#creating the User object
-			user = fplUser.objects.create_user(tmp['username'], tmp['email'],tmp['password'])
-			user.is_active = False
-			user.phone = tmp['phone']
-			#print user.password+" ee "
-			user.save()
-			hexkey=(user.password.split('$')[3]).encode("hex")
-			activation_url = "http://freepl.mkti.in/activate/"+hexkey    
-			test_url = "http://localhost:8000/activate/"+hexkey
-			"""
-			we send email of the activation_url to the user email address here
-			"""
-			#creating the fplUser object
-			if SEND_MAIL:
-			    send_mail("Congratulations! You have been registered for FreePL 2014" , activation_url , 'freepl@mkti.com', [user.email], fail_silently = False)	
-			else:#Testing
-			    print "Activation Url ",test_url
-			#userd=authenticate(username=tmp['username'],password=tmp['password'])
-			#login(request,userd)
-			response_dict.update({"server_response":"yes","server_message":"Registration Successful"})
-
-	return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')
-
+@facebook_authorization_required
+def authorize(request):
+    response_dict={'server_response': "no" }
+    try:
+	ui = fplUser.objects.get(user = request.facebook.user)
+	response_dict={'server_response': "yes" }
+    except:
+	user = fplUser(user = request.facebook.user, cumulativescore = 0)
+	user.save()
+    return HttpResponseRedirect('/')
 
 def logout_(request):
-	logout(request)
+	request.facebook = None
 	response_dict={}
 	return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')
 
-@login_required
+@facebook_authorization_required
 def locktheteam(request):
 	"""
-	returns whether the team is lockable if not return the error
-	and if lockable then lock it modify the dbs and return the successful
-	team
+	#returns whether the team is lockable if not return the error
+	#and if lockable then lock it modify the dbs and return the successful
+	#team
 	"""
 	response_dict={'server_response':"no","server_message":"Bad Request!"}
 	tmp=request.POST
+	if request.facebook:
+	    #Checking if the request has the desired keys.
+	    if chkkey(tmp,["teamconfig","teamname","fixtureid"]):
+		    print tmp["teamconfig"],tmp["fixtureid"],tmp["teamname"]
+		    tmp2=tmp["teamconfig"].split(',')
+		    
+		    val = validate_team(tmp["teamconfig"],tmp["fixtureid"],tmp["teamname"])
+		    if val=='yes':
 
-	#Checking if the request has the desired keys.
-	if chkkey(tmp,["teamconfig","teamname","fixtureid"]):
-		print tmp["teamconfig"],tmp["fixtureid"],tmp["teamname"]
-		tmp2=tmp["teamconfig"].split(',')
-		
-		val = validate_team(tmp["teamconfig"],tmp["fixtureid"],tmp["teamname"])
-		if val=='yes':
+			if fixtureTeams.objects.filter(teamname = tmp["teamname"]):
+			    response_dict.update({"server_message":"Team name already exists!"})
+			else:
+			    fixture = fixtures.objects.get(id = tmp["fixtureid"])
+			    try:
+				alreadythere = fixtureTeams.objects.get(user=request.facebook.user,fixture = fixture)
+				alreadythere.teamconfig = tmp["teamconfig"]
+				alreadythere.teamname = tmp["teamname"]
+				alreadythere.save()
 
-		    if fixtureTeams.objects.filter(teamname = tmp["teamname"]):
-			response_dict.update({"server_message":"Team name already exists!"})
+			    except fixtures.DoesNotExist:
+				newfixtureteam = fixtureTeams()
+				newfixtureteam.teamconfig = tmp["teamconfig"]
+				newfixtureteam.teamname = tmp["teamname"]
+				newfixtureteam.user= request.facebook.user
+				newfixtureteam.fixture= fixture
+				newfixtureteam.save()
+
+			    response_dict.update({"server_message":"congos"})
+			    response_dict.update({"server_response":"yes"})
 		    else:
-			fixture = fixtures.objects.get(id = tmp["fixtureid"])
-			try:
-			    alreadythere = fixtureTeams.objects.get(user=request.user,fixture = fixture)
-			    alreadythere.teamconfig = tmp["teamconfig"]
-			    alreadythere.teamname = tmp["teamname"]
-			    alreadythere.save()
-
-			except fixtures.DoesNotExist:
-			    newfixtureteam = fixtureTeams()
-			    newfixtureteam.teamconfig = tmp["teamconfig"]
-			    newfixtureteam.teamname = tmp["teamname"]
-			    newfixtureteam.user= request.user
-			    newfixtureteam.fixture= fixture
-			    newfixtureteam.save()
-
-			response_dict.update({"server_message":"congos"})
-			response_dict.update({"server_response":"yes"})
-		else:
-		    response_dict.update({"server_message":val})
+			response_dict.update({"server_message":val})
 
 	return HttpResponse(json.dumps(response_dict),mimetype='application/javascript')
 
