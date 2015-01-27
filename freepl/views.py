@@ -86,7 +86,7 @@ def home(request):
 		#If the user made any fixture team
 		teamconfig = []
 
-		obj, created = fixtureTeams.objects.get_or_create(user=request.facebook.user,fixture = fixture)
+		obj, created = fixtureTeams.objects.get_or_create(user=fplUser.objects.get(user=request.facebook.user),fixture = fixture)
 		if created:
 		    s = obj.teamconfig
 		    
