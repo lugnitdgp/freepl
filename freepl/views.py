@@ -83,7 +83,7 @@ def home(request):
 		teamconfig = []
 		try:
 		    print fixture,request.facebook.user
-		    userfixtureteam = fixtureTeams.objects.get(fixture=fixture,user=request.facebook.user)
+		    userfixtureteam = fixtureTeams.objects.filter(user=request.facebook.user).get(fixture = fixture)
 		    s = userfixtureteam.teamconfig
 		    teamconfig = map(int,s.split(','))
 		    teamconfig.pop()
