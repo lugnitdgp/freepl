@@ -11,7 +11,6 @@ from django.core.validators import validate_email
 from django.core.mail import send_mail
 from fandjango.decorators import facebook_authorization_required
 
-from mysite.settings import SEND_MAIL
 
 
 def chkkey(dic,li):
