@@ -147,8 +147,8 @@ def locktheteam(request):
 		    if val=='yes':
 			tm = None
 			try:
-			    tmp = fixtureTeams.objects.get(teamname = tmp["teamname"])
-			    if tmp.user.user != request.facebook.user:
+			    tm = fixtureTeams.objects.get(teamname = tmp["teamname"])
+			    if tm.user.user != request.facebook.user:
 				response_dict.update({"server_message":"Team name already exists!"})
 			except:
 			    pass
