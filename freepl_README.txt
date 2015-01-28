@@ -48,7 +48,7 @@ For Admins:
    State 2 -> locked - False, active - True => The fixture would be active and the users,
                                                can form their teams.
    State 3 -> locked - True, active - False => The match is on, and users cannot be made.
-   State 4 -> locked - True, active - False => The match is over and the scores need will be published.
+   State 4 -> locked - True, active - True => The match is over and the scores need will be published.
    
    I. Administering a particular fixture (Follow the steps in order).
       i. Create a fixture.
