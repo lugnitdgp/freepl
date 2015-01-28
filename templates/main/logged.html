@@ -200,12 +200,11 @@
 						    console.log($("div#"+fixtureid+" p.fixterror").html());
 						    $("#error"+fixtureid).html(reply.server_message);
 					    }
-					    die();
 				    },
 				    error : function(xhr,errmsg,err) {
-				    alert(xhr.status + ": " + xhr.responseText);
-				    console.log(xhr.ResponseText);
-				    die();
+					alert(xhr.status + ": " + xhr.responseText);
+					console.log(xhr.ResponseText);
+					die();
 				    }
 			    });
 			    return false;
