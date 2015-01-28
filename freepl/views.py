@@ -57,8 +57,8 @@ def validate_team(teamconfig,fixtureid,teamname):
 	    return error_messages['power']
 	return 'yes'
     except Exception as e:
-	print e
-	return e
+	#print e
+	return str(e)+' badrequest'
 	
 # Create your views here.
 #@facebook_authorization_required
@@ -85,23 +85,24 @@ def home(request):
 		#print playersinfixture
 		#If the user made any fixture team
 		teamconfig = []
-
+		#print fixture
 		obj, created = fixtureTeams.objects.get_or_create(user=fplUser.objects.get(user=request.facebook.user),fixture = fixture)
 		if created:
-		    s = obj.teamconfig
-		    
-		    teams.append(obj)
-		    teamconfig = map(int,s[:-1].split(','))
-		else:
+		    #print obj,"new"
 		    obj.user = fplUser.objects.get(user=request.facebook.user)
 		    obj.fixture = fixture
 		    obj.teamname = ''
 		    obj.teamconfig = '0,'*len(playersinfixture)
 		    obj.save()
-		    
+
 		    teamconfig = map(int,obj.teamconfig[:-1].split(','))
 		    teams.append(obj)
-		    
+
+		else:
+		    #print obj,"created"
+		    s = obj.teamconfig		    
+		    teams.append(obj)
+		    teamconfig = map(int,s[:-1].split(','))
 		    """
 		    following is a three-in-one list zipped into one.
 		    """
@@ -148,7 +149,7 @@ def locktheteam(request):
 			    response_dict.update({"server_message":"Team name already exists!"})
 			else:
 			    fixture = fixtures.objects.get(id = tmp["fixtureid"])
-			    print 'finally'
+			    #print 'finally'
 			    team_  = None
 			    try:
 				team_ = fixtureTeams.objects.get(user=request.facebook.user,fixture = fixture)
@@ -156,7 +157,7 @@ def locktheteam(request):
 				team_ = fixtureTeams()
 			    team_.teamconfig = tmp["teamconfig"]
 			    team_.teamname = tmp["teamname"]
-			    team_.user= request.facebook.user
+			    team_.user= fplUser.objects.get(user=request.facebook.user)
 			    team_.fixture= fixture
 			    team_.save()
 

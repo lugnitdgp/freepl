@@ -55,7 +55,10 @@ class PlayerStatsListFilter(admin.SimpleListFilter):
         """
         # Compare the requested value (either '80s' or '90s')
         # to decide how to filter the queryset.
-        for fixture in self.allfixtures:    
+        if self.value()!=None:
+	    return queryset.filter(fixture = fixtures.objects.get(id = self.value()))
+        for fixture in self.allfixtures:
+	    print self.value(),fixture.id
 	    if self.value() == fixture.id:
 		return queryset.filter(fixture = fixture)
 
@@ -89,7 +92,11 @@ class FixtureTeamsListFilter(admin.SimpleListFilter):
         """
         # Compare the requested value (either '80s' or '90s')
         # to decide how to filter the queryset.
+        # to decide how to filter the queryset.
+        if self.value()!=None:
+	    return queryset.filter(fixture = fixtures.objects.get(id = self.value()))
         for fixture in self.allfixtures:    
+	    print self.value(),fixture.id
 	    if self.value() == fixture.id:
 		return queryset.filter(fixture = fixture)
 
