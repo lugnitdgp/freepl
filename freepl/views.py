@@ -159,11 +159,11 @@ def locktheteam(request):
 			    team_ = fixtureTeams.objects.get(user = fplUser.objects.get(user=request.facebook.user),fixture = fixture)
 			except fixtures.DoesNotExist:
 			    team_ = fixtureTeams()
-			    team_.teamconfig = tmp["teamconfig"]
-			    team_.teamname = tmp["teamname"]
-			    team_.user= fplUser.objects.get(user=request.facebook.user)
-			    team_.fixture= fixture
-			    team_.save()
+			team_.teamconfig = tmp["teamconfig"]
+			team_.teamname = tmp["teamname"]
+			team_.user= fplUser.objects.get(user=request.facebook.user)
+			team_.fixture= fixture
+			team_.save()
 
 			response_dict.update({"server_message":"congos"})
 			response_dict.update({"server_response":"yes"})
