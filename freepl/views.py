@@ -144,7 +144,7 @@ def locktheteam(request):
 	    if chkkey(tmp,["teamconfig","teamname","fixtureid"]):
 		    #print tmp["teamconfig"],tmp["fixtureid"],tmp["teamname"]
 		    val = validate_team(tmp["teamconfig"],tmp["fixtureid"],tmp["teamname"])
-		    if val=='yes':
+		    if val=='yes':#which means the team is valid
 			tm = None
 			try:
 			    tm = fixtureTeams.objects.get(teamname = tmp["teamname"])
@@ -156,7 +156,7 @@ def locktheteam(request):
 			#print 'finally'
 			team_  = None
 			try:
-			    team_ = fixtureTeams.objects.get(user=request.facebook.user,fixture = fixture)
+			    team_ = fixtureTeams.objects.get(user = fplUser.objects.get(user=request.facebook.user),fixture = fixture)
 			except fixtures.DoesNotExist:
 			    team_ = fixtureTeams()
 			    team_.teamconfig = tmp["teamconfig"]
