@@ -96,7 +96,7 @@ def home(request):
 		    obj.user = fplUser.objects.get(user=request.facebook.user)
 		    obj.fixture = fixture
 		    obj.teamname = ''
-		    obj.teamconfig = '0,'*n
+		    obj.teamconfig = '0,'*len(playersinfixture)
 		    obj.save()
 		    
 		    teamconfig = map(int,obj.teamconfig[:-1].split(','))
