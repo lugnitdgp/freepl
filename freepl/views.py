@@ -152,22 +152,21 @@ def locktheteam(request):
 				response_dict.update({"server_message":"Team name already exists!"})
 			except:
 			    pass
-			else:
-			    fixture = fixtures.objects.get(id = tmp["fixtureid"])
-			    #print 'finally'
-			    team_  = None
-			    try:
-				team_ = fixtureTeams.objects.get(user=request.facebook.user,fixture = fixture)
-			    except fixtures.DoesNotExist:
-				team_ = fixtureTeams()
-			    team_.teamconfig = tmp["teamconfig"]
-			    team_.teamname = tmp["teamname"]
-			    team_.user= fplUser.objects.get(user=request.facebook.user)
-			    team_.fixture= fixture
-			    team_.save()
+			fixture = fixtures.objects.get(id = tmp["fixtureid"])
+			#print 'finally'
+			team_  = None
+			try:
+			    team_ = fixtureTeams.objects.get(user=request.facebook.user,fixture = fixture)
+			except fixtures.DoesNotExist:
+			team_ = fixtureTeams()
+			team_.teamconfig = tmp["teamconfig"]
+			team_.teamname = tmp["teamname"]
+			team_.user= fplUser.objects.get(user=request.facebook.user)
+			team_.fixture= fixture
+			team_.save()
 
-			    response_dict.update({"server_message":"congos"})
-			    response_dict.update({"server_response":"yes"})
+			response_dict.update({"server_message":"congos"})
+			response_dict.update({"server_response":"yes"})
 		    else:
 			response_dict.update({"server_message":val})
 
