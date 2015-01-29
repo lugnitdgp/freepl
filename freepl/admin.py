@@ -1,5 +1,6 @@
 from django.contrib import admin
 from freepl.models import fplUser,fixtures,playerstats,fixtureTeams,players,teams
+from django.db.models import Q
 
 
 """
@@ -105,11 +106,18 @@ def fixtureteamscoreupdate(modeladmin,request,queryset):
     for i in xrange(n):
 	fixtureteam = queryset[i]
 	l = map(int,fixtureteam.teamconfig[:-1].split(','))
+	playerlist = players.objects.order_by('netperformance')
 	score = 0
-	for pid in l:
-	    player = players.objects.get(id=pid)
-	    playerstats = playerstats.objects.get(player=player,fixture = fixtureteam.fixture)		
-	    score += playerstats.funscore
+	playersinfixture = playerlist.filter(Q(country=fixtureteam.fixture.teamA)|Q(country=fixtureteam.fixture.teamB))
+
+	for i in xrange(len(l)):
+	    player = playersinfixture[i]#.objects.get(id=playersinfixture[i].id)
+	    try:
+		playerstats_ = playerstats.objects.get(player=player,fixture = fixtureteam.fixture)
+		funscore = playerstats_.funscore
+	    except:
+		funscore = 0
+	    score += funscore * l[i]
 	fixtureteam.score = score
 	fixtureteam.save()
 
