@@ -104,7 +104,7 @@ def fixtureteamscoreupdate(modeladmin,request,queryset):
     n=len(queryset)
     for i in xrange(n):
 	fixtureteam = queryset[i]
-	l = map(int,fixtureteam.teamconfig.split(','))[:-1]
+	l = map(int,fixtureteam.teamconfig[:-1].split(','))
 	score = 0
 	for pid in l:
 	    player = players.objects.get(id=pid)
