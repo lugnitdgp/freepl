@@ -108,7 +108,7 @@ def home(request):
 		    """
 		player_fixture.append(zip(teamconfig,playersinfixture))
 	    fixturewiseteams = zip(allfixtures,teams,player_fixture)
-	    return render(request,'main/logged.html',{"name":username,"fixturewiseteams":fixturewiseteams,"fixtures":allfixtures,"fplUsers":fplUser.objects.all(),"players":players.objects.all()})
+	    return render(request,'main/logged.html',{"name":username,"fixturewiseteams":fixturewiseteams,"fixtures":allfixtures,"fplUsers":fplUser.objects.all().order_by('-cumulativescore'),"players":players.objects.all()})
 
 	else:
 	    return render(request,'startpage/start.html')
