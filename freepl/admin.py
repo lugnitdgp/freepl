@@ -10,6 +10,26 @@ and calculates the score of each team for each fixture.
 """
 
 def calculate_fun_score(playerstats):
+    base_bat_score = playerstats.runsmade
+    impact_bat_score = -5 if playerstats.runsmade==0 else 0
+    impact_bat_score += 2*playerstats.sixes
+    milestone_bat_score = 0 if playerstats.runsmade<0 else int(playerstats.runsmade/25)*10
+    pace_bat_score = playerstats.runsmade -playerstats.ballsfaced 
+
+    ballsb = int(playerstats.oversbowled)
+    ballsbowled = int(playerstats.oversbowled-ballsb)*6 + ballsb
+    base_bowl_score = 20*playerstats.wickets
+    impact_bowl_score = playerstats.dotsbowled+20*playerstats.maidenovers
+    milestone_bowl_score = 10*(playerstats.wickets-1) if playerstats.wickets>0 else 0
+    pace_bowl_score = ballsbowled-playerstats.runsgiven if ballsbowled-playerstats.runsgiven>0 \
+    else 2*ballsbowled-playerstats.runsgiven
+
+    field = playerstats.catches*10+playerstats.stumpings*15+playerstats.runouts*10
+    mom = int(playerstats.mom)*25
+
+    return base_bat_score+base_bowl_score+impact_bat_score+impact_bowl_score+\
+    milestone_bowl_score+milestone_bat_score+pace_bowl_score+pace_bat_score+mom+field
+
     s1 = playerstats.runsmade
     s2 = 2*playerstats.sixes
     s3 = int(playerstats.runsmade/25)*10
