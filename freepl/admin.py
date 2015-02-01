@@ -68,10 +68,7 @@ class PlayerStatsListFilter(admin.SimpleListFilter):
         # to decide how to filter the queryset.
         if self.value()!=None:
 	    return queryset.filter(fixture = fixtures.objects.get(id = self.value()))
-        for fixture in self.allfixtures:
-	    print self.value(),fixture.id
-	    if self.value() == fixture.id:
-		return queryset.filter(fixture = fixture)
+	return queryset
 
 class FixtureTeamsListFilter(admin.SimpleListFilter):
     # Human-readable title which will be displayed in the
@@ -106,10 +103,7 @@ class FixtureTeamsListFilter(admin.SimpleListFilter):
         # to decide how to filter the queryset.
         if self.value()!=None:
 	    return queryset.filter(fixture = fixtures.objects.get(id = self.value()))
-        for fixture in self.allfixtures:    
-	    print self.value(),fixture.id
-	    if self.value() == fixture.id:
-		return queryset.filter(fixture = fixture)
+	return queryset
 
 def fixtureteamscoreupdate(modeladmin,request,queryset):
     n=len(queryset)
@@ -118,7 +112,7 @@ def fixtureteamscoreupdate(modeladmin,request,queryset):
 	l = map(int,fixtureteam.teamconfig[:-1].split(','))
 	playerlist = players.objects.order_by('netperformance')
 	score = 0
-	playersinfixture = playerlist.filter(Q(country=fixtureteam.fixture.teamA)|Q(country=fixtureteam.fixture.teamB))
+	playersinfixture = list(playerlist.filter(Q(country=fixtureteam.fixture.teamA)|Q(country=fixtureteam.fixture.teamB)))
 
 	for i in xrange(len(l)):
 	    player = playersinfixture[i]#.objects.get(id=playersinfixture[i].id)
@@ -127,6 +121,7 @@ def fixtureteamscoreupdate(modeladmin,request,queryset):
 		funscore = playerstats_.funscore
 	    except:
 		funscore = 0
+	    print player.firstname,player.lastname,l[i]
 	    score += funscore * l[i]
 	fixtureteam.score = score
 	fixtureteam.save()
