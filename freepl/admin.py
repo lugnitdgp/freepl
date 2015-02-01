@@ -11,7 +11,7 @@ and calculates the score of each team for each fixture.
 
 def calculate_fun_score(playerstats):
     base_bat_score = playerstats.runsmade
-    impact_bat_score = -5 if playerstats.runsmade==0 and (not playerstats.dnb) else 0
+    impact_bat_score = -5 if (playerstats.runsmade==0) and (not playerstats.dnb) else 0
     impact_bat_score += 2*playerstats.sixes
     milestone_bat_score = 0 if playerstats.runsmade<0 else int(playerstats.runsmade/25)*10
     pace_bat_score = playerstats.runsmade -playerstats.ballsfaced 
