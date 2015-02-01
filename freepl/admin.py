@@ -15,36 +15,26 @@ def calculate_fun_score(playerstats):
     impact_bat_score += 2*playerstats.sixes
     milestone_bat_score = 0 if playerstats.runsmade<0 else int(playerstats.runsmade/25)*10
     pace_bat_score = playerstats.runsmade -playerstats.ballsfaced 
-
+    
     ballsb = int(playerstats.oversbowled)
-    ballsbowled = int(playerstats.oversbowled-ballsb)*6 + ballsb
+    ballsbowled = int((playerstats.oversbowled-ballsb)*10) + ballsb*6
     base_bowl_score = 20*playerstats.wickets
+    #print base_bowl_score,"bowl"
     impact_bowl_score = playerstats.dotsbowled+20*playerstats.maidenovers
+    #print impact_bowl_score,"impact"
     milestone_bowl_score = 10*(playerstats.wickets-1) if playerstats.wickets>0 else 0
-    pace_bowl_score = ballsbowled-playerstats.runsgiven if ballsbowled-playerstats.runsgiven>0 \
-    else 2*ballsbowled-playerstats.runsgiven
-
+    #print milestone_bowl_score,"milestone"
+    pace_bowl_score = 2*(ballsbowled-playerstats.runsgiven) if ballsbowled-playerstats.runsgiven>0 \
+    else ballsbowled-playerstats.runsgiven
+    #print pace_bowl_score,"pace"
+    #print base_bowl_score+impact_bowl_score+milestone_bowl_score+pace_bowl_score,"bowl"
+    
     field = playerstats.catches*10+playerstats.stumpings*15+playerstats.runouts*10
     mom = int(playerstats.mom)*25
 
     return base_bat_score+base_bowl_score+impact_bat_score+impact_bowl_score+\
     milestone_bowl_score+milestone_bat_score+pace_bowl_score+pace_bat_score+mom+field
 
-    s1 = playerstats.runsmade
-    s2 = 2*playerstats.sixes
-    s3 = int(playerstats.runsmade/25)*10
-    
-    s4 = playerstats.wickets
-    
-    ballsb = int(playerstats.oversbowled)
-    ballsbowled = int(playerstats.oversbowled-ballsb) + ballsb
-    s5 = ballsbowled
-    s6 = 10*(playerstats.wickets-1) if playerstats.wickets>0 else 0
-    s7 = ballsbowled - playerstats.runsgiven
-
-    s8 = playerstats.catches*10+playerstats.stumpings*15+playerstats.runouts*10
-    s9 = int(playerstats.mom)*25
-    return s1+s2+s3+s4+s5+s6+s7+s8+s9
 
 class PlayerStatsListFilter(admin.SimpleListFilter):
     # Human-readable title which will be displayed in the
