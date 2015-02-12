@@ -262,7 +262,7 @@ $('.teamgrid').isotope({
 		<li id="D" class='last tab'><a href='#'><span>Player Watch</span></a></li>
 		<li id="E" class='last tab'><a href='#'><span>Rules</span></a></li>
 	    </ul>
-	    
+
 	</div>
     </div>
 
@@ -1141,12 +1141,15 @@ $('.teamgrid').isotope({
 			</table> -->
 
 			<ul class="viewpl">
-				<li><div>
+			{% for cplayer in players %}
+				<li><div class="{{cplayer.country}}">
 					<img src="{% static 'freepl/images/' %}" class="dp">
-					<h4 class="tempName">{{k.1.firstname}} {{k.1.lastname}}</h4>
+					<h4 class="tempName">{{cplayer.firstname}} {{cplayer.lastname}}</h4>
+					<h4>{{cplayer.country}}</h4>
 					<h4>{{cplayer.netperformance}}</h4>
-					<h4 class="tempPrice">Price {{k.1.price}}</h4>
+					<h4 class="tempPrice">Price {{cplayer.price}}</h4>
 				</div></li>
+				{% endfor %}
 			</ul>
 		</div>
 

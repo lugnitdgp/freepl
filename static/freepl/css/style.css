@@ -772,3 +772,71 @@ h3
 	padding: 2em;
 	text-align: center;
 }
+.viewpl
+{
+	display: block;
+	text-align: center;
+	padding-top: 3em; 
+}
+.viewpl li
+{
+	display: inline-block;
+}
+.viewpl li div
+{
+	height: 200px;
+	width: 200px;
+	padding: 20px;
+	background: #fff;
+	border-radius: 5px;
+	margin: 10px;
+	transition:all 0.2s;
+	-webkit-transition:all 0.2s;
+	-moz-transition:all 0.2s;
+	-o-transition:all 0.2s;
+	border:4px solid transparent;
+}
+.viewpl li div:hover
+{
+	transform:scale(1.05);
+	-webkit-transform:scale(1.05);
+	-moz-transform:scale(1.05);
+	-o-transform:scale(1.05);
+}
+.viewpl li div *
+{
+	color: #000;
+	margin: 0.1em auto;
+}
+.IND:hover
+{
+	border:4px solid #3498DB;
+}
+.ENG:hover
+{
+	border:4px solid #0c74b5;
+}
+.SL:hover
+{
+	border:4px solid #6801c1;
+}
+.AUS:hover
+{
+	border:4px solid #F1C40F;
+}
+.NZ:hover
+{
+	border:4px solid #34495E;
+}
+.PAK:hover
+{
+	border:4px solid #2ECC71;
+}
+.SA:hover
+{
+	border:4px solid #16A085;
+}
+.WI:hover
+{
+	border:4px solid #C0392B;
+}
