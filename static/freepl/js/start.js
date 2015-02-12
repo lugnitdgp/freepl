@@ -50,6 +50,7 @@ $(document).ready(function() {
 		par.children(".dp").remove();
 		par.children(".tempName").remove();
 		par.children(".tempPrice").remove();
+		
 		inst.fadeOut();
 		
 		inst.attr({'class':"item"});
@@ -69,7 +70,7 @@ $(document).ready(function() {
 	$('.rc1').click(function(){
 		if(plcount<11 && locked!=1)
 		{
-			$(this).fadeOut('fast');
+			$(this).fadeOut(100);
 			$(this).addClass("effect1");
 			
 			var temp=$(this).children(".temp").html();
@@ -92,7 +93,40 @@ $(document).ready(function() {
 
 
 	// power play assignment
-	var pow=0;
+
+	var pcheck=0;
+
+	
+		
+	$('.power').click(function(){
+		if(pcheck==0){
+		$(this).addClass("powactive");
+			pcheck=1;
+			alert(pcheck);
+		}
+
+	});
+	
+		$('.power').mouseover(function(){
+			if(pcheck==0)
+	{
+			$(this).css("color","#3498DB");
+		}
+		});
+		$('.power').mouseout(function(){
+			if(pcheck==0)
+	{
+			$(this).css("color","#cacaca");
+		}
+		});
+		$('.powactive').click(function(){
+			if (pcheck==1) {
+				pcheck=0;
+				$(this).removeClass("powactive");
+			};
+		})
+
+	/*var pow=0;
 	$('.item div').click(function(){
 		if (pow==0) {
 			$(this).addClass("powered");
@@ -106,6 +140,6 @@ $(document).ready(function() {
 		pow=0;
 
 
-	})
+	}) */
 	
 });

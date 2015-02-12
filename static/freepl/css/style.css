@@ -709,27 +709,17 @@ h3
 {
 	font-weight: 200;
 }
-
-.pow
+.power
 {
-	color: #dadada;
-	padding: 10px;
-	border-radius: 50%;
+	color: #cacaca;
+	font-weight: 500;
+	cursor: pointer;
 	font-size: 1.2em;
 	margin: 0;
-	cursor: pointer;
-}
-.pow:hover
-{
-	color: #3498DB;
-	background: #dbdbdb;
+	text-align: left;
 }
 .powactive
 {
-	color: #fff;
-	background: #3498DB;
-}
-.powered
-{
-	border:1px solid #3498DB;
+	color: #3498DB !important;
+	font-size: 1.8em;
 }
