@@ -4,6 +4,7 @@
 <head>
 	
     <link rel="stylesheet" type="text/css" href="{% static 'freepl/css/style.css' %}">
+    
     <link rel="stylesheet" type="text/css" href="{% static 'freepl/css/tabs.css' %}">
    <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'> -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
@@ -15,6 +16,7 @@
     <script type="text/javascript" src="{% static 'freepl/js/start.js' %}"></script>
     <script type="text/javascript" src="{% static 'freepl/css/skel.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'freepl/js/blockui.js' %}"></script>
+    <script type="text/javascript" src="{% static 'freepl/js/jquery-ui.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'freepl/js/isotope.pkgd.min.js' %}"></script>
     <script>
         skel.init();
@@ -337,8 +339,11 @@ $('.teamgrid').isotope({
 					    				<div class="row rc1 {%if not fixture.locked%}clickablepl{%endif%} {%if k.0 == 1 %}selected {% elif  k.0 == 2 %} powerplayer  {%endif%}" id="p{{k.1.id}}">
 					    					<div class="temp">
 					    						<img src="{% static 'freepl/images/' %}" class="dp">
-					    					<h4 class="tempName">{{k.1.firstname}} {{k.1.lastname}}</h4>
+					    						<h4 class="tempName">{{k.1.firstname}} {{k.1.lastname}}</h4>
 					    					<h4 class="tempPrice">Price {{k.1.price}}</h4>
+					    					
+
+
 					    					</div>
 
 					    					<div class="2u role{{k.1.role}}"><h4>{{k.1.role}}</h4></div>

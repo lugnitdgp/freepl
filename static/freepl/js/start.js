@@ -43,15 +43,17 @@ $(document).ready(function() {
 	$('.item').hide();
 	
 	$('.cross').click(function(){
+
 		var par=$(this).parent();
 		var inst=($(this).parent()).parent();
-		var idinst=inst.attr("id");
-		
-		inst.fadeOut();
+		var idinst=inst.attr("data-plid");
 		par.children(".dp").remove();
 		par.children(".tempName").remove();
 		par.children(".tempPrice").remove();
+		inst.fadeOut();
+		
 		inst.attr({'class':"item"});
+		$("#"+idinst).removeClass("effect1");
 		$("#"+idinst).fadeIn();
 		if(plcount>0)
 		{
@@ -67,22 +69,42 @@ $(document).ready(function() {
 	$('.rc1').click(function(){
 		if(plcount<11 && locked!=1)
 		{
+			$(this).fadeOut('fast');
+			$(this).addClass("effect1");
 			
-			$(this).fadeOut();
 			var temp=$(this).children(".temp").html();
 			
 			var plid=$(this).attr("id");
 			$('.item').eq(plcount).fadeIn();
+			$('.item').eq(plcount).attr({'data-plid':plid});
 			$('.item').eq(plcount).addClass(plid);
 			$("."+plid+" div").append(temp);
 			temp=null;
 			plcount++;
-			alert(plcount);
+			
 			
 
 		}
 		
 		
+
+	});
+
+
+	// power play assignment
+	var pow=0;
+	$('.item div').click(function(){
+		if (pow==0) {
+			$(this).addClass("powered");
+			pow=1;
+		};
+
+
+	});
+	$('.powered').click(function(){
+		$(this).removeClass("powered");
+		pow=0;
+
 
 	})
 	

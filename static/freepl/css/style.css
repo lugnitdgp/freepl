@@ -221,8 +221,20 @@ margin-left:450px;
 text-align:centre;
 float:left;
 margin-top:30px;
+padding: 0.8em;
+background: #fff;
+margin-bottom: 1em;
+border: none;
+color: #3498DB;
+transition:all 0.2s;
+-webkit-transition:all 0.2s;
+-moz-transition:all 0.2s;
+-o-transition:all 0.2s;
 }
-
+.teamnameentry:hover
+{
+	border: #3498DB;
+}
 
 .lockteam
 {
@@ -553,8 +565,8 @@ h3
 }
 .teamgrid li div
 {
-	width: 150px;
-	height: 150px;
+	width: 170px;
+	height: 170px;
 	padding: 1em;
 	position: relative;
 	border-radius: 5px;
@@ -628,7 +640,7 @@ h3
 	-webkit-transition:all 0.2s;
 	-moz-transition:all 0.2s;
 	-o-transition:all 0.2s;
-}
+}/*
 .rc1:hover
 {
 	background: #dbdbdb;
@@ -636,7 +648,7 @@ h3
 	-webkit-transform:scale(1.1);
 	-moz-transform:scale(1.1);
 	-o-transform:scale(1.1);
-}
+} */
 .rc1 div
 {
 	margin-bottom: 1px;
@@ -673,7 +685,15 @@ h3
 	-webkit-border-radius: 50%;
 	-moz-border-radius: 50%;
 	-o-border-radius: 50%;
+	height: 40px;
 
+}
+.effect1
+{
+	transform:translateX(-200px);
+	-webkit-transform:translateX(-200px);
+	-moz-transform:translateX(-200px);
+	-o-transform:translateX(-200px);
 }
 .temp
 {
@@ -682,4 +702,34 @@ h3
 .tempName,.tempPrice
 {
 	color: #000;
+	margin: 0;
+	padding: 0.8em 0;
+}
+.tempPrice
+{
+	font-weight: 200;
+}
+
+.pow
+{
+	color: #dadada;
+	padding: 10px;
+	border-radius: 50%;
+	font-size: 1.2em;
+	margin: 0;
+	cursor: pointer;
+}
+.pow:hover
+{
+	color: #3498DB;
+	background: #dbdbdb;
+}
+.powactive
+{
+	color: #fff;
+	background: #3498DB;
+}
+.powered
+{
+	border:1px solid #3498DB;
 }
