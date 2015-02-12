@@ -2,8 +2,10 @@
 <!DOCTYPE HTML>
 <html>
 <head>
+	
     <link rel="stylesheet" type="text/css" href="{% static 'freepl/css/style.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'freepl/css/tabs.css' %}">
+   <!-- <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300' rel='stylesheet' type='text/css'> -->
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>FreePL - Mukti 2015 Home</title>
     <script type='text/javascript' src="{% static 'freepl/js/jquery.js' %}"></script>
@@ -11,7 +13,20 @@
     <script type="text/javascript" src="{% static 'freepl/js/waypoints.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'freepl/js/jquery.mCustomScrollbar.min.js' %}"></script-->
     <script type="text/javascript" src="{% static 'freepl/js/start.js' %}"></script>
+    <script type="text/javascript" src="{% static 'freepl/css/skel.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'freepl/js/blockui.js' %}"></script>
+    <script type="text/javascript" src="{% static 'freepl/js/isotope.pkgd.min.js' %}"></script>
+    <script>
+        skel.init();
+
+        
+// init
+$('.teamgrid').isotope({
+  // options
+  itemSelector: '.item',
+  layoutMode: 'fitRows'
+});
+      </script>
 
 
 
@@ -258,17 +273,99 @@
 					    {%if fixture.locked %}
 						<p>Your team {{team.teamname}} scored {{team.score}} freepl points.</p>
 					    {% else %}
-						<div class="rules">
+					     <div class="row rowcorrect">
+					     	<div class="8u" id="Tselcthead">Your Team:</div>
+					     	<div class="4u" id="allPlwrap"> All Players</div>
+					     	</div>
+					     <div class="row rowcorrect">
+					    	<div class="8u rowcorrect">
+					    		<ul class="teamgrid">
+					    			<li class="item">
+					    				<div>
+					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
+
+
+					    				</div>
+					    			</li>
+					    			<li class="item">
+					    				<div>
+					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
+					    					
+					    				</div>
+					    			</li>
+					    			<li class="item">
+					    				<div>
+					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
+					    					
+					    				</div>
+					    			</li>
+					    			<li class="item"><div><img src="{% static 'freepl/images/Delete.png' %}" class="cross"></div></li>
+					    			<li class="item"><div><img src="{% static 'freepl/images/Delete.png' %}" class="cross"></div></li>
+					    			<li class="item"><div><img src="{% static 'freepl/images/Delete.png' %}" class="cross"></div></li>
+					    			<li class="item"><div><img src="{% static 'freepl/images/Delete.png' %}" class="cross"></div></li>
+					    			<li class="item"><div><img src="{% static 'freepl/images/Delete.png' %}" class="cross"></div></li>
+					    			<li class="item"><div><img src="{% static 'freepl/images/Delete.png' %}" class="cross"></div></li>
+					    			<li class="item"><div><img src="{% static 'freepl/images/Delete.png' %}" class="cross"></div></li>
+					    			<li class="item"><div><img src="{% static 'freepl/images/Delete.png' %}" class="cross"></div></li>
+					    			
+					    		</ul>
+
+					    	</div>
+
+
+					    	<div class="4u" id="allplayers">
+					    		<!--<ul class="allPl">
+
+					    			<li id="allPlhd">Select Players:</li>
+					    			{% for k in teamlist_plyrs %}
+					    			<li><div class="allPlpl">
+						    				<div class="plrole"><h4>{{k.1.role}}</h4></div>
+						    				<div class="plname"><h4>{{k.1.firstname}} {{k.1.lastname}}</h4></div>
+						    				<div class="plcountry"><h4>{{k.1.country}}</h4></div>
+						    				<div class="plprice"><h4>{{k.1.price}}</h4></div>
+					    			</div></li>
+					    			{% endfor %}
+					    		</ul> -->
+
+					    		<div class="row">
+					    			<div class="12u" id="allPlhd">
+					    				Select Players:
+					    			</div>
+					    		</div>
+					    		
+					    		{% for k in teamlist_plyrs %}
+					    				<div class="row rc1 {%if not fixture.locked%}clickablepl{%endif%} {%if k.0 == 1 %}selected {% elif  k.0 == 2 %} powerplayer  {%endif%}" id="p{{k.1.id}}">
+					    					<div class="temp">
+					    						<img src="{% static 'freepl/images/' %}" class="dp">
+					    					<h4 class="tempName">{{k.1.firstname}} {{k.1.lastname}}</h4>
+					    					<h4 class="tempPrice">Price {{k.1.price}}</h4>
+					    					</div>
+
+					    					<div class="2u role{{k.1.role}}"><h4>{{k.1.role}}</h4></div>
+						    				<div class="5u"><h4>{{k.1.firstname}} {{k.1.lastname}}</h4></div>
+						    				<div class="2u countrywrap"><img src="countries/{{k.1.flag}}" alt="{{k.1.country}}"></div>
+						    				<div class="3u"><h4>{{k.1.price}}</h4></div>
+					    				</div>
+					    			{% endfor %}
+					    			
+					    		
+					    	</div>
+
+					    </div>
+					<!--	<div class="rules">
 							<h2>Rules</h2>
 							<p id="error{{fixture.id}}" style="width:1000px;color:yellow"></p>
-						</div>
+						</div> -->
 					    
 						{% csrf_token %}
 						<input id="bf{{fixture.id}}e" class="teamnameentry" {% if not team.teamname == '' %} value="{{team.teamname}}" {% else %} placeholder= "Enter your teamname"{%endif%} ></input>
 						<button id="bf{{fixture.id}}" class="lockteam submitbutton">Lock the team</button>
 					    {%endif%}
 
-						    <table class="allplayer">	
+
+					   
+
+						  <!--  <table class="allplayer">	
 							    <tr class="tableheader">
 								    <td >  Name  </td>
 								    <td >  Country  </td>
@@ -286,7 +383,7 @@
 										<td class="c5 powerornot">        </td>
 									</tr>
 								    {% endfor %}
-						    </table>
+						    </table> -->
 				    {%else%}
 					{% if fixture.locked %}
 					    <p>Thank you for selecting your team! Enjoy the match :D </p>

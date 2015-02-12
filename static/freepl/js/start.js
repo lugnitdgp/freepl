@@ -34,5 +34,56 @@ $(document).ready(function() {
 	}); 
 	return false;
 	});
+
+
+	//  player selection close button
+	var plcount=0;
+	var locked=0;
+
+	$('.item').hide();
+	
+	$('.cross').click(function(){
+		var par=$(this).parent();
+		var inst=($(this).parent()).parent();
+		var idinst=inst.attr("id");
+		
+		inst.fadeOut();
+		par.children(".dp").remove();
+		par.children(".tempName").remove();
+		par.children(".tempPrice").remove();
+		inst.attr({'class':"item"});
+		$("#"+idinst).fadeIn();
+		if(plcount>0)
+		{
+			plcount--;
+		}
+		
+
+
+
+	});
+	
+
+	$('.rc1').click(function(){
+		if(plcount<11 && locked!=1)
+		{
+			
+			$(this).fadeOut();
+			var temp=$(this).children(".temp").html();
+			
+			var plid=$(this).attr("id");
+			$('.item').eq(plcount).fadeIn();
+			$('.item').eq(plcount).addClass(plid);
+			$("."+plid+" div").append(temp);
+			temp=null;
+			plcount++;
+			alert(plcount);
+			
+
+		}
+		
+		
+
+	})
 	
 });
