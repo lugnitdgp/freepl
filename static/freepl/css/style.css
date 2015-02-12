@@ -640,20 +640,24 @@ h3
 .rc1
 {
 	background: #fff;
+	border: 1px solid transparent;
 	margin-top: 4px;
 	transition:all 0.2s;
 	-webkit-transition:all 0.2s;
 	-moz-transition:all 0.2s;
 	-o-transition:all 0.2s;
-}/*
+}
+.rc1 *
+{
+	color: #34495E;
+	font-weight: 400;
+}
 .rc1:hover
 {
-	background: #dbdbdb;
-	transform:scale(1.1);
-	-webkit-transform:scale(1.1);
-	-moz-transform:scale(1.1);
-	-o-transform:scale(1.1);
-} */
+	border-top: 1px solid #9B59B6;
+	border-bottom: 3px solid #9B59B6;
+	
+}
 .rc1 div
 {
 	margin-bottom: 1px;
@@ -666,6 +670,8 @@ h3
 {
 	height: 500px;
 	overflow-y:auto;
+	overflow-x:hidden;
+	border-bottom: 4px solid #8E44AD; 
 }
 .countrywrap
 {
@@ -684,6 +690,11 @@ h3
 	height: 10px;
 	width: 10px;
 	cursor: pointer;
+	opacity: 0.4;
+}
+.cross:hover
+{
+	opacity: 1;
 }
 .dp
 {
@@ -742,4 +753,12 @@ h3
 .paparent *
 {
 	color: #fff;
+}
+#spnotice
+{
+	text-shadow:none;
+	color: #fff;
+	font-weight: 300;
+	padding: 2em;
+	text-align: center;
 }

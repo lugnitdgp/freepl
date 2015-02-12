@@ -38,28 +38,39 @@ $(document).ready(function() {
 
 	//  player selection close button
 	var plcount=0;
+	var mod=0;
 	var locked=0;
 
 	$('.item').hide();
 	
 	$('.cross').click(function(){
+		if (plcount>0) {
+			plcount--;
+		};
 
-		var par=$(this).parent();
-		var inst=($(this).parent()).parent();
+		var par=$(this).parent(); // div
+		var inst=($(this).parent()).parent(); // li item
 		var idinst=inst.attr("data-plid");
+		par.removeClass("paparent");
+		par.children(".power").removeClass("powactive");
+
+		
+
+
 		par.children(".dp").remove();
 		par.children(".tempName").remove();
 		par.children(".tempPrice").remove();
-		
+		var cont1=inst.html();
+		$('.teamgrid').append("<li class='item' style='display:none;'>"+cont1+"</li>");
+
 		inst.fadeOut();
 		
 		inst.attr({'class':"item"});
 		$("#"+idinst).removeClass("effect1");
 		$("#"+idinst).fadeIn();
-		if(plcount>0)
-		{
-			plcount--;
-		}
+		if (plcount==0) {
+			$('#spnotice').delay(900).fadeIn();
+		};
 		
 
 
@@ -68,6 +79,7 @@ $(document).ready(function() {
 	
 
 	$('.rc1').click(function(){
+		$('#spnotice').hide();
 		if(plcount<11 && locked!=1)
 		{
 			$(this).fadeOut(100);
@@ -76,11 +88,14 @@ $(document).ready(function() {
 			var temp=$(this).children(".temp").html();
 			
 			var plid=$(this).attr("id");
-			$('.item').eq(plcount).fadeIn();
-			$('.item').eq(plcount).attr({'data-plid':plid});
-			$('.item').eq(plcount).addClass(plid);
+			
+			$('.item').eq(mod).fadeIn();
+			$('.item').eq(mod).css("display","inline-block");
+			$('.item').eq(mod).attr({'data-plid':plid});
+			$('.item').eq(mod).addClass(plid);
 			$("."+plid+" div").append(temp);
 			temp=null;
+			mod++;
 			plcount++;
 			
 			
