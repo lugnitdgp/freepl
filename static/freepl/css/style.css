@@ -669,6 +669,7 @@ h3
 .item
 {
 	position: relative;
+	vertical-align: bottom;
 }
 .cross
 {
@@ -705,9 +706,14 @@ h3
 	margin: 0;
 	padding: 0.8em 0;
 }
+.tempName
+{
+	color: #2C3E50;
+}
 .tempPrice
 {
 	font-weight: 200;
+	color: #8E44AD;
 }
 .power
 {
