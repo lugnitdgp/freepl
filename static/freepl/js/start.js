@@ -99,10 +99,19 @@ $(document).ready(function() {
 	
 		
 	$('.power').click(function(){
+		var pow=$(this);
+		var powparent=pow.parent();
 		if(pcheck==0){
-		$(this).addClass("powactive");
+		pow.addClass("powactive");
+		powparent.addClass("paparent");
 			pcheck=1;
-			alert(pcheck);
+			
+		}
+		else
+		{
+			pow.removeClass("powactive");
+		powparent.removeClass("paparent");
+			pcheck=0;
 		}
 
 	});
@@ -116,15 +125,10 @@ $(document).ready(function() {
 		$('.power').mouseout(function(){
 			if(pcheck==0)
 	{
-			$(this).css("color","#cacaca");
+			$(this).css("color","#777");
 		}
 		});
-		$('.powactive').click(function(){
-			if (pcheck==1) {
-				pcheck=0;
-				$(this).removeClass("powactive");
-			};
-		})
+		
 
 	/*var pow=0;
 	$('.item div').click(function(){
