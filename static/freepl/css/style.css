@@ -764,7 +764,7 @@ h3
 {
 	color: #fff;
 }
-#spnotice
+.spnotice
 {
 	text-shadow:none;
 	color: #34495E;
@@ -776,7 +776,23 @@ h3
 {
 	display: block;
 	text-align: center;
-	padding-top: 3em; 
+	padding-top: 2em;
+	margin: 40px;
+}
+.viewplhd div
+{
+	background: #16A085;
+	padding: 0.5em;
+	color: #fff;
+	margin-top: 2em !important;
+}
+.viewplhd div h3
+{
+	text-align: center;
+	width: 100%;
+	margin: 0;
+	padding: 0.5em 0;
+	font-weight: 400;
 }
 .viewpl li
 {

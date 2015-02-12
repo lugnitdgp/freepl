@@ -249,7 +249,7 @@ $('.teamgrid').isotope({
 		<li id="A" class='has-sub active tab'><a href='#'><span>Fixtures</span></a>
 		    <ul>
 			{% for fixture in fixtures %}
-			    <li class='last fixture'  id=listf{{fixture.id}} >
+			    <li class='last fixture'  id='listf{{fixture.id}}' data-plc="0" data-pcheck="0" >
 				<a href='#' >
 				    <span> {{fixture.teamA.country}} vs {{fixture.teamB.country}} on {{fixture.date}}</span>
 				</a>
@@ -290,9 +290,9 @@ $('.teamgrid').isotope({
 					     	</div>
 					     <div class="row rowcorrect">
 					    	<div class="8u rowcorrect">
-					    		<h2 id="spnotice"> Select the players you want in your team from the list of players on the right menu</h2>
+					    		<h2 class="spnotice" id="spnoticef{{fixture.id}}"> Select the players you want in your team from the list of players on the right menu</h2>
 					    		<ul class="teamgrid">
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -300,7 +300,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -308,7 +308,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -316,7 +316,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -324,7 +324,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -332,7 +332,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -340,7 +340,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -348,7 +348,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -356,7 +356,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -364,7 +364,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -372,7 +372,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -380,7 +380,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -388,7 +388,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -396,7 +396,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -404,7 +404,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -412,7 +412,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -420,7 +420,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -428,7 +428,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -436,7 +436,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -444,7 +444,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -452,7 +452,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -460,14 +460,14 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
 
 
 					    				</div>
-					    			</li><li class="item">
+					    			</li><li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -475,7 +475,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -483,7 +483,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -491,7 +491,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -499,7 +499,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -507,7 +507,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -515,7 +515,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -523,7 +523,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -531,7 +531,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -539,7 +539,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -547,14 +547,14 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
 
 
 					    				</div>
-					    			</li><li class="item">
+					    			</li><li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -562,7 +562,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -570,7 +570,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -578,7 +578,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -586,7 +586,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -594,7 +594,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -602,7 +602,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -610,7 +610,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -618,7 +618,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -626,7 +626,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -634,14 +634,14 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
 
 
 					    				</div>
-					    			</li><li class="item">
+					    			</li><li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -649,7 +649,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -657,7 +657,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -665,7 +665,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -673,7 +673,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -681,7 +681,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -689,7 +689,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -697,7 +697,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -705,7 +705,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -713,7 +713,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -721,7 +721,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -729,7 +729,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -737,7 +737,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -745,7 +745,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -753,7 +753,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -761,7 +761,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -769,7 +769,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -777,7 +777,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -785,7 +785,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -793,7 +793,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -801,7 +801,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -809,7 +809,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -817,7 +817,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -825,7 +825,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -833,7 +833,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -841,7 +841,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -849,7 +849,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -857,7 +857,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -865,7 +865,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -873,7 +873,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -881,7 +881,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -889,7 +889,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -897,7 +897,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -905,7 +905,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -913,7 +913,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -921,7 +921,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -929,7 +929,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -937,7 +937,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -945,7 +945,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -953,7 +953,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -961,7 +961,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -969,7 +969,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -977,7 +977,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -985,7 +985,7 @@ $('.teamgrid').isotope({
 
 					    				</div>
 					    			</li>
-					    			<li class="item">
+					    			<li class="itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
 					    					<h4 class="power">P</h4>
@@ -1020,7 +1020,7 @@ $('.teamgrid').isotope({
 					    		</div>
 					    		
 					    		{% for k in teamlist_plyrs %}
-					    				<div class="row rc1 {%if not fixture.locked%}clickablepl{%endif%} {%if k.0 == 1 %}selected {% elif  k.0 == 2 %} powerplayer  {%endif%}" id="p{{k.1.id}}">
+					    				<div class="row rc1 {%if not fixture.locked%}clickablepl{%endif%} {%if k.0 == 1 %}selected {% elif  k.0 == 2 %} powerplayer  {%endif%}" id="p{{k.1.id}}" data-check="f{{fixture.id}}">
 					    					<div class="temp">
 					    						<img src="{% static 'freepl/images/' %}" class="dp">
 					    						<h4 class="tempName">{{k.1.firstname}} {{k.1.lastname}}</h4>
@@ -1139,8 +1139,9 @@ $('.teamgrid').isotope({
 					</tr>
 				{% endfor %}
 			</table> -->
-
+			<div class="row viewplhd rowcorrect"><div class="10u -1u"><h3>The Complete Players' List</h3></div></div>
 			<ul class="viewpl">
+			
 			{% for cplayer in players %}
 				<li><div class="{{cplayer.country}}">
 					<img src="{% static 'freepl/images/' %}" class="dp">

@@ -37,17 +37,28 @@ $(document).ready(function() {
 
 
 	//  player selection close button
+
+	var fix=null;
+	var pcheck=null;
+	$('.fixture').click(function(){
+		fix=$(this).attr("id");
+		plcount=$(this).attr("data-plc");
+		pcheck=$("#"+fix).attr("data-pcheck");
+	});
 	var plcount=0;
 	var mod=0;
 	var locked=0;
-
-	$('.item').hide();
+	for(var i=1;i<=15;i++)
+	{
+		$(".itemf"+i).hide();
+	}
+	
 	
 	$('.cross').click(function(){
 		if (plcount>0) {
 			plcount--;
 		};
-
+		$("#"+fix).attr({"data-plc":plcount});
 		var par=$(this).parent(); // div
 		var inst=($(this).parent()).parent(); // li item
 		var idinst=inst.attr("data-plid");
@@ -69,7 +80,7 @@ $(document).ready(function() {
 		$("#"+idinst).removeClass("effect1");
 		$("#"+idinst).fadeIn();
 		if (plcount==0) {
-			$('#spnotice').delay(900).fadeIn();
+			$(".spnotice").delay(900).fadeIn();
 		};
 		
 
@@ -79,9 +90,12 @@ $(document).ready(function() {
 	
 
 	$('.rc1').click(function(){
-		$('#spnotice').hide();
+		var fixid=$(this).attr("data-check");
+		$("#spnotice"+fixid).hide();
 		if(plcount<11 && locked!=1)
 		{
+			plcount++;
+			$("#"+fix).attr({"data-plc":plcount});
 			$(this).fadeOut(100);
 			$(this).addClass("effect1");
 			
@@ -89,14 +103,14 @@ $(document).ready(function() {
 			
 			var plid=$(this).attr("id");
 			
-			$('.item').eq(mod).fadeIn();
-			$('.item').eq(mod).css("display","inline-block");
-			$('.item').eq(mod).attr({'data-plid':plid});
-			$('.item').eq(mod).addClass(plid);
+			$(".item"+fixid).eq(mod).fadeIn();
+			$(".item"+fixid).eq(mod).css("display","inline-block");
+			$(".item"+fixid).eq(mod).attr({'data-plid':plid});
+			$(".item"+fixid).eq(mod).addClass(plid);
 			$("."+plid+" div").append(temp);
 			temp=null;
 			mod++;
-			plcount++;
+			
 			
 			
 
@@ -108,15 +122,16 @@ $(document).ready(function() {
 
 
 	// power play assignment
-
-	var pcheck=0;
+//	var pcheck=$("#"+fix).attr("data-pcheck");
 
 	
 		
 	$('.power').click(function(){
 		var pow=$(this);
+
 		var powparent=pow.parent();
 		if(pcheck==0){
+		$("#"+fix).attr({"data-pcheck":1});
 		pow.addClass("powactive");
 		powparent.addClass("paparent");
 			pcheck=1;
@@ -124,6 +139,7 @@ $(document).ready(function() {
 		}
 		else
 		{
+			$("#"+fix).attr({"data-pcheck":0});
 			pow.removeClass("powactive");
 		powparent.removeClass("paparent");
 			pcheck=0;
