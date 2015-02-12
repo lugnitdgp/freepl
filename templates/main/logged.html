@@ -80,6 +80,9 @@ $('.teamgrid').isotope({
 	    });
 	    */
 	    var st=$('.sticky').offset().top;
+	    if (st<85) {
+	    	st=85;
+	    };
 	    var stik=function() {
 	    var scrollTop=$(window).scrollTop();
 	    if(scrollTop>st){
@@ -259,6 +262,7 @@ $('.teamgrid').isotope({
 		<li id="D" class='last tab'><a href='#'><span>Player Watch</span></a></li>
 		<li id="E" class='last tab'><a href='#'><span>Rules</span></a></li>
 	    </ul>
+	    
 	</div>
     </div>
 
@@ -1118,7 +1122,7 @@ $('.teamgrid').isotope({
 		</div>
 		
 		<div id="contentD" class="tabcontent">
-			<table class="allplayer playerperformances " style="width:80%;margin-left:10%;">
+			<!--<table class="allplayer playerperformances " style="width:80%;margin-left:10%;">
 				<tr class="tableheader">
 				    <td >   Player  </td>
 				    <td >   Country </td>
@@ -1134,7 +1138,16 @@ $('.teamgrid').isotope({
 						<td>{{cplayer.price}}</td>
 					</tr>
 				{% endfor %}
-			</table>
+			</table> -->
+
+			<ul class="viewpl">
+				<li><div>
+					<img src="{% static 'freepl/images/' %}" class="dp">
+					<h4 class="tempName">{{k.1.firstname}} {{k.1.lastname}}</h4>
+					<h4>{{cplayer.netperformance}}</h4>
+					<h4 class="tempPrice">Price {{k.1.price}}</h4>
+				</div></li>
+			</ul>
 		</div>
 
 		
