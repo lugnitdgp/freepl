@@ -739,7 +739,7 @@ h3
 .tempPrice
 {
 	font-weight: 200;
-	color: #8E44AD;
+	color: #8E44AD !important;
 }
 .power
 {
@@ -810,7 +810,7 @@ h3
 	-webkit-transition:all 0.2s;
 	-moz-transition:all 0.2s;
 	-o-transition:all 0.2s;
-	border:4px solid transparent;
+	border:6px solid transparent;
 }
 .viewpl li div:hover
 {
@@ -826,33 +826,33 @@ h3
 }
 .IND:hover
 {
-	border:4px solid #3498DB;
+	border-left:6px solid #3498DB;
 }
 .ENG:hover
 {
-	border:4px solid #0c74b5;
+	border-left:6px solid #0c74b5;
 }
 .SL:hover
 {
-	border:4px solid #6801c1;
+	border-left:6px solid #6801c1;
 }
 .AUS:hover
 {
-	border:4px solid #F1C40F;
+	border-left:6px solid #F1C40F;
 }
 .NZ:hover
 {
-	border:4px solid #34495E;
+	border-left:6px solid #34495E;
 }
 .PAK:hover
 {
-	border:4px solid #2ECC71;
+	border-left:6px solid #2ECC71;
 }
 .SA:hover
 {
-	border:4px solid #16A085;
+	border-left:6px solid #16A085;
 }
 .WI:hover
 {
-	border:4px solid #C0392B;
+	border-left:6px solid #C0392B;
 }

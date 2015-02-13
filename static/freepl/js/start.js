@@ -121,10 +121,50 @@ $(document).ready(function() {
 	});
 
 
+
+$('.teamgrid').attr({'data-pstatus':0});
+$('.power').attr({'data-pow':0});
+
+	$('.power').click(function(){
+		
+		var current=$(this);
+		
+		var powstate=$(this).attr('data-pow');
+		var currentpar=$(this).parent();
+		var gpapapow=($(this).parent()).parent(); // li
+		var gpapacl=gpapapow.attr("class"); 
+		gpapacl=gpapacl.substring(4);
+		gpapacl=gpapacl.substring(0,2);
+		var ggpapapow=gpapapow.parent(); // teamgrid
+		
+		// cases
+
+		// case 1: init
+		var state=ggpapapow.attr('data-pstatus');
+		
+		
+		alert(state);
+		alert(powstate);
+		if(state==0 && powstate==0) // No power player set
+		{
+			current.addClass("powactive");
+			currentpar.addClass("paparent");
+			current.attr({'data-pow':1});
+			ggpapapow.attr({'data-pstatus':1});
+		}
+		else if (state==1 && powstate==1) // selected player is power player
+		{
+			current.removeClass("powactive");
+			currentpar.removeClass("paparent");
+			current.attr({'data-pow':0});
+			ggpapapow.attr({'data-pstatus':0});
+		};
+	})
+
 	// power play assignment
 //	var pcheck=$("#"+fix).attr("data-pcheck");
 
-	
+	/* Power Play 
 		
 	$('.power').click(function(){
 		var pow=$(this);
@@ -158,7 +198,7 @@ $(document).ready(function() {
 	{
 			$(this).css("color","#777");
 		}
-		});
+		}); */
 		
 
 	/*var pow=0;
