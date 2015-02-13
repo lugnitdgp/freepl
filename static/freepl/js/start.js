@@ -128,7 +128,7 @@ $('.power').attr({'data-pow':0});
 	$('.power').click(function(){
 		
 		var current=$(this);
-		
+
 		var powstate=$(this).attr('data-pow');
 		var currentpar=$(this).parent();
 		var gpapapow=($(this).parent()).parent(); // li
@@ -143,8 +143,8 @@ $('.power').attr({'data-pow':0});
 		var state=ggpapapow.attr('data-pstatus');
 		
 		
-		alert(state);
-		alert(powstate);
+		//alert(state);
+		//alert(powstate);
 		if(state==0 && powstate==0) // No power player set
 		{
 			current.addClass("powactive");
