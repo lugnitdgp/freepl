@@ -61,12 +61,14 @@ $(document).ready(function() {
 		$("#"+fix).attr({"data-plc":plcount});
 		var par=$(this).parent(); // div
 		var inst=($(this).parent()).parent(); // li item
+		var ggpapa=inst.parent();
 		var idinst=inst.attr("data-plid");
 		par.removeClass("paparent");
 		par.children(".power").removeClass("powactive");
+		ggpapa.attr({'data-pstatus':0});
+		par.children('.power').attr({'data-pow':0});
 
 		
-
 
 		par.children(".dp").remove();
 		par.children(".tempName").remove();
