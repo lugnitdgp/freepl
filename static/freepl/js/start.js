@@ -27,13 +27,13 @@ $(document).ready(function() {
 	
 	
 	// When clicking on the button close or the mask layer the popup closed
-	$('a.close, #mask').live('click', function() { 
+	/*$('a.close, #mask').live('click', function() { 
 	  $('#mask , .login-popup').fadeOut(300 , function() {
 		$('#signin').show();
 		$('#mask').remove();  
 	}); 
-	return false;
-	});
+	return false; 
+	});*/
 
 
 	//  player selection close button
