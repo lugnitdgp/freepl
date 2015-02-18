@@ -25,7 +25,37 @@ $(document).ready(function() {
 		return false;
 	});
 	
+	//initialized values for roles
+	var rbowl=0;
+	var rbat=0;
+	var rall=0;
+	var rwk=0;
 	
+	function plych(rbowl,rbat,rwk,rall,fix)
+	{
+		if (rbat>=4) {
+			$(".bat"+fix).removeClass("ntd");
+			$(".bat"+fix).addClass("done");
+
+		};
+		if (rbowl>=2) {
+			$(".bowl"+fix).removeClass("ntd");
+			$(".bowl"+fix).addClass("done");
+
+		};
+		if (rwk==1) {
+			$(".wk"+fix).removeClass("ntd");
+			$(".wk"+fix).addClass("done");
+
+		};
+		if (rall>=2) {
+			$(".all"+fix).removeClass("ntd");
+			$(".all"+fix).addClass("done");
+
+		};
+
+	}
+
 	// When clicking on the button close or the mask layer the popup closed
 	/*$('a.close, #mask').live('click', function() { 
 	  $('#mask , .login-popup').fadeOut(300 , function() {
@@ -47,6 +77,34 @@ $(document).ready(function() {
 		
 		plcount=$(this).attr("data-plc");
 		pcheck=$("#"+fix).attr("data-pcheck");
+
+		rbowl=0;rbat=0;rwk=0;rall=0;
+		for (var i = 0; i <11; i++) {
+				temprole=$(".temp"+fix).eq(i).attr("data-role");
+
+				if(temprole=="rolebowl")
+				{
+					rbowl++;
+					temprole=null;
+				}
+				if(temprole=="rolebat")
+				{
+					rbat++;
+					temprole=null;
+				}
+				if(temprole=="roleallround")
+				{
+					rall++;
+					temprole=null;
+				}
+				if(temprole=="rolewk")
+				{
+					rwk++;
+					temprole=null;
+				}
+			};
+			var fncall=plych(rbowl,rbat,rwk,rall,fix);
+
 	});
 	var plcount=0;
 	var mod=0;
@@ -128,8 +186,11 @@ $(document).ready(function() {
 
 // Second attempt
 
+
+var temprole=null;
 $('.rc1').click(function(){
 		var fixid=$(this).attr("data-check");
+		var thispl=$(this);
 		$("#spnotice"+fixid).hide();
 		if(plcount<11 && locked!=1)
 		{
@@ -141,11 +202,51 @@ $('.rc1').click(function(){
 			var temp=$(this).children(".temp").html();
 			
 			var plid=$(this).attr("id");
+
+
+			var role=thispl.children(".role").attr("data-role");
+			var scancl="item"+thispl.attr("data-check");
 			
+			
+
 			$(".emp"+fixid).first().fadeIn();
 			$(".emp"+fixid).first().css("display","inline-block");
 			$(".emp"+fixid).first().attr({'data-plid':plid});
 			$(".emp"+fixid).first().addClass(plid);
+			$(".emp"+fixid).first().attr({'data-role':role});
+
+			var scanpar=$("."+scancl).parent();
+			for (var i = 0; i <11; i++) {
+				temprole=scanpar.children("."+scancl).eq(i).attr("data-role");
+
+				if(temprole=="rolebowl")
+				{
+					rbowl++;
+					temprole=null;
+				}
+				if(temprole=="rolebat")
+				{
+					rbat++;
+					temprole=null;
+				}
+				if(temprole=="roleallround")
+				{
+					rall++;
+					temprole=null;
+				}
+				if(temprole=="rolewk")
+				{
+					rwk++;
+					temprole=null;
+				}
+			};
+			
+			
+			var fncall=plych(rbowl,rbat,rwk,rall,fixid);
+			rbat=0;rwk=0;rbowl=0;rall=0;
+
+
+
 			var t=$(".emp"+fixid).first();
 			t.removeClass("emp"+fixid);
 			$("."+plid+" div").append(temp);
@@ -185,6 +286,11 @@ $('.rc1').click(function(){
 
 		inst.fadeOut();
 		//inst.addClass();
+
+
+
+
+
 		inst.attr({'class':"emp"+idfix+" item"+idfix});
 		$("#"+idinst).removeClass("effect1");
 		$("#"+idinst).fadeIn();

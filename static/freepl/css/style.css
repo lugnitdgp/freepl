@@ -231,11 +231,7 @@ p.fixturelabel{
 	background: #C0392B;
 	color: #fff;
 }
-.done
-{
-	background: #27AE60;
-	color: #fff;
-}
+
 #Trules
 {
 	padding: 1em;
@@ -245,7 +241,46 @@ p.fixturelabel{
 #concheck
 {
 	background: #fff;
-	min-height: 100px;
+	padding: 2em;
+}
+#concheck ul
+{
+	display: block;
+	text-align: center;
+}
+#concheck ul li
+{
+	display: inline-block;
+	margin: 0 1em;
+}
+#concheck ul li div
+{
+	padding: 1.5em;
+	width: 70px;
+	height: 70px;
+}
+.ntd
+{
+	background:#E74C3C;
+
+}
+.ntd h4
+{
+	color: #fff;
+	font-size: 2.5em;
+	font-weight: 400;
+	margin: 0;
+}
+.done
+{
+	background: #2ECC71;
+}
+.done h4
+{
+	color: #fff;
+	font-size: 2.5em;
+	font-weight: 400;
+	margin: 0;
 }
 .teamnameentry
 {
