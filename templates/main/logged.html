@@ -282,7 +282,7 @@ $('.teamgrid').isotope({
 					    {% else %}
 					    <div class="row">
 					    	
-					    	<div class="4u">
+					    	<div class="4u -4u">
 
 							    {% csrf_token %}
 								<input id="bf{{fixture.id}}e" class="teamnameentry" {% if not team.teamname == '' %} value="{{team.teamname}}" {% else %} placeholder= "Enter your teamname"{%endif%} ></input>
