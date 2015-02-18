@@ -38,21 +38,49 @@ $(document).ready(function() {
 			$(".bat"+fix).addClass("done");
 
 		};
+		if (rbat<4) {
+			$(".bat"+fix).addClass("ntd");
+			$(".bat"+fix).removeClass("done");
+
+		};
+
+
 		if (rbowl>=2) {
 			$(".bowl"+fix).removeClass("ntd");
 			$(".bowl"+fix).addClass("done");
 
 		};
+		if (rbowl<2) {
+			$(".bowl"+fix).addClass("ntd");
+			$(".bowl"+fix).removeClass("done");
+
+		};
+
+
 		if (rwk==1) {
 			$(".wk"+fix).removeClass("ntd");
 			$(".wk"+fix).addClass("done");
 
 		};
+		if (rwk!=1) {
+			$(".wk"+fix).addClass("ntd");
+			$(".wk"+fix).removeClass("done");
+
+		};
+		
+
+
 		if (rall>=2) {
 			$(".all"+fix).removeClass("ntd");
 			$(".all"+fix).addClass("done");
 
 		};
+		if (rall<2) {
+			$(".all"+fix).addClass("ntd");
+			$(".all"+fix).removeClass("done");
+
+		};
+
 
 	}
 
@@ -69,10 +97,12 @@ $(document).ready(function() {
 	//  player selection close button
 
 	var fix=null;
+	var newfix=null;
 	var pcheck=null;
 	var idfix=null;
 	$('.fixture').click(function(){
 		fix=$(this).attr("id");
+		newfix=fix.substring(4);
 		idfix=fix.substring(4);
 		
 		plcount=$(this).attr("data-plc");
@@ -186,7 +216,7 @@ $(document).ready(function() {
 
 // Second attempt
 
-
+var currpow=0;
 var temprole=null;
 $('.rc1').click(function(){
 		var fixid=$(this).attr("data-check");
@@ -271,11 +301,14 @@ $('.rc1').click(function(){
 		var inst=($(this).parent()).parent(); // li item
 		var ggpapa=inst.parent();
 		var idinst=inst.attr("data-plid");
-		par.removeClass("paparent");
-		par.children(".power").removeClass("powactive");
-		ggpapa.attr({'data-pstatus':0});
-		par.children('.power').attr({'data-pow':0});
 
+		if(par.children('.power').attr("data-pow")==1)
+		{
+			par.removeClass("paparent");
+			par.children(".power").removeClass("powactive");
+			ggpapa.attr({'data-pstatus':0});
+			par.children('.power').attr({'data-pow':0});
+		}
 		
 
 		par.children(".dp").remove();
@@ -285,10 +318,39 @@ $('.rc1').click(function(){
 		$('.teamgrid').append("<li class='item' style='display:none;'>"+cont1+"</li>");
 
 		inst.fadeOut();
+		inst.attr({'data-role':" "});
 		//inst.addClass();
+		var fixid=fix.substring(4);
+		//var currpow=ggpapa.attr('data-pstatus');
+		for (var i = 0; i <11; i++) {
+				temprole=ggpapa.children(".item"+fixid).eq(i).attr("data-role");
+				//alert(temprole);
 
-
-
+				if(temprole=="rolebowl")
+				{
+					rbowl++;
+					temprole=null;
+				}
+				if(temprole=="rolebat")
+				{
+					rbat++;
+					temprole=null;
+				}
+				if(temprole=="roleallround")
+				{
+					rall++;
+					temprole=null;
+				}
+				if(temprole=="rolewk")
+				{
+					rwk++;
+					temprole=null;
+				}
+			};
+			
+			
+			var fncall=plych(rbowl,rbat,rwk,rall,fixid);
+			rbat=0;rwk=0;rbowl=0;rall=0;
 
 
 		inst.attr({'class':"emp"+idfix+" item"+idfix});
@@ -333,13 +395,20 @@ $('.power').attr({'data-pow':0});
 			currentpar.addClass("paparent");
 			current.attr({'data-pow':1});
 			ggpapapow.attr({'data-pstatus':1});
-		}
-		else if (state==1 && powstate==1) // selected player is power player
+			//alert(newfix);
+			$(".pow"+newfix).removeClass("ntd");
+			$(".pow"+newfix).addClass("done");
+		};
+		if (state==1 && powstate==1) // selected player is power player
 		{
 			current.removeClass("powactive");
 			currentpar.removeClass("paparent");
 			current.attr({'data-pow':0});
 			ggpapapow.attr({'data-pstatus':0});
+			//fix=fix.substring(4);
+			//alert(newfix);
+			$(".pow"+newfix).addClass("ntd");
+			$(".pow"+newfix).removeClass("done");
 		};
 	})
 
