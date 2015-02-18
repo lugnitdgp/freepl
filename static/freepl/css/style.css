@@ -252,6 +252,10 @@ p.fixturelabel{
 {
 	display: inline-block;
 	margin: 0 2em;
+	perspective:1000px;
+	-webkit-perspective:1000px;
+	-moz-perspective:1000px;
+	-o-perspective:1000px;
 }
 .concheck ul li h5
 {
@@ -268,10 +272,14 @@ p.fixturelabel{
 	height: 70px;
 	display: block;
 	margin: 0 auto;
-	transition:all 0.2s;
-	-webkit-transition:all 0.2s;
-	-moz-transition:all 0.2s;
-	-o-transition:all 0.2s;
+	transition:all 0.5s;
+	-webkit-transition:all 0.5s;
+	-moz-transition:all 0.5s;
+	-o-transition:all 0.5s;
+	perspective:1000px;
+	-webkit-perspective:1000px;
+	-moz-perspective:1000px;
+	-o-perspective:1000px;
 }
 .concheck ul li div:hover
 {
@@ -283,6 +291,10 @@ p.fixturelabel{
 .ntd
 {
 	background:#E74C3C;
+	transform:rotateY(0deg);
+	-webkit-transform:rotateY(0deg);
+	-moz-transform:rotateY(0deg);
+	-o-transform:rotateY(0deg);
 
 }
 .ntd h4
@@ -299,6 +311,10 @@ p.fixturelabel{
 .done
 {
 	background: #2ECC71;
+	transform:rotateY(360deg);
+	-webkit-transform:rotateY(360deg);
+	-moz-transform:rotateY(360deg);
+	-o-transform:rotateY(360deg);
 }
 .done h4
 {
