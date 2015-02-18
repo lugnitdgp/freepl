@@ -232,28 +232,28 @@ p.fixturelabel{
 	color: #fff;
 }
 
-#Trules
+.Trules
 {
 	padding: 1em;
 	background: #3498DB;
 	color: #fff;
 }
-#concheck
+.concheck
 {
 	background: #fff;
 	padding: 2em;
 }
-#concheck ul
+.concheck ul
 {
 	display: block;
 	text-align: center;
 }
-#concheck ul li
+.concheck ul li
 {
 	display: inline-block;
 	margin: 0 1em;
 }
-#concheck ul li div
+.concheck ul li div
 {
 	padding: 1.5em;
 	width: 70px;

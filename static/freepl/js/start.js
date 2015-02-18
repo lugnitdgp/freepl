@@ -469,5 +469,20 @@ $('.power').attr({'data-pow':0});
 
 
 	}) */
+/*	var lockstate=0;
+	$('.lockteam').click(function(){
+		var statepar=$('.state').parent();
+		alert(statepar.children("done"));
+		for (var i = 0; i <5; i++) {
+				if(statepar.children("done"))
+				{
+					lockstate++;
+				}
+		};
+		if (lockstate==5) {
+			alert("bal");
+		};
+
+	}); */
 	
 });
