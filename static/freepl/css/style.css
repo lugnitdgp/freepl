@@ -211,30 +211,42 @@ p.fixturelabel{
 .constraints
 {
 	padding: 5px;
+	border-radius:5px;
+	border: 
+}
+.cnd
+{
+
 }
 .cons
 {
-	padding: 1em !important;
-	margin: 5px;
-	font-size: 1.3em;
+	padding:0.01em 1.5em !important;
+	margin: 2px;
 	text-align: center;
-}
-.cons *
-{
-	float: left;
+	border-radius: 10px;
 }
 
-.cons img
-{
-	height: 50px;
-	width: 50px;
-	margin: 0.5em;
-}
 .nd
 {
-	border: 2px solid #E74C3C;
+	background: #C0392B;
+	color: #fff;
 }
-
+.done
+{
+	background: #27AE60;
+	color: #fff;
+}
+#Trules
+{
+	padding: 1em;
+	background: #3498DB;
+	color: #fff;
+}
+#concheck
+{
+	background: #fff;
+	min-height: 100px;
+}
 .teamnameentry
 {
 display: block;
@@ -698,7 +710,7 @@ h3
 }
 #allplayers
 {
-	height: 500px;
+	height: 550px;
 	overflow-y:auto;
 	overflow-x:hidden;
 	border-bottom: 4px solid #8E44AD; 
