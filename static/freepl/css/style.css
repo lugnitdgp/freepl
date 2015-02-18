@@ -214,14 +214,25 @@ p.fixturelabel{
 }
 .cons
 {
-	padding: 0.5em 1em !important;
+	padding: 1em !important;
 	margin: 5px;
 	font-size: 1.3em;
 	text-align: center;
 }
+.cons *
+{
+	float: left;
+}
+
+.cons img
+{
+	height: 50px;
+	width: 50px;
+	margin: 0.5em;
+}
 .nd
 {
-	background: #E74C3C;
+	border: 2px solid #E74C3C;
 }
 
 .teamnameentry
