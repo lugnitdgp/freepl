@@ -40,8 +40,11 @@ $(document).ready(function() {
 
 	var fix=null;
 	var pcheck=null;
+	var idfix=null;
 	$('.fixture').click(function(){
 		fix=$(this).attr("id");
+		idfix=fix.substring(4);
+		
 		plcount=$(this).attr("data-plc");
 		pcheck=$("#"+fix).attr("data-pcheck");
 	});
@@ -155,6 +158,42 @@ $('.rc1').click(function(){
 		}
 		
 		
+
+	});
+
+	$('.cross').click(function(){
+		if (plcount>0) {
+			plcount--;
+		};
+		$("#"+fix).attr({"data-plc":plcount});
+		var par=$(this).parent(); // div
+		var inst=($(this).parent()).parent(); // li item
+		var ggpapa=inst.parent();
+		var idinst=inst.attr("data-plid");
+		par.removeClass("paparent");
+		par.children(".power").removeClass("powactive");
+		ggpapa.attr({'data-pstatus':0});
+		par.children('.power').attr({'data-pow':0});
+
+		
+
+		par.children(".dp").remove();
+		par.children(".tempName").remove();
+		par.children(".tempPrice").remove();
+		var cont1=inst.html();
+		$('.teamgrid').append("<li class='item' style='display:none;'>"+cont1+"</li>");
+
+		inst.fadeOut();
+		//inst.addClass();
+		inst.attr({'class':"emp"+idfix+" item"+idfix});
+		$("#"+idinst).removeClass("effect1");
+		$("#"+idinst).fadeIn();
+		if (plcount==0) {
+			$(".spnotice").delay(900).fadeIn();
+		};
+		
+
+
 
 	});
 

@@ -208,17 +208,26 @@ p.fixturelabel{
     font-style:italic;	
     color: #3a3a3a;
 }
+.constraints
+{
+	padding: 5px;
+}
+.cons
+{
+	padding: 0.5em 1em !important;
+	margin: 5px;
+	font-size: 1.3em;
+	text-align: center;
+}
+.nd
+{
+	background: #E74C3C;
+}
 
-
-/*
-
-Sticky Footer by Ryan Fait
-http://ryanfait.com/
-
-*/
 .teamnameentry
 {
-margin-left:450px;
+display: block;
+margin-left: auto;
 text-align:centre;
 float:left;
 margin-top:30px;
@@ -459,9 +468,9 @@ margin-top:100px;
 	font-style:normal;
 	height:50px;
 	line-height:50px;
-	width:205px;
+	width:150px;
+	margin-left: 2em;
 	margin-top:15px;
-	margin-left:9%;
 	text-decoration:none;
 	text-align:center;
 	transition:all 0.2s;
@@ -664,8 +673,8 @@ h3
 }
 .rc1:hover
 {
-	border-top: 1px solid #9B59B6;
-	border-bottom: 3px solid #9B59B6;
+	background: #f0f0f0;
+	border-left: 8px solid #9B59B6;
 	
 }
 .rc1 div
@@ -687,7 +696,7 @@ h3
 {
 	margin: 10px 0;
 }
-.item
+.itemf1,.itemf2, .itemf3, .itemf4, .itemf5, .itemf6, .itemf7, .itemf8, .itemf9
 {
 	position: relative;
 	vertical-align: bottom;

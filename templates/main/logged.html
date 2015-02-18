@@ -280,9 +280,25 @@ $('.teamgrid').isotope({
 					    {%if fixture.locked %}
 						<p>Your team {{team.teamname}} scored {{team.score}} freepl points.</p>
 					    {% else %}
-					    {% csrf_token %}
-						<input id="bf{{fixture.id}}e" class="teamnameentry" {% if not team.teamname == '' %} value="{{team.teamname}}" {% else %} placeholder= "Enter your teamname"{%endif%} ></input>
-						<button id="bf{{fixture.id}}" class="lockteam submitbutton">Lock the team</button>
+					    <div class="row">
+					    	<div class="8u constraints">
+					    		<div class="row">
+					    			<div class="5u cons nd"> At least 4 batsmen</div>
+						    		<div class="5u cons nd"> At least 2 allrounders</div>
+						    		<div class="5u cons nd">Exactly 1 wicketkeeper</div>
+						    		<div class="5u cons nd"> At least 2 bowlers</div>
+						    		<div class="10u cons nd"> Exactly one Powerplay</div>
+					    		</div>
+					    		
+					    		
+					    	</div>
+					    	<div class="4u">
+
+							    {% csrf_token %}
+								<input id="bf{{fixture.id}}e" class="teamnameentry" {% if not team.teamname == '' %} value="{{team.teamname}}" {% else %} placeholder= "Enter your teamname"{%endif%} ></input>
+								<button id="bf{{fixture.id}}" class="lockteam submitbutton">Lock the team</button>
+							</div>
+						</div>
 					    {%endif%}
 					     <div class="row rowcorrect">
 					     	<div class="8u" id="Tselcthead">Your Team:</div>
@@ -292,14 +308,7 @@ $('.teamgrid').isotope({
 					    	<div class="8u rowcorrect">
 					    		<h2 class="spnotice" id="spnoticef{{fixture.id}}"> Select the players you want in your team from the list of players on the right menu</h2>
 					    		<ul class="teamgrid">
-					    			<li class="emp itemf{{fixture.id}}">
-					    				<div>
-					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
-					    					<h4 class="power">P</h4>
-
-
-					    				</div>
-					    			</li>
+					    			
 					    			<li class="empf{{fixture.id}} itemf{{fixture.id}}">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
