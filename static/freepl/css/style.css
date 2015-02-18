@@ -251,13 +251,34 @@ p.fixturelabel{
 .concheck ul li
 {
 	display: inline-block;
-	margin: 0 1em;
+	margin: 0 2em;
+}
+.concheck ul li h5
+{
+	color: #34495E;
+	font-size: 1.1em;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	text-align: center;
 }
 .concheck ul li div
 {
 	padding: 1.5em;
 	width: 70px;
 	height: 70px;
+	display: block;
+	margin: 0 auto;
+	transition:all 0.2s;
+	-webkit-transition:all 0.2s;
+	-moz-transition:all 0.2s;
+	-o-transition:all 0.2s;
+}
+.concheck ul li div:hover
+{
+	transform:scale(1.05);
+	-webkit-transform:scale(1.05);
+	-moz-transform:scale(1.05);
+	-o-transform:scale(1.05);
 }
 .ntd
 {
@@ -271,6 +292,10 @@ p.fixturelabel{
 	font-weight: 400;
 	margin: 0;
 }
+.ntd h6
+{
+	margin: 0;
+}
 .done
 {
 	background: #2ECC71;
@@ -280,6 +305,9 @@ p.fixturelabel{
 	color: #fff;
 	font-size: 2.5em;
 	font-weight: 400;
+	margin: 0;
+}.done h6
+{
 	margin: 0;
 }
 .teamnameentry
