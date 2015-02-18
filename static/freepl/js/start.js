@@ -308,6 +308,8 @@ $('.rc1').click(function(){
 			par.children(".power").removeClass("powactive");
 			ggpapa.attr({'data-pstatus':0});
 			par.children('.power').attr({'data-pow':0});
+			$(".pow"+newfix).addClass("ntd");
+			$(".pow"+newfix).removeClass("done");
 		}
 		
 
