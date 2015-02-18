@@ -593,7 +593,7 @@ h3
 	-webkit-transition:all 0.2s;
 	-moz-transition:all 0.2s;
 	-o-transition:all 0.2s;
-
+	overflow: hidden;
 }
 #Tselcthead
 {

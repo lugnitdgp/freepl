@@ -53,7 +53,7 @@ $(document).ready(function() {
 		$(".itemf"+i).hide();
 	}
 	
-	
+	/*
 	$('.cross').click(function(){
 		if (plcount>0) {
 			plcount--;
@@ -121,7 +121,42 @@ $(document).ready(function() {
 		
 
 	});
+*/
 
+// Second attempt
+
+$('.rc1').click(function(){
+		var fixid=$(this).attr("data-check");
+		$("#spnotice"+fixid).hide();
+		if(plcount<11 && locked!=1)
+		{
+			plcount++;
+			$("#"+fix).attr({"data-plc":plcount});
+			$(this).fadeOut(100);
+			$(this).addClass("effect1");
+			
+			var temp=$(this).children(".temp").html();
+			
+			var plid=$(this).attr("id");
+			
+			$(".emp"+fixid).first().fadeIn();
+			$(".emp"+fixid).first().css("display","inline-block");
+			$(".emp"+fixid).first().attr({'data-plid':plid});
+			$(".emp"+fixid).first().addClass(plid);
+			var t=$(".emp"+fixid).first();
+			t.removeClass("emp"+fixid);
+			$("."+plid+" div").append(temp);
+			temp=null;
+			//mod++;
+			
+			
+			
+
+		}
+		
+		
+
+	});
 
 
 $('.teamgrid').attr({'data-pstatus':0});
