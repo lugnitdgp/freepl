@@ -249,7 +249,7 @@ $('.teamgrid').isotope({
 		<li id="A" class='has-sub active tab'><a href='#'><span>Fixtures</span></a>
 		    <ul>
 			{% for fixture in fixtures %}
-			    <li class='last fixture'  id='listf{{fixture.id}}' data-plc="0" data-pcheck="0" >
+			    <li class='last fixture'  id='listf{{fixture.id}}' data-plc="0" data-pcheck="0" data-countryA="{{fixture.teamA.country}}" data-countryB="{{fixture.teamB.country}}" data-numA="0" data-numB="0" >
 				<a href='#' >
 				    <span> {{fixture.teamA.country}} vs {{fixture.teamB.country}} on {{fixture.date}}</span>
 				</a>
@@ -300,11 +300,12 @@ $('.teamgrid').isotope({
 					    			<div class="12u Trules">Conditions</div>
 					    			<div class="12u concheck">
 					    				<ul>
-					    					<li><h5>Batsmen</h5><div class="batf{{fixture.id}} ntd state"><h4>4+</h4></div></li>
+					    					<li><h5>Batsmen</h5><div class="batf{{fixture.id}} ntd state"><h4>4+<h4></div></li>
 					    					<li><h5>Allrounder</h5><div class="allf{{fixture.id}} ntd state"><h4>2+</h4></div></li>
 					    					<li><h5>Wicket keeper</h5><div class="wkf{{fixture.id}} ntd state"><h4>1</h4></div></li>
 					    					<li><h5>Bowler</h5><div class="bowlf{{fixture.id}} ntd state"><h4>2+</h4></div></li>
 					    					<li><h5>Power Player</h5><div class="powf{{fixture.id}} ntd state"><h4>1</h4></div></li>
+					    					<li><h5>Team Spread</h5><div class="sprf{{fixture.id}} done state"><h4 class="sprvalf{{fixture.id}}">0</h4></div></li>
 					    					<li><h5>Budget</h5><h3 class="budf{{fixture.id}} budget">1000</h3></li>
 					    				</ul>
 					    			</div>
@@ -440,7 +441,7 @@ $('.teamgrid').isotope({
 					    				<div class="row rc1 {%if not fixture.locked%}clickablepl{%endif%} {%if k.0 == 1 %}selected {% elif  k.0 == 2 %} powerplayer  {%endif%}" id="p{{k.1.id}}" data-check="f{{fixture.id}}">
 					    					<div class="temp">
 					    						<img src="{% static 'freepl/images/' %}" class="dp">
-					    						<h4 class="tempName">{{k.1.firstname}} {{k.1.lastname}}</h4>
+					    						<h4 class="tempName" data-country='{{k.1.country}}'>{{k.1.firstname}} {{k.1.lastname}}</h4>
 					    						<div class="tempRole role{{k.1.role}}" style="display:none"></div>
 					    						<h4 class="tempPrice" data-price="{{k.1.price}}">Price {{k.1.price}}</h4>
 
@@ -452,7 +453,7 @@ $('.teamgrid').isotope({
 
 					    					<div class="2u role role{{k.1.role}}" data-role="role{{k.1.role}}"><img src="{% static 'freepl/images/role{{k.1.role}}' %}"></div>
 						    				<div class="5u"><h4>{{k.1.firstname}} {{k.1.lastname}}</h4></div>
-						    				<div class="2u countrywrap"><img src="countries/{{k.1.flag}}" alt="{{k.1.country}}"></div>
+						    				<div class="2u countrywrap"><img src="countries/{{k.1.country}}.jpg" alt="{{k.1.country}}"></div>
 						    				<div class="3u"><h4>{{k.1.price}}</h4></div>
 					    				</div>
 					    			{% endfor %}

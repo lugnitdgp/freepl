@@ -101,7 +101,19 @@ $(document).ready(function() {
 	var pcheck=null;
 	var idfix=null;
 	var budget=1000;
+
+	var counA=null;
+	var counB=null;
+	var numA=0;
+	var numB=0;
 	$('.fixture').click(function(){
+
+		counA=$(this).attr("data-countryA");
+		counB=$(this).attr("data-countryB");
+		numA=$(this).attr("data-numA");
+		numB=$(this).attr("data-numB");
+		Tspread=0;
+		//alert(counA+" ,"+counB);
 		fix=$(this).attr("id");
 		newfix=fix.substring(4);
 		idfix=fix.substring(4);
@@ -109,6 +121,8 @@ $(document).ready(function() {
 		//alert(budget);
 		plcount=$(this).attr("data-plc");
 		pcheck=$("#"+fix).attr("data-pcheck");
+
+
 
 		rbowl=0;rbat=0;rwk=0;rall=0;
 		for (var i = 0; i <11; i++) {
@@ -221,6 +235,7 @@ $(document).ready(function() {
 var currpow=0;
 var temprole=null;
 var price=0;
+var Tspread=0;
 $('.rc1').click(function(){
 		var fixid=$(this).attr("data-check");
 		var thispl=$(this);
@@ -232,7 +247,34 @@ $('.rc1').click(function(){
 			$("#"+fix).attr({"data-plc":plcount});
 			$(this).fadeOut(100);
 			$(this).addClass("effect1");
-			
+
+			// Team SPread Count
+			var tempcoun=($(this).children(".temp")).children(".tempName").attr("data-country");
+			//alert(tempcoun);
+			if(tempcoun==counA)
+			{
+				numA++;
+				$("#"+fix).attr({'data-numA':numA});
+			}
+			if (tempcoun==counB) {
+				numB++;
+				$("#"+fix).attr({'data-numB':numB});
+			};
+			Tspread=Math.max(numA,numB);
+			if (Tspread>6) {
+				$(".spr"+newfix).removeClass("done");
+				$(".spr"+newfix).addClass("ntd");
+			};
+			if (Tspread<=6) {
+				$(".spr"+newfix).removeClass("ntd");
+				$(".spr"+newfix).addClass("done");
+			};
+			var spr=Tspread.toString();
+			//alert(spr);
+
+			$(".sprval"+newfix).html(spr);
+
+
 			var temp=$(this).children(".temp").html();
 			
 			var plid=$(this).attr("id");
@@ -315,6 +357,34 @@ $('.rc1').click(function(){
 		var inst=($(this).parent()).parent(); // li item
 		var ggpapa=inst.parent();
 		var idinst=inst.attr("data-plid");
+
+
+		// Team SPread Count
+			var tempcount=par.children(".tempName").attr("data-country");
+			//alert(tempcoun);
+			if(tempcount==counA)
+			{
+				numA--;
+				$("#"+fix).attr({'data-numA':numA});
+			}
+			if (tempcount==counB) {
+				numB--;
+				$("#"+fix).attr({'data-numB':numB});
+			};
+			Tspread=Math.max(numA,numB);
+			if (Tspread>6) {
+				$(".spr"+newfix).removeClass("done");
+				$(".spr"+newfix).addClass("ntd");
+			};
+			if (Tspread<=6) {
+				$(".spr"+newfix).removeClass("ntd");
+				$(".spr"+newfix).addClass("done");
+			};
+			var spr=Tspread.toString();
+			//alert(spr);
+
+			$(".sprval"+newfix).html(spr);
+
 
 		if(par.children('.power').attr("data-pow")==1)
 		{

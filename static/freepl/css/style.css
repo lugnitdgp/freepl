@@ -247,6 +247,7 @@ p.fixturelabel{
 {
 	display: block;
 	text-align: center;
+	padding-left: 0 !important;
 }
 .concheck ul:before
 {
