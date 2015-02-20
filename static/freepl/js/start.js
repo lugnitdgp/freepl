@@ -586,7 +586,9 @@ $('.power').attr({'data-pow':0});
 	}) */
 	var lockstate=0;
 	$('.lockteam').click(function(){
+		if(Tspread<=6){
 		var check=storepl();
+	}
 
 	});
 	
