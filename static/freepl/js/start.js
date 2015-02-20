@@ -411,6 +411,8 @@ $('.rc1').click(function(){
 		par.children(".dp").remove();
 		par.children(".tempName").remove();
 		par.children(".tempPrice").remove();
+		par.children(".rl").remove();
+		par.children(".coun").remove();
 
 
 

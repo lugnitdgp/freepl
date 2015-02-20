@@ -864,7 +864,7 @@ h3
 {
 	color: #2C3E50;
 	font-weight: 400;
-	font-size: 1.4em;
+	font-size: 1.3em;
 }
 .tempPrice
 {
@@ -1008,4 +1008,22 @@ h3
 .coun
 {
 	width: 25px;
+	margin:0.2em 1em;
+
+}
+.role img
+{
+	width: 20px;
+	padding-top: 1em;
+}
+.rl
+{
+	width: 25px;
+	margin: 0.2em 1em;
+}
+.fixc
+{
+	width: 60px;
+	margin: 1em;
+	margin-bottom: 0;
 }
