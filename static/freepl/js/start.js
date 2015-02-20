@@ -100,11 +100,13 @@ $(document).ready(function() {
 	var newfix=null;
 	var pcheck=null;
 	var idfix=null;
+	var budget=1000;
 	$('.fixture').click(function(){
 		fix=$(this).attr("id");
 		newfix=fix.substring(4);
 		idfix=fix.substring(4);
-		
+		budget=parseInt($(".bud"+newfix).html());
+		//alert(budget);
 		plcount=$(this).attr("data-plc");
 		pcheck=$("#"+fix).attr("data-pcheck");
 
@@ -218,6 +220,7 @@ $(document).ready(function() {
 
 var currpow=0;
 var temprole=null;
+var price=0;
 $('.rc1').click(function(){
 		var fixid=$(this).attr("data-check");
 		var thispl=$(this);
@@ -225,6 +228,7 @@ $('.rc1').click(function(){
 		if(plcount<11 && locked!=1)
 		{
 			plcount++;
+			
 			$("#"+fix).attr({"data-plc":plcount});
 			$(this).fadeOut(100);
 			$(this).addClass("effect1");
@@ -232,8 +236,18 @@ $('.rc1').click(function(){
 			var temp=$(this).children(".temp").html();
 			
 			var plid=$(this).attr("id");
-
-
+			//Budget changes
+			price=parseInt((thispl.children(".temp")).children(".tempPrice").attr("data-price"));
+			budget=budget-price;
+			if (budget<0) {
+				$(".bud"+newfix).addClass("lowbudget");
+			};
+			if (budget>0) {
+				$(".bud"+newfix).removeClass("lowbudget");
+			};
+			var stbud=budget.toString();
+			//alert(stbud);
+			$(".bud"+newfix).html(stbud);
 			var role=thispl.children(".role").attr("data-role");
 			var scancl="item"+thispl.attr("data-check");
 			
@@ -244,7 +258,7 @@ $('.rc1').click(function(){
 			$(".emp"+fixid).first().attr({'data-plid':plid});
 			$(".emp"+fixid).first().addClass(plid);
 			$(".emp"+fixid).first().attr({'data-role':role});
-
+			
 			var scanpar=$("."+scancl).parent();
 			for (var i = 0; i <11; i++) {
 				temprole=scanpar.children("."+scancl).eq(i).attr("data-role");
@@ -311,11 +325,25 @@ $('.rc1').click(function(){
 			$(".pow"+newfix).addClass("ntd");
 			$(".pow"+newfix).removeClass("done");
 		}
+		price=parseInt(par.children(".tempPrice").attr("data-price"));
 		
+			budget=budget+price;
+			if (budget<0) {
+				$(".bud"+newfix).addClass("lowbudget");
+			};
+			if (budget>0) {
+				$(".bud"+newfix).removeClass("lowbudget");
+			};
+			var stbudd=budget.toString();
+			//alert(stbud);
+			$(".bud"+newfix).html(stbudd);
 
 		par.children(".dp").remove();
 		par.children(".tempName").remove();
 		par.children(".tempPrice").remove();
+
+
+
 		var cont1=inst.html();
 		$('.teamgrid').append("<li class='item' style='display:none;'>"+cont1+"</li>");
 

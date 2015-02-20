@@ -202,8 +202,8 @@ padding:5px;
 
 
 p.fixturelabel{
-    text-align:centre;
-    margin-left:450px;
+    text-align:center;
+    width: 100%;
     font-size:20px;
     font-style:italic;	
     color: #3a3a3a;
@@ -248,10 +248,14 @@ p.fixturelabel{
 	display: block;
 	text-align: center;
 }
+.concheck ul:before
+{
+	padding: 0 !important;
+}
 .concheck ul li
 {
 	display: inline-block;
-	margin: 0 2em;
+	margin: 0 1em;
 	perspective:1000px;
 	-webkit-perspective:1000px;
 	-moz-perspective:1000px;
@@ -742,6 +746,18 @@ h3
 {
 	padding: 5px;
 }
+.role
+{
+	height: 46px;
+}
+.roleallround
+{
+	background: ;
+}
+.rolebowl
+{
+	background: 
+}
 .plrole
 {
 	width: 15%;
@@ -966,4 +982,15 @@ h3
 .WI:hover
 {
 	border-left:6px solid #C0392B;
+}
+.budget
+{
+	color: #2ECC71;
+	font-size: 3em;
+	font-weight: 300;
+	text-align: center;
+	margin: 0.1em 0;
+}
+.lowbudget{
+	color: #E74C3C !important;
 }

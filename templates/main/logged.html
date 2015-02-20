@@ -305,6 +305,7 @@ $('.teamgrid').isotope({
 					    					<li><h5>Wicket keeper</h5><div class="wkf{{fixture.id}} ntd state"><h4>1</h4></div></li>
 					    					<li><h5>Bowler</h5><div class="bowlf{{fixture.id}} ntd state"><h4>2+</h4></div></li>
 					    					<li><h5>Power Player</h5><div class="powf{{fixture.id}} ntd state"><h4>1</h4></div></li>
+					    					<li><h5>Budget</h5><h3 class="budf{{fixture.id}} budget">1000</h3></li>
 					    				</ul>
 					    			</div>
 					    			<!--<div class="row rowcorrect">
@@ -441,7 +442,7 @@ $('.teamgrid').isotope({
 					    						<img src="{% static 'freepl/images/' %}" class="dp">
 					    						<h4 class="tempName">{{k.1.firstname}} {{k.1.lastname}}</h4>
 					    						<div class="tempRole role{{k.1.role}}" style="display:none"></div>
-					    						<h4 class="tempPrice">Price {{k.1.price}}</h4>
+					    						<h4 class="tempPrice" data-price="{{k.1.price}}">Price {{k.1.price}}</h4>
 
 
 					    					
@@ -449,7 +450,7 @@ $('.teamgrid').isotope({
 
 					    					</div>
 
-					    					<div class="2u role role{{k.1.role}}" data-role="role{{k.1.role}}"><h4>{{k.1.role}}</h4></div>
+					    					<div class="2u role role{{k.1.role}}" data-role="role{{k.1.role}}"><img src="{% static 'freepl/images/role{{k.1.role}}' %}"></div>
 						    				<div class="5u"><h4>{{k.1.firstname}} {{k.1.lastname}}</h4></div>
 						    				<div class="2u countrywrap"><img src="countries/{{k.1.flag}}" alt="{{k.1.country}}"></div>
 						    				<div class="3u"><h4>{{k.1.price}}</h4></div>
