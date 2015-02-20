@@ -858,11 +858,13 @@ h3
 {
 	color: #000;
 	margin: 0;
-	padding: 0.8em 0;
+	padding: 0.4em 0;
 }
 .tempName
 {
 	color: #2C3E50;
+	font-weight: 400;
+	font-size: 1.4em;
 }
 .tempPrice
 {
@@ -1002,4 +1004,8 @@ h3
 .countrywrap img
 {
 	width: 30px;
+}
+.coun
+{
+	width: 25px;
 }
