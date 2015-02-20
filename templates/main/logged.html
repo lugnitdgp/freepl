@@ -204,7 +204,7 @@ $('.teamgrid').isotope({
 				    data : {
 						    csrfmiddlewaretoken: '{{ csrf_token }}',
 						    fixtureid:fixtureid,
-						    teamconfig : teamconfig,
+						    teamconfig : selectdpl,
 						    teamname : teamnameentry
 						    },
 				    success : function(reply) {

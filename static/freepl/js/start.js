@@ -24,6 +24,21 @@ $(document).ready(function() {
 		
 		return false;
 	});
+
+	var selectedpl=[];
+	function storepl()
+	{
+		for (var i = 0; i <11; i++) {
+			var tempor=$(".item"+newfix).eq(i).attr("data-plid");
+			var powcheck=$(".item"+newfix).eq(i).children().attr("class");
+			if(powcheck=="paparent")
+			{
+				tempor="*"+tempor;
+			}
+			selectedpl.push(tempor);
+			alert(selectedpl);
+		}
+	}
 	
 	//initialized values for roles
 	var rbowl=0;
@@ -569,20 +584,10 @@ $('.power').attr({'data-pow':0});
 
 
 	}) */
-/*	var lockstate=0;
+	var lockstate=0;
 	$('.lockteam').click(function(){
-		var statepar=$('.state').parent();
-		alert(statepar.children("done"));
-		for (var i = 0; i <5; i++) {
-				if(statepar.children("done"))
-				{
-					lockstate++;
-				}
-		};
-		if (lockstate==5) {
-			alert("bal");
-		};
+		var check=storepl();
 
-	}); */
+	});
 	
 });
