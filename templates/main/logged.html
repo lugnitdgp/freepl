@@ -453,8 +453,8 @@ $('.teamgrid').isotope({
 
 					    					<div class="2u role role{{k.1.role}}" data-role="role{{k.1.role}}"><img src="{% static 'freepl/images/role{{k.1.role}}' %}"></div>
 						    				<div class="5u"><h4>{{k.1.firstname}} {{k.1.lastname}}</h4></div>
-						    				<div class="2u countrywrap"><img src="countries/{{k.1.country}}.jpg" alt="{{k.1.country}}"></div>
-						    				<div class="3u"><h4>{{k.1.price}}</h4></div>
+						    				<div class="2u countrywrap"><img src="static/freepl/images/{{k.1.country}}.jpg" alt="{{k.1.country}}"></div>
+						    				<div class="3u"><h4 class="TP">{{k.1.price}}</h4></div>
 					    				</div>
 					    			{% endfor %}
 					    			

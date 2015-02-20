@@ -869,6 +869,10 @@ h3
 	font-weight: 200;
 	color: #8E44AD !important;
 }
+.TP
+{
+	color: #8E44AD !important;
+}
 .power
 {
 	color: #777;
@@ -994,4 +998,8 @@ h3
 }
 .lowbudget{
 	color: #E74C3C !important;
+}
+.countrywrap img
+{
+	width: 30px;
 }
