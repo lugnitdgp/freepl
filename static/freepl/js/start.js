@@ -36,7 +36,7 @@ $(document).ready(function() {
 				tempor="*"+tempor;
 			}
 			selectedpl.push(tempor);
-			alert(selectedpl);
+			//alert(selectedpl);
 		}
 	}
 	
