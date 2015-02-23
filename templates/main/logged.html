@@ -321,7 +321,24 @@ $('.teamgrid').isotope({
 					    	</div>
 					    		<h2 class="spnotice" id="spnoticef{{fixture.id}}"> Select the players you want in your team from the list of players on the right menu</h2>
 					    		<ul class="teamgrid">
-					    			
+					    		
+					    		{% for k in teamlist_plyrs %}
+							    {% if k.0 != 0 %}
+								<li class="itemf{{fixture.id}} p{{k.1.id}}" data-role="role{{k.1.role}}" data-plid="p{{k.1.id}}" style="display: inline-block;">
+					    				<div>
+					    					<img src="/static/freepl/images/Delete.png" class="cross">
+					    					<h4 class="power" data-pow="{%if k.0 == 1%}0{%else%}1{%endif%}">P</h4>
+					    					<img src="/static/freepl/images/" class="dp">
+					    					<h4 class="tempName" data-country="{{k.1.country}}">{{k.1.firstname}} {{k.1.lastname}}</h4>
+					    					<img src="static/freepl/images/{{k.1.role}}.png" class="rl">
+					    					<img src="static/freepl/images/{{k.1.country}}.jpg" class="coun" alt="{{k.1.country}}">
+					    					<div class="tempRole role{{k.1.role}}" style="display:none"></div>
+					    					<h4 class="tempPrice" data-price="{{k.1.price}}">Price 95</h4>
+					    				</div>
+					    			</li>
+							    {% endif %}
+
+					    		{% endfor %}
 					    			<li class="empf{{fixture.id}} itemf{{fixture.id}}" data-role="">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
@@ -438,7 +455,7 @@ $('.teamgrid').isotope({
 					    		</div>
 					    		
 					    		{% for k in teamlist_plyrs %}
-					    				<div class="row rc1 {%if not fixture.locked%}clickablepl{%endif%} {%if k.0 == 1 %}selected {% elif  k.0 == 2 %} powerplayer  {%endif%}" id="p{{k.1.id}}" data-check="f{{fixture.id}}">
+					    				<div class="row rc1 {%if not fixture.locked%}clickablepl{%endif%} {%if k.0 != 0 %}hidden{%endif%}" id="p{{k.1.id}}" data-check="f{{fixture.id}}">
 					    					<div class="temp">
 					    						<img src="{% static 'freepl/images/' %}" class="dp">
 					    						<h4 class="tempName" data-country='{{k.1.country}}'>{{k.1.firstname}} {{k.1.lastname}}</h4>
@@ -458,7 +475,7 @@ $('.teamgrid').isotope({
 						    				<div class="2u countrywrap"><img src="static/freepl/images/{{k.1.country}}.jpg" alt="{{k.1.country}}"></div>
 						    				<div class="3u"><h4 class="TP">{{k.1.price}}</h4></div>
 					    				</div>
-					    			{% endfor %}
+					    		{% endfor %}
 					    			
 					    		
 					    	</div>
