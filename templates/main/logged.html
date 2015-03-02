@@ -317,12 +317,10 @@ $('.teamgrid').isotope({
 							    		<div class="cons nd"><h4>Atleast 2 Bowlers </h4></div>
 							    		<div class="cons nd"><h4>Exactly 1 Powerplayer</h4></div>
 					    			</div> -->
-					    		
-					    		
 					    	</div>
 					    		<h2 class="spnotice" id="spnoticef{{fixture.id}}"> Select the players you want in your team from the list of players on the right menu</h2>
 					    		<ul class="teamgrid">
-					    			
+								<div id="hiddenteamf{{fixture.id}}" style="display:none;">{{team.teamconfig}}</div>
 					    			<li class="empf{{fixture.id}} itemf{{fixture.id}}" data-role="">
 					    				<div>
 					    					<img src="{% static 'freepl/images/Delete.png' %}" class="cross">
@@ -439,7 +437,7 @@ $('.teamgrid').isotope({
 					    		</div>
 					    		
 					    		{% for k in teamlist_plyrs %}
-					    				<div class="row rc1 {%if not fixture.locked%}clickablepl{%endif%} {%if k.0 == 1 %}selected {% elif  k.0 == 2 %} powerplayer  {%endif%}" id="p{{k.1.id}}" data-check="f{{fixture.id}}">
+					    				<div class="row rc1 {%if not fixture.locked%}clickablepl{%endif%} {%if k.0 != 0 %}hidden{%endif%}" id="p{{k.1.id}}" data-check="f{{fixture.id}}">
 					    					<div class="temp">
 					    						<img src="{% static 'freepl/images/' %}" class="dp">
 					    						<h4 class="tempName" data-country='{{k.1.country}}'>{{k.1.firstname}} {{k.1.lastname}}</h4>
@@ -459,7 +457,7 @@ $('.teamgrid').isotope({
 						    				<div class="2u countrywrap"><img src="static/freepl/images/{{k.1.country}}.jpg" alt="{{k.1.country}}"></div>
 						    				<div class="3u"><h4 class="TP">{{k.1.price}}</h4></div>
 					    				</div>
-					    			{% endfor %}
+					    		{% endfor %}
 					    			
 					    		
 					    	</div>

@@ -29,7 +29,7 @@ def validate_team(teamconfig,fixtureid,teamname):
 	fixture = fixtures.objects.get(id=fixtureid)
 	#print fixture
 	teamconfig_list = map(int,teamconfig[:-1].split(','))
-	playersinfixture = players.objects.filter(Q(country=fixture.teamA)|Q(country=fixture.teamB)).order_by('netperformance')
+	playersinfixture = players.objects.filter(Q(country=fixture.teamA)|Q(country=fixture.teamB)).order_by('country')
 	if len(playersinfixture)!=len(teamconfig_list):
 	    return 'lolwa'
 	#constraint parameters
@@ -39,20 +39,24 @@ def validate_team(teamconfig,fixtureid,teamname):
 	error_messages = {'bat':'Batsmen insufficient!','bowl':'Bowlers insufficient!','wk':'You must keep only one wicketkeeper!','allround':'Allrounders insufficient!',fixture.teamA:'Maximum players from a single team exceeded!',fixture.teamB:'aximum players from a single team exceeded!','price':'Total Budget Exceeded!','power':'Must have one power player'}
 
 	for i in xrange(len(teamconfig_list)):
-	    if teamconfig_list[i]>0:
-		#print playersinfixture[i].role
-		cons[playersinfixture[i].role]+=1
-		cons['price']+=playersinfixture[i].price
-		cons[playersinfixture[i].country]+=1
-		if teamconfig_list[i]==2:
-		    cons['power']+=1
+	    #print playersinfixture[i].role
+	    playerid = None
+	    if teamconfig_list[i][0] == '*':
+		playerid = int(teamconfig_list[i][2:])
+		cons[power]+=1
+	    else:
+		playerid = int(teamconfig_list[i][1:])
+	    player = playersinfixture.objects.filter(id = playerid)
+	    cons[player.role]+=1
+	    cons['price']+=player.price
+	    cons[player.country]+=1
 
 	for key in cons:
 	    if (cons[key]>=low_limits[key] and cons[key]<=up_limits[key]) or key=='power':
 		continue
 	    else:
 		return error_messages[key]+'Budget '+str(cons['price'])
-	
+
 	if cons['power']!=1:
 	    return error_messages['power']
 	return 'yes'
@@ -75,13 +79,13 @@ def home(request):
 	    teamlists = []
 	    player_fixture = []
 	    teams = []
-	    playerlist = players.objects.order_by('netperformance')
+	    playerlist = players.objects.all()
 	    userfixtureteams = fixtureTeams.objects.filter(user=request.facebook.user)
 	    username = request.facebook.user.first_name
 	    for fixture in allfixtures:
 		teamA = fixture.teamA
 		teamB = fixture.teamB
-		playersinfixture = playerlist.filter(Q(country=teamA)|Q(country=teamB))
+		playersinfixture = playerlist.filter(Q(country=teamA)|Q(country=teamB)).order_by('country')
 		#print playersinfixture
 		#If the user made any fixture team
 		teamconfig = []
@@ -92,21 +96,37 @@ def home(request):
 		    obj.user = fplUser.objects.get(user=request.facebook.user)
 		    obj.fixture = fixture
 		    obj.teamname = ''
-		    obj.teamconfig = '0,'*len(playersinfixture)
+		    obj.teamconfig = ''#'0,'*len(playersinfixture)
 		    obj.save()
 
-		    teamconfig = map(int,obj.teamconfig[:-1].split(','))
-		    teams.append(obj)
-
+		    teamconfig = ''#map(int,obj.teamconfig[:-1].split(','))
 		else:
-		    #print obj,"created"
-		    s = obj.teamconfig		    
+		    pass
+		
+		teams.append(obj)
+		#print obj,"created"
+		"""
+		    s = obj.teamconfig
+		    s = map(str,s.split())
+		    #s = s[2:] if s[0]=='*' else s[1:] 
 		    teams.append(obj)
-		    teamconfig = map(int,s[:-1].split(','))
-		    """
+		    teamconfig = []
+		    for i in xrange(len(playersinfixture)):
+			cur_pid = playersinfixture[i].id
+			val = 0
+			for j in xrange(len(s)):
+			    tmp = s[j][2:] if s[j][0]=='*' else s[j][1:]
+			    if tmp == str(cur_pid):
+				if s[j][0]=='*':
+				    val = 2
+				else:
+				    val = 1
+				break
+			teamconfig.append(val)
+		    
 		    following is a three-in-one list zipped into one.
-		    """
-		player_fixture.append(zip(teamconfig,playersinfixture))
+		"""
+		player_fixture.append(playersinfixture)
 	    fixturewiseteams = zip(allfixtures,teams,player_fixture)
 	    return render(request,'main/logged.html',{"name":username,"fixturewiseteams":fixturewiseteams,"fixtures":allfixtures,"fplUsers":fplUser.objects.all().order_by('-cumulativescore'),"players":players.objects.all()})
 
