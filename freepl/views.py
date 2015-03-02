@@ -100,10 +100,12 @@ def home(request):
 		    obj.save()
 
 		    teamconfig = ''#map(int,obj.teamconfig[:-1].split(','))
-		    teams.append(obj)
-
 		else:
-		    #print obj,"created"
+		    pass
+		
+		teams.append(obj)
+		#print obj,"created"
+		"""
 		    s = obj.teamconfig
 		    s = map(str,s.split())
 		    #s = s[2:] if s[0]=='*' else s[1:] 
@@ -121,10 +123,10 @@ def home(request):
 				    val = 1
 				break
 			teamconfig.append(val)
-		    """
+		    
 		    following is a three-in-one list zipped into one.
-		    """
-		player_fixture.append(zip(teamconfig,playersinfixture))
+		"""
+		player_fixture.append(playersinfixture)
 	    fixturewiseteams = zip(allfixtures,teams,player_fixture)
 	    return render(request,'main/logged.html',{"name":username,"fixturewiseteams":fixturewiseteams,"fixtures":allfixtures,"fplUsers":fplUser.objects.all().order_by('-cumulativescore'),"players":players.objects.all()})
 
