@@ -62,6 +62,21 @@ $(document).ready(function() {
 				}
 		}
 		alert(lockedpllist);
+		for (var i=0; i < 11; i++)
+		{
+			if (lockedpllist(i).substring(0,1)=="*") {
+				//do something
+			}
+			else
+			{
+				var temp=$("#"+lockedpllist(i)).children(".temp").html();
+				var t=$(".emp"+fixid).first();
+			t.removeClass("emp"+fixid);
+			$("."+lockedpllist(i)+" div").append(temp);
+			temp=null;
+			($('.concheck ul li div').addClass("done");
+			}
+		}
 	}
 	//initialized values for roles
 	var rbowl=0;
