@@ -48,20 +48,20 @@ $(document).ready(function() {
 		var lockedpllist=[];
 		var ids=$("#hiddenteam"+newfix).html();
 		//var ids="p12,p11,p13,p22";
-		var j=0;
+		var j=-1;
 		var idslength=ids.length;
 		//alert(idslength);
 		for (var i = 0; i < idslength; i++) {
 			var subtest=ids.substring(i,i+1);
-			alert(subtest);
+			//alert(subtest);
 				if (subtest==",") {
-					var lckplid=ids.substring(j,i);
-					alert(lckplid);
+					var lckplid=ids.substring(j+1,i);
+					//alert(lckplid);
 					j=i;
-					//lockedpllist.push((lckplid.parseInt()));
-					continue;
+					lockedpllist.push(lckplid);
 				}
 		}
+		alert(lockedpllist);
 	}
 	//initialized values for roles
 	var rbowl=0;
