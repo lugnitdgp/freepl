@@ -36,7 +36,7 @@ $(document).ready(function() {
 				tempor="*"+tempor;
 			}
 			selectedpl.push(tempor);
-			//alert(selectedpl);
+			alert(selectedpl);
 		}
 	}
 	
@@ -160,7 +160,7 @@ $(document).ready(function() {
 		plcount=$(this).attr("data-plc");
 		pcheck=$("#"+fix).attr("data-pcheck");
 
-
+		selectedpl=[]; // reinitializing  selected player list array;
 
 		rbowl=0;rbat=0;rwk=0;rall=0;
 		for (var i = 0; i <11; i++) {
@@ -609,10 +609,12 @@ $('.power').attr({'data-pow':0});
 	}) */
 	var lockstate=0;
 	$('.lockteam').click(function(){
-		if(Tspread<=6){
+		
 		var check=storepl();
 		var check2=restoreteam(newfix);
-	}
+	
+	
+
 
 	});
 	
