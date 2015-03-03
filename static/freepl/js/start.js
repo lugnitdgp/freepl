@@ -43,28 +43,25 @@ $(document).ready(function() {
 
 	// function for restoring team players once team locked
 
-	function restoreteam()
+	function restoreteam(newfix)
 	{
 		var lockedpllist=[];
-		var ids=$('#test').html();
-		alert(ids);
+		var ids=$("#hiddenteam"+newfix).html();
 		//var ids="p12,p11,p13,p22";
-		var jj=0;
+		var j=0;
 		var idslength=ids.length;
-		alert(idslength);
+		//alert(idslength);
 		for (var i = 0; i < idslength; i++) {
-			alert(i);
 			var subtest=ids.substring(i,i+1);
 			alert(subtest);
 				if (subtest==",") {
-					var lckplid=ids.substring(jj,i);
-					/*alert(lckplid);
-					jj=i;
-					lockedpllist.push((lckplid.parseInt()));*/
+					var lckplid=ids.substring(j,i);
+					alert(lckplid);
+					j=i;
+					//lockedpllist.push((lckplid.parseInt()));
 					continue;
 				}
 		}
-		alert(lockedpllist);
 	}
 	//initialized values for roles
 	var rbowl=0;
@@ -614,7 +611,7 @@ $('.power').attr({'data-pow':0});
 	$('.lockteam').click(function(){
 		if(Tspread<=6){
 		var check=storepl();
-		var check2=restoreteam();
+		var check2=restoreteam(newfix);
 	}
 
 	});
