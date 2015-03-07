@@ -36,7 +36,7 @@ $(document).ready(function() {
 				tempor="*"+tempor;
 			}
 			selectedpl.push(tempor);
-			//alert(selectedpl);
+			alert(selectedpl);
 		}
 	}
 	
@@ -48,19 +48,34 @@ $(document).ready(function() {
 		var lockedpllist=[];
 		var ids=$("#hiddenteam"+newfix).html();
 		//var ids="p12,p11,p13,p22";
-		var j=0;
+		var j=-1;
 		var idslength=ids.length;
 		//alert(idslength);
 		for (var i = 0; i < idslength; i++) {
 			var subtest=ids.substring(i,i+1);
-			alert(subtest);
+			//alert(subtest);
 				if (subtest==",") {
-					var lckplid=ids.substring(j,i);
-					alert(lckplid);
+					var lckplid=ids.substring(j+1,i);
+					//alert(lckplid);
 					j=i;
-					//lockedpllist.push((lckplid.parseInt()));
-					continue;
+					lockedpllist.push(lckplid);
 				}
+		}
+		alert(lockedpllist);
+		for (var i=0; i < 11; i++)
+		{
+			if (lockedpllist(i).substring(0,1)=="*") {
+				//do something
+			}
+			else
+			{
+				var temp=$("#"+lockedpllist(i)).children(".temp").html();
+				var t=$(".emp"+fixid).first();
+			t.removeClass("emp"+fixid);
+			$("."+lockedpllist(i)+" div").append(temp);
+			temp=null;
+			$('.concheck ul li div').addClass("done");
+			}
 		}
 	}
 	//initialized values for roles
@@ -160,7 +175,7 @@ $(document).ready(function() {
 		plcount=$(this).attr("data-plc");
 		pcheck=$("#"+fix).attr("data-pcheck");
 
-
+		selectedpl=[]; // reinitializing  selected player list array;
 
 		rbowl=0;rbat=0;rwk=0;rall=0;
 		for (var i = 0; i <11; i++) {
@@ -609,10 +624,12 @@ $('.power').attr({'data-pow':0});
 	}) */
 	var lockstate=0;
 	$('.lockteam').click(function(){
-		if(Tspread<=6){
+		
 		var check=storepl();
 		var check2=restoreteam(newfix);
-	}
+	
+	
+
 
 	});
 	
