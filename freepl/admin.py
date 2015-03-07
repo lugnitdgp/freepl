@@ -133,6 +133,26 @@ def playerstatsupdate(modeladmin,request,queryset):
 	playerstats.funscore = calculate_fun_score(playerstats)
 	playerstats.save()
 
+def playerstatsentry(modeladmin,request,queryset):
+    n=len(queryset)
+    for i in xrange(n):
+	fixture = queryset[i]
+	playersinfixture = players.objects.filter(Q(country=fixtureteam.fixture.teamA)|Q(country=fixtureteam.fixture.teamB))
+	url = fixture.url
+	playerstats = scorecard_getter(url)
+	'save each stat'
+	for key in playerstats:
+	    space = key.find(' ')
+	    firstname = key[:space]
+	    lastname = key[space+1:]
+	    player=None
+	    try:
+		player = playersinfixture.objects.get(firstname = firstname,lastname = lastname)
+	    except:
+		raise Exception('Player '+firstname+lastname+' could not be found in database!')
+	    ps = playerstats(fixture = fixture,player = player,**playerstats[key])
+	    ps.save()
+
 def cumulativescoreupdate(modeladmin,request,queryset):
     n=len(queryset)
     for i in xrange(n):
@@ -174,6 +194,7 @@ class fixturesAdmin(admin.ModelAdmin):
     list_display = ('id','teamA','teamB','active','locked','date')
     list_display_links = ['id']
     list_editable = ('teamA','teamB','active','locked','date')
+    actions = [playerstatsentry]
 
 class fixtureTeamsAdmin(admin.ModelAdmin):
     list_display = ('user','teamname','score')

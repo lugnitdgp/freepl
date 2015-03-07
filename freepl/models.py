@@ -22,8 +22,8 @@ class fplUser(models.Model):
 	return (self.user.first_name+' '+self.user.last_name)
 
 class teams(models.Model):
-    country = models.CharField(max_length=10)
-    
+    country = models.CharField(max_length=20)
+    flag = models.ImageField(upload_to='countries/')
     def __unicode__(self):
 	return self.country
 
@@ -33,6 +33,8 @@ class fixtures(models.Model):
     teamA = models.ForeignKey(teams,related_name='teamA')
     teamB = models.ForeignKey(teams,related_name='teamB')
     date = models.DateTimeField()
+    url = models.CharField(max_length=500,default='')
+
     def __unicode__(self):
 	return '%s %s %s' % (self.teamA.country,self.teamB.country,self.date)
     
