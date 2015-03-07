@@ -626,7 +626,7 @@ $('.power').attr({'data-pow':0});
 	$('.lockteam').click(function(){
 		
 		var check=storepl();
-		var check2=restoreteam(newfix);
+		//var check2=restoreteam(newfix);
 	
 	
 
