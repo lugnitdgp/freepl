@@ -25,8 +25,8 @@ $(document).ready(function() {
 		return false;
 	});
 
-	var selectedpl=[];
-	function storepl()
+	var selectedpl;
+	function storepl(selectedpl)
 	{
 		for (var i = 0; i <11; i++) {
 			var tempor=$(".item"+newfix).eq(i).attr("data-plid");
@@ -35,7 +35,7 @@ $(document).ready(function() {
 			{
 				tempor="*"+tempor;
 			}
-			selectedpl.push(tempor);
+			selectedpl=selectedpl.concat(tempor);
 			alert(selectedpl);
 		}
 	}
@@ -622,15 +622,15 @@ $('.power').attr({'data-pow':0});
 
 
 	}) */
-	var lockstate=0;
+	/*var lockstate=0;
 	$('.lockteam').click(function(){
 		
-		var check=storepl();
+		var check=storepl(selectedpl);
 		//var check2=restoreteam(newfix);
 	
 	
 
 
-	});
+	});*/
 	
 });
