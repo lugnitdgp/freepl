@@ -203,8 +203,8 @@ $('.teamgrid').isotope({
 				    dataType: "json",
 				    data : {
 						    csrfmiddlewaretoken: '{{ csrf_token }}',
-						    fixtureid:fixtureid,
-						    teamconfig : selectdpl,
+						    fixtureid: fixtureid,
+						    teamconfig : selectedpl,
 						    teamname : teamnameentry
 						    },
 				    success : function(reply) {
