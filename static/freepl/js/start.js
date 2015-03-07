@@ -74,7 +74,7 @@ $(document).ready(function() {
 			t.removeClass("emp"+fixid);
 			$("."+lockedpllist(i)+" div").append(temp);
 			temp=null;
-			($('.concheck ul li div').addClass("done");
+			$('.concheck ul li div').addClass("done");
 			}
 		}
 	}
